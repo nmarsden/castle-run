@@ -9,7 +9,7 @@
 
 [ ] ground
   [x] show as checker board
-  [ ] scroll
+  [x] scroll
 
 [ ] player
   [ ] movement
