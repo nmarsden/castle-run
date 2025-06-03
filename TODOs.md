@@ -12,7 +12,9 @@
   [x] scroll
 
 [ ] player
-  [ ] movement
+  [x] movement using keyboard
+  [ ] movement using touch
+  [ ] restrict player movement to ground
 
 [ ] enemy
   [ ] move with the ground

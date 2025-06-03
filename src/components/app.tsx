@@ -8,6 +8,7 @@ import Camera from "./camera.tsx";
 import Ground from "./ground.tsx";
 import Enemy from './enemy.tsx';
 import Player from "./player.tsx";
+import { Keyboard } from './keyboard.tsx';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
           <Enemy position={[-2, 0, -2]}/>
           <Enemy position={[2, 0, -2]}/>
           <Player />
+          <Keyboard />
         </Suspense>
       </Canvas>
       <Loader containerStyles={{ background: '#07046380' }}/>
