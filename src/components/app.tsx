@@ -9,6 +9,7 @@ import Ground from "./ground.tsx";
 import Enemy from './enemy.tsx';
 import Player from "./player.tsx";
 import { Keyboard } from './keyboard.tsx';
+import PlayerBounds from './playerBounds.tsx';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
           <Enemy position={[0, 0, -2]}/>
           <Enemy position={[-2, 0, -2]}/>
           <Enemy position={[2, 0, -2]}/>
+          <PlayerBounds />
           <Player />
           <Keyboard />
         </Suspense>

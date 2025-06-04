@@ -16,6 +16,7 @@
   [x] movement using keyboard
   [ ] movement using touch
   [x] restrict player movement
+  [x] visually indicate player movement bounds, eg. boundary lines
 
 [ ] enemy
   [x] move with the ground
