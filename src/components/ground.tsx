@@ -9,11 +9,13 @@ export default function Ground(){
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const texture = useTexture("textures/checker_board.png");
   const groundClock = useRef(new Clock(false));
+  const width = useRef(5);
+  const length = useRef(14);
 
   useEffect(() => {
     texture.wrapS = RepeatWrapping;
     texture.wrapT = RepeatWrapping;
-    texture.repeat = new Vector2(2.5, 5);
+    texture.repeat = new Vector2(width.current * 0.5, length.current * 0.5);
     texture.needsUpdate = true;
   }, []);
 
@@ -34,7 +36,7 @@ export default function Ground(){
       rotation-x={Math.PI * -0.5} 
       position-y={-0.51} 
       position-z={-4.5}
-      scale={[5, 10, 1]}
+      scale={[width.current, length.current, 1]}
       castShadow={true}
       receiveShadow={true}      
     >

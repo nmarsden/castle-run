@@ -14,11 +14,19 @@ const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
 export default function Player (){
   const player = useRef<Mesh>(null!);
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
+  const tempPos = useRef<Vector3>(new Vector3());
 
   useEffect(() => {
     const playerOffset = PLAYER_OFFSETS.get(playerAction) as Vector3;
-    player.current.position.add(playerOffset);
-    
+    tempPos.current.set(player.current.position.x, player.current.position.y, player.current.position.z);
+    tempPos.current.add(playerOffset);
+
+    if (tempPos.current.x > 2) return;
+    if (tempPos.current.x < -2) return;
+    if (tempPos.current.z > 0) return;
+    if (tempPos.current.z < -3) return;
+
+    player.current.position.set(tempPos.current.x, tempPos.current.y, tempPos.current.z);
   }, [playerAction]);
   
   return (

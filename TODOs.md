@@ -10,11 +10,12 @@
 [ ] ground
   [x] show as checker board
   [x] scroll
+  [x] extend ground off the bottom of the screen
 
 [ ] player
   [x] movement using keyboard
   [ ] movement using touch
-  [ ] restrict player movement to ground
+  [x] restrict player movement
 
 [ ] enemy
   [x] move with the ground
