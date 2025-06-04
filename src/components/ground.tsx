@@ -1,11 +1,14 @@
 import { useTexture } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber";
-import { useEffect } from "react";
-import { Vector2, RepeatWrapping } from "three";
+import { useEffect, useRef } from "react";
+import { Vector2, RepeatWrapping, Clock } from "three";
+import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 
 export default function Ground(){
+  const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
+  const playing = useGlobalStore((state: GlobalState) => state.playing);
   const texture = useTexture("textures/checker_board.png");
-  const speed = 0.5;
+  const groundClock = useRef(new Clock(false));
 
   useEffect(() => {
     texture.wrapS = RepeatWrapping;
@@ -14,9 +17,16 @@ export default function Ground(){
     texture.needsUpdate = true;
   }, []);
 
-  useFrame(({ clock }) => {
+  useEffect(() => {
+    if (playing) {
+      groundClock.current.start();
+    }
+  }, [playing]);
+
+  useFrame(() => {
     texture.offset.setX(0);
-    texture.offset.setY(clock.getElapsedTime() * speed % 1);
+    const yOffset = (texture.offset.y + (groundClock.current.getDelta() * groundSpeed * 0.5)) % 1;
+    texture.offset.setY(yOffset);
   });
   
   return (

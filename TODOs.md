@@ -17,5 +17,5 @@
   [ ] restrict player movement to ground
 
 [ ] enemy
-  [ ] move with the ground
+  [x] move with the ground
   [ ] show threatened squares
