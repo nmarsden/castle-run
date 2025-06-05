@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { GlobalState, PlayerAction, useGlobalStore } from "../stores/useGlobalStore";
 import { Mesh, Vector3 } from "three";
+import { useGLTF } from "@react-three/drei";
 
 const OFFSET = 1;
 const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
@@ -12,6 +13,8 @@ const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
 ])
 
 export default function Player (){
+  const rook = useGLTF("models/Rook.glb");
+
   const player = useRef<Mesh>(null!);
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
   const tempPos = useRef<Vector3>(new Vector3());
@@ -35,10 +38,10 @@ export default function Player (){
       castShadow={true}
       receiveShadow={true}
       position={[0, 0, -1]}
+      geometry={(rook.nodes.Rook as Mesh).geometry}
+      scale={25}
+      rotation-x={Math.PI * -0.5}
     >
-      <boxGeometry 
-        args={[1, 1, 1]} 
-      />
       <meshStandardMaterial 
         color={'orange'} 
       />

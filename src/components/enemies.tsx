@@ -6,7 +6,7 @@ export default function Enemies (){
 
   return (
     <>
-      {enemyPositions.map(position => <Enemy position={position}/>)}
+      {enemyPositions.map((position, index) => <Enemy key={`enemy-${index}`} position={position}/>)}
     </>
   );
 }

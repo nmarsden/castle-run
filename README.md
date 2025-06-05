@@ -6,6 +6,7 @@ Built with React, TypeScript, & Vite.
 
 ### Assets
 #### Models
+Low Poly Chess Set - https://lowpolyassets.itch.io/low-poly-chess-set
 #### Textures
 #### Music
 #### SFX
