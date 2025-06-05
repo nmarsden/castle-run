@@ -6,10 +6,10 @@ import Performance from "./performance.tsx";
 import Lights from "./lights.tsx";
 import Camera from "./camera.tsx";
 import Ground from "./ground.tsx";
-import Enemy from './enemy.tsx';
 import Player from "./player.tsx";
-import { Keyboard } from './keyboard.tsx';
+import Keyboard from './keyboard.tsx';
 import PlayerBounds from './playerBounds.tsx';
+import Enemies from './enemies.tsx';
 
 export default function App() {
   return (
@@ -23,12 +23,7 @@ export default function App() {
           <Lights />
           <Camera />
           <Ground />
-          <Enemy position={[0, 0, -9]}/>
-          <Enemy position={[-2, 0, -9]}/>
-          <Enemy position={[2, 0, -9]}/>
-          <Enemy position={[0, 0, -2]}/>
-          <Enemy position={[-2, 0, -2]}/>
-          <Enemy position={[2, 0, -2]}/>
+          <Enemies />
           <PlayerBounds />
           <Player />
           <Keyboard />

@@ -20,6 +20,7 @@ export default function Enemy ({ position }: { position: [number, number, number
   useFrame(() => {
     enemyOffset.current.setZ(enemyClock.current.getDelta() * groundSpeed);
     enemy.current.position.add(enemyOffset.current);
+    enemy.current.visible = enemy.current.position.z < 3 && enemy.current.position.z > -12;
   });
 
   return (
@@ -28,6 +29,7 @@ export default function Enemy ({ position }: { position: [number, number, number
       castShadow={true}
       receiveShadow={true}
       position={position}
+      visible={false}
     >
       <boxGeometry 
         args={[1, 1, 1]} 

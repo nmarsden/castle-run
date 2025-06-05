@@ -20,4 +20,8 @@
 
 [ ] enemy
   [x] move with the ground
+  [x] only visible when on the ground
   [ ] show threatened squares
+
+[ ] waves
+  [x] setup enemy positions

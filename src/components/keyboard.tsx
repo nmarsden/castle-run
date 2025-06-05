@@ -10,7 +10,7 @@ export type Action = {
 
 export type ActionField = keyof Action;
 
-export const Keyboard = () => {
+const Keyboard = () => {
   const setPlayerAction = useGlobalStore((state: GlobalState) => state.setPlayerAction);
 
   const keys = new Map<string, ActionField>([
@@ -71,3 +71,5 @@ export const Keyboard = () => {
   }, [])
   return <></>;
 }
+
+export default Keyboard;
