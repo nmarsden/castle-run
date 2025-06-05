@@ -23,7 +23,7 @@ export default function Player (){
 
     if (tempPos.current.x > 2) return;
     if (tempPos.current.x < -2) return;
-    if (tempPos.current.z > 0) return;
+    if (tempPos.current.z > 1) return;
     if (tempPos.current.z < -3) return;
 
     player.current.position.set(tempPos.current.x, tempPos.current.y, tempPos.current.z);
@@ -34,6 +34,7 @@ export default function Player (){
       ref={player}
       castShadow={true}
       receiveShadow={true}
+      position={[0, 0, -1]}
     >
       <boxGeometry 
         args={[1, 1, 1]} 

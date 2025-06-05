@@ -7,12 +7,12 @@ export default function PlayerBounds() {
   const lineWidth = useRef(0.2);
 
   const { linePoints } = useMemo(() => {
-    const halfLineWidth = lineWidth.current * 0.5
+    const lineWidthOffset = lineWidth.current * 0.2
     const bounds = { 
-      left: -(2.5 + halfLineWidth),
-      right: 2.5 + halfLineWidth,
-      back: 0.5 + halfLineWidth,
-      forward: -(3.5 + halfLineWidth)
+      left: -(2.5 + lineWidthOffset),
+      right: 2.5 + lineWidthOffset,
+      back: 1.5 + lineWidthOffset,
+      forward: -(3.5 + lineWidthOffset)
     };
     const linePoints = []
     linePoints.push(new Vector3(bounds.left, 0, bounds.forward));
@@ -21,7 +21,7 @@ export default function PlayerBounds() {
     linePoints.push(new Vector3(bounds.right, 0, bounds.forward));
     linePoints.push(new Vector3(bounds.left, 0, bounds.forward));
     linePoints.forEach(point => {
-      point.add({ x: 0, y: -0.5 + halfLineWidth, z: 0 });
+      point.add({ x: 0, y: -0.45 + lineWidthOffset, z: 0 });
     })
 
     return { linePoints };
