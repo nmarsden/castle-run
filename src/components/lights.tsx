@@ -14,7 +14,7 @@ export default function Lights() {
       'Ambient': folder(
         {
           ambientColor: {value: 'white', label: 'color'},
-          ambientIntensity: {value: 2, min: 0, max: 10, step: 0.1, label: 'intensity'}
+          ambientIntensity: {value: 1.1, min: 0, max: 10, step: 0.1, label: 'intensity'}
         }
       ),
       'Directional': folder(

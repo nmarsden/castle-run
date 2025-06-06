@@ -24,7 +24,7 @@
   [x] move with the ground
   [x] only visible when on the ground
   [x] use models
-  [ ] show threatened squares
+  [x] show threatened squares
 
 [ ] waves
   [x] setup enemy positions

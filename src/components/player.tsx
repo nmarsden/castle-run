@@ -18,6 +18,7 @@ export default function Player (){
 
   const player = useRef<Mesh>(null!);
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
+  const colors = useGlobalStore((state: GlobalState) => state.colors);
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
 
@@ -75,7 +76,7 @@ export default function Player (){
         scale={25}
       >
         <meshStandardMaterial 
-          color={'orange'} 
+          color={colors.player}
         />
       </mesh>  
     </group>

@@ -3,8 +3,9 @@ import { EnemyType, GlobalState, useGlobalStore } from "../stores/useGlobalStore
 import { useEffect, useMemo, useRef } from "react";
 import { Clock, Mesh, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
+import Threat from "./threat";
 
-export default function Enemy ({ position, type }: { position: [number, number, number], type: EnemyType }){
+export default function Enemy ({ position, type, threats }: { position: [number, number, number], type: EnemyType, threats: [number, number, number][] }){
   const pawn = useGLTF("models/Pawn.glb");
   const knight = useGLTF("models/Knight.glb");
   const bishop = useGLTF("models/Bishop.glb");
@@ -14,6 +15,7 @@ export default function Enemy ({ position, type }: { position: [number, number, 
   const enemy = useRef<Mesh>(null!);
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
+  const colors = useGlobalStore((state: GlobalState) => state.colors);
   const enemyOffset = useRef<Vector3>(new Vector3());
   const enemyClock = useRef(new Clock(false));
 
@@ -38,20 +40,26 @@ export default function Enemy ({ position, type }: { position: [number, number, 
   });
 
   return (
-    <mesh
-      ref={enemy}
-      castShadow={true}
-      receiveShadow={true}
-      position={position}
-      geometry={geometry}
-      scale={25}
-      rotation-x={Math.PI * -0.5}
-      visible={false}
-    >
-      <meshStandardMaterial 
-        color={'red'} 
-      />
-    </mesh>  )
+    <>
+      <mesh
+        ref={enemy}
+        castShadow={true}
+        receiveShadow={true}
+        position={position}
+        geometry={geometry}
+        scale={25}
+        rotation-x={Math.PI * -0.5}
+        visible={false}
+      >
+        <meshStandardMaterial 
+          color={colors.enemy} 
+        />
+      </mesh>
+      <>
+        {threats.map((threat, index) => <Threat key={`threat-${index}`} position={threat}/>)}
+      </>
+    </>
+  )
 }
 
 useGLTF.preload('models/Pawn.glb');

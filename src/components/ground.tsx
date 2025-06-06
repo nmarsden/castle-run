@@ -7,6 +7,7 @@ import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 export default function Ground(){
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
+  const colors = useGlobalStore((state: GlobalState) => state.colors);
   const texture = useTexture("textures/checker_board.png");
   const groundClock = useRef(new Clock(false));
   const width = useRef(5);
@@ -42,7 +43,7 @@ export default function Ground(){
     >
       <planeGeometry args={[1, 1, 1]} />
       <meshStandardMaterial 
-        color={'#b7afaf'} 
+        color={colors.ground} 
         map={texture}
       />
     </mesh>  
