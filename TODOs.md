@@ -18,11 +18,12 @@
   [x] restrict player movement
   [x] visually indicate player movement bounds, eg. boundary lines
   [x] use Rook model
+  [x] animate movement
 
 [ ] enemy
   [x] move with the ground
   [x] only visible when on the ground
-  [ ] use models
+  [x] use models
   [ ] show threatened squares
 
 [ ] waves
