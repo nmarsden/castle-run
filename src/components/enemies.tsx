@@ -2,11 +2,11 @@ import Enemy from "./enemy";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 
 export default function Enemies (){
-  const enemyPositions = useGlobalStore((state: GlobalState) => state.enemyPositions);
+  const wave = useGlobalStore((state: GlobalState) => state.wave);
 
   return (
     <>
-      {enemyPositions.map((position, index) => <Enemy key={`enemy-${index}`} position={position}/>)}
+      {wave.enemies.map((enemy, index) => <Enemy key={`enemy-${index}`} position={enemy.position} type={enemy.type}/>)}
     </>
   );
 }

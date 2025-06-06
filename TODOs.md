@@ -17,10 +17,12 @@
   [ ] movement using touch
   [x] restrict player movement
   [x] visually indicate player movement bounds, eg. boundary lines
+  [x] use Rook model
 
 [ ] enemy
   [x] move with the ground
   [x] only visible when on the ground
+  [ ] use models
   [ ] show threatened squares
 
 [ ] waves

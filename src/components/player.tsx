@@ -48,3 +48,5 @@ export default function Player (){
     </mesh>  
   )
 }
+
+useGLTF.preload('models/Rook.glb')
