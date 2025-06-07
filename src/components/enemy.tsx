@@ -1,11 +1,11 @@
 import { useFrame } from "@react-three/fiber";
-import { EnemyType, GlobalState, useGlobalStore } from "../stores/useGlobalStore";
+import { EnemyType, GlobalState, ThreatInfo, useGlobalStore } from "../stores/useGlobalStore";
 import { useEffect, useMemo, useRef } from "react";
 import { Clock, Mesh, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import Threat from "./threat";
 
-export default function Enemy ({ position, type, threats }: { position: [number, number, number], type: EnemyType, threats: [number, number, number][] }){
+export default function Enemy ({ position, type, threats }: { position: [number, number, number], type: EnemyType, threats: ThreatInfo[] }){
   const pawn = useGLTF("models/Pawn.glb");
   const knight = useGLTF("models/Knight.glb");
   const bishop = useGLTF("models/Bishop.glb");
@@ -30,6 +30,8 @@ export default function Enemy ({ position, type, threats }: { position: [number,
   useEffect(() => {
     if (playing) {
       enemyClock.current.start();
+    } else {
+      enemyClock.current.stop();
     }
   }, [playing]);
   
@@ -56,7 +58,7 @@ export default function Enemy ({ position, type, threats }: { position: [number,
         />
       </mesh>
       <>
-        {threats.map((threat, index) => <Threat key={`threat-${index}`} position={threat}/>)}
+        {threats.map((threat, index) => <Threat key={`threat-${index}`} position={threat.position} id={threat.id} />)}
       </>
     </>
   )

@@ -27,6 +27,7 @@
   [ ] add thruster(s)
   [ ] animate when idle
   [ ] should bounds extend to cover the whole ground?
+  [ ] react to hitting threat
 
 [ ] enemy
   [x] move with the ground
