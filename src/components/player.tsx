@@ -18,6 +18,7 @@ export default function Player (){
 
   const player = useRef<Mesh>(null!);
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
+  const setPlayerZOffset = useGlobalStore((state: GlobalState) => state.setPlayerZOffset);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
@@ -32,6 +33,8 @@ export default function Player (){
     if (tempPos.current.x < -2) return;
     if (tempPos.current.y > 2) return;
     if (tempPos.current.y < -2) return;
+
+    setPlayerZOffset(tempPos.current.y);
 
     isMoving.current = true;
     const duration = 0.15;

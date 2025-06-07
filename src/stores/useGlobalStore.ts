@@ -251,10 +251,12 @@ export type GlobalState = {
   playing: boolean;
   groundSpeed: number;
   playerAction: PlayerAction;
+  playerZOffset: number;
   wave: Wave;
   colors: Colors;
 
   setPlayerAction: (playerAction: PlayerAction) => void;
+  setPlayerZOffset: (playerZOffset: number) => void;
   setColors: (colors: Colors) => void;
 };
 
@@ -263,6 +265,7 @@ export const useGlobalStore = create<GlobalState>((set) => {
     playing: false,
     groundSpeed: 1.75,
     playerAction: 'NONE',
+    playerZOffset: 0,
     wave: populateWave(WAVE_DATA),
     colors: {
       player: '#ffa500',
@@ -277,6 +280,10 @@ export const useGlobalStore = create<GlobalState>((set) => {
 
       // Update playing & playerAction state
       return { playing, playerAction };
+    }),
+
+    setPlayerZOffset: (playerZOffset: number) => set(() => {
+      return { playerZOffset };
     }),
 
     setColors: (colors: Colors) => set(() => {

@@ -2,19 +2,34 @@ import {CameraControls, PerspectiveCamera} from "@react-three/drei";
 import {useControls} from "leva";
 import {ReactNode, useEffect, useRef} from "react";
 import {PerspectiveCamera as PerspectiveCameraType, Vector3} from "three";
+import {GlobalState, useGlobalStore} from "../stores/useGlobalStore";
 
 export default function Camera({ children } : { children?: ReactNode }) {
+  const playerZOffset = useGlobalStore((state: GlobalState) => state.playerZOffset);
   const cameraControls = useRef<CameraControls>(null!);
   const fov = useRef(100);
-  const cameraPosition = useRef<Vector3>(new Vector3(0, 4.2, 0.7));
   const cameraTarget = useRef<Vector3>(new Vector3(0, 0, -2.2));
-  
+  const cameraPositionPresets = useRef<Map<number, Vector3>>(new Map<number, Vector3>([
+    [2,  new Vector3(0, 3.76, -0.8)],
+    [1,  new Vector3(0, 4.0, 0.0)],
+    [0,  new Vector3(0, 4.2, 0.7)],
+    [-1, new Vector3(0, 3.5, 2.2)],
+    [-2, new Vector3(0, 3.06, 3.75)],
+  ]));
+  const cameraPosition = useRef<Vector3>(cameraPositionPresets.current.get(playerZOffset) as Vector3);
+
   useEffect(() => {
     setTimeout(() => {
       cameraControls.current.setTarget(cameraTarget.current.x, cameraTarget.current.y, cameraTarget.current.z, true);
     }, 300);
   }, []);
-  
+
+  useEffect(() => {
+    // Adjust camera position based on playerZOffset
+    const camPos = cameraPositionPresets.current.get(playerZOffset) as Vector3;
+    cameraControls.current.setPosition(camPos.x, camPos.y, camPos.z, true);
+  }, [playerZOffset]);
+
   useControls(
     'Camera',
     {
@@ -33,8 +48,8 @@ export default function Camera({ children } : { children?: ReactNode }) {
         value: cameraPosition.current.y, 
         label: 'positionY', 
         min: 0, 
-        max: 200, 
-        step: 0.1, 
+        max: 50, 
+        step: 0.01, 
         onChange: (value) => {
           cameraPosition.current.y = value;
           cameraControls.current.setPosition(cameraPosition.current.x, cameraPosition.current.y, cameraPosition.current.z);
@@ -43,9 +58,9 @@ export default function Camera({ children } : { children?: ReactNode }) {
       positionZ: { 
         value: cameraPosition.current.z, 
         label: 'positionZ', 
-        min: 0, 
-        max: 100, 
-        step: 0.1,
+        min: -50, 
+        max: 50, 
+        step: 0.01,
         onChange: (value) => {
           cameraPosition.current.z = value;
           cameraControls.current.setPosition(cameraPosition.current.x, cameraPosition.current.y, cameraPosition.current.z);
@@ -56,7 +71,7 @@ export default function Camera({ children } : { children?: ReactNode }) {
         label: 'targetZ', 
         min: -10, 
         max: 0, 
-        step: 0.1,
+        step: 0.01,
         onChange: (value) => {
           cameraTarget.current.z = value;
           cameraControls.current.setTarget(cameraTarget.current.x, cameraTarget.current.y, cameraTarget.current.z);
