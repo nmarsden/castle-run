@@ -28,15 +28,26 @@
   [ ] animate when idle
   [ ] should bounds extend to cover the whole ground?
   [ ] react to hitting threat
-  [x] health indicator
+ 
+[ ] health indicator
+  [x] show health indicator on player
+  [x] decrease health when threat hit
+  [ ] increase health when health power-up collected
 
 [ ] enemy
   [x] move with the ground
   [x] only visible when on the ground
   [x] use models
   [x] show threatened squares
-  [ ] react to being hit/taken by player
+  [x] react to being hit by player
+      [x] kill enemy
+      [x] kill enemy's threats
   [ ] fade in entering enemies & fade out leaving enemies
 
 [ ] waves
   [x] setup enemy positions
+
+[ ] game over
+  [ ] end game when player's health runs out
+  [ ] show game over overlay
+  [ ] allow restart

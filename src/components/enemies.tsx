@@ -6,7 +6,7 @@ export default function Enemies (){
 
   return (
     <>
-      {wave.enemies.map((enemy, index) => <Enemy key={`enemy-${index}`} position={enemy.position} type={enemy.type} threats={enemy.threats} />)}
+      {wave.enemies.map((enemy, index) => <Enemy key={`enemy-${index}`} {...enemy} />)}
     </>
   );
 }

@@ -1,11 +1,11 @@
 import { useFrame } from "@react-three/fiber";
-import { EnemyType, GlobalState, ThreatInfo, useGlobalStore } from "../stores/useGlobalStore";
+import { EnemyInfo, GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import { useEffect, useMemo, useRef } from "react";
 import { Clock, Mesh, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import Threat from "./threat";
 
-export default function Enemy ({ position, type, threats }: { position: [number, number, number], type: EnemyType, threats: ThreatInfo[] }){
+export default function Enemy ({ id, position, type, threats }: EnemyInfo){
   const pawn = useGLTF("models/Pawn.glb");
   const knight = useGLTF("models/Knight.glb");
   const bishop = useGLTF("models/Bishop.glb");
@@ -16,8 +16,10 @@ export default function Enemy ({ position, type, threats }: { position: [number,
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
+  const enemyHitId = useGlobalStore((state: GlobalState) => state.enemyHitId);
   const enemyOffset = useRef<Vector3>(new Vector3());
   const enemyClock = useRef(new Clock(false));
+  const isDead = useRef(false);
 
   const geometry = useMemo(() => {
     if (type === 'PAWN') return (pawn.nodes.Pawn as Mesh).geometry;
@@ -34,8 +36,21 @@ export default function Enemy ({ position, type, threats }: { position: [number,
       enemyClock.current.stop();
     }
   }, [playing]);
-  
+
+  useEffect(() => {
+    if (isDead.current) return;
+
+    if (enemyHitId === id) {
+      // console.log('Enemy Hit: id=', id);
+      // Die
+      isDead.current = true;
+      enemy.current.visible = false;
+    }
+  }, [enemyHitId]);
+
   useFrame(() => {
+    if (isDead.current) return;
+
     enemyOffset.current.setZ(enemyClock.current.getDelta() * groundSpeed);
     enemy.current.position.add(enemyOffset.current);
     enemy.current.visible = enemy.current.position.z < 3 && enemy.current.position.z > -12;
