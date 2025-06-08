@@ -10,6 +10,7 @@ import Player from "./player.tsx";
 import Keyboard from './keyboard.tsx';
 import PlayerBounds from './playerBounds.tsx';
 import Enemies from './enemies.tsx';
+import PowerUps from './powerUps.tsx';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Camera />
           <Ground />
           <Enemies />
+          <PowerUps />
           <PlayerBounds />
           <Player />
           <Keyboard />

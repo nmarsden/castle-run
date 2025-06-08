@@ -10,8 +10,8 @@ const WAVE_DATA: WaveData = [
   '_____',
   '_____',
   '_____',
-  '_1___',
-  '__1__',
+  '_p___',
+  '__p__',
   '_____',
   '_____',
   '_____',
@@ -20,7 +20,7 @@ const WAVE_DATA: WaveData = [
   '_____',
   '_____',
   '_____',
-  '__5__',
+  '__K__',
   '_____',
   '_____',
   '_____',
@@ -29,7 +29,7 @@ const WAVE_DATA: WaveData = [
   '_____',
   '_____',
   '_____',
-  '__4__',
+  '__q__',
   '_____',
   '_____',
   '_____',
@@ -38,25 +38,25 @@ const WAVE_DATA: WaveData = [
   '_____',
   '_____',
   '_____',
-  '__3__',
+  '__b__',
+  '_____',
+  '_____',
+  '_____',
+  '____h',
   '_____',
   '_____',
   '_____',
   '_____',
+  '__k__',
   '_____',
   '_____',
   '_____',
   '_____',
-  '__2__',
+  'h____',
   '_____',
   '_____',
   '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '__1__',
+  '__p__',
   '_____',
   '_____',
   '_____',
@@ -107,18 +107,33 @@ export type EnemyInfo = {
   type: EnemyType;
   threats: ThreatInfo[];
 }
+
+export type PowerUpType = 'HEALTH';
+
+export type PowerUpInfo = {
+  id: number;
+  position: [number, number, number];
+  type: PowerUpType;
+}
+
 type Wave = {
   enemies: EnemyInfo[];
+  powerUps: PowerUpInfo[];
 };
 
+const NO_POWER_UP_ID = -1;
 const NO_ENEMY_ID = -1;
 
 const ENEMY_CODE_TO_TYPE = new Map<String, EnemyType>([
-  ['1', 'PAWN'],
-  ['2', 'KNIGHT'],
-  ['3', 'BISHOP'],
-  ['4', 'QUEEN'],
-  ['5', 'KING'],
+  ['p', 'PAWN'],
+  ['k', 'KNIGHT'],
+  ['b', 'BISHOP'],
+  ['q', 'QUEEN'],
+  ['K', 'KING'],
+]);
+
+const POWER_UP_CODE_TO_TYPE = new Map<String, PowerUpType>([
+  ['h', 'HEALTH']
 ]);
 
 const THREAT_OFFSETS = new Map<EnemyType, [number, number][]>([
@@ -207,6 +222,10 @@ const getEnemyType = (code: string): EnemyType | undefined => {
   return ENEMY_CODE_TO_TYPE.get(code);
 };
 
+const getPowerUpType = (code: string): PowerUpType | undefined => {
+  return POWER_UP_CODE_TO_TYPE.get(code);
+};
+
 const getPositionY = (type: EnemyType): number => {
   if (type === 'PAWN' || type === 'KNIGHT') return -0.175;
   return 0.5;
@@ -230,7 +249,9 @@ const calcThreats = (enemy: EnemyInfo): ThreatInfo[] => {
 
 const populateWave = (waveData: WaveData): Wave => {
   const enemies: EnemyInfo[] = [];
-  // Populate position & type
+  const powerUps: PowerUpInfo[] = [];
+
+  // Populate enemies & powerUps
   let z = -1;
   let id = 0;
   for (let i = waveData.length-1; i >= 0; i--) {
@@ -238,22 +259,28 @@ const populateWave = (waveData: WaveData): Wave => {
     for (let j = 0; j<squares.length; j++) {
       const square = squares[j];
       const x = j - 2;
-      const type = getEnemyType(square);
-      if (type) {
-        const y = getPositionY(type);
-        enemies.push({ id, position: [x, y, z], type, threats: [] });
+      const enemyType = getEnemyType(square);
+      if (enemyType) {
+        const y = getPositionY(enemyType);
+        enemies.push({ id, position: [x, y, z], type: enemyType, threats: [] });
+        id++;
+      }
+      const powerUpType = getPowerUpType(square);
+      if (powerUpType) {
+        const y = 0;
+        powerUps.push({ id, position: [x, y, z], type: powerUpType });
         id++;
       }
     }
     z--;
   }
-  // Populate threats
+  // Populate enemy threats
   for (let i=0; i<enemies.length; i++) {
     const enemy = enemies[i];
     enemy.threats.push(...calcThreats(enemy));
   }
 
-  return { enemies };
+  return { enemies, powerUps };
 }
 
 export type PlayerAction = 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_FORWARD' | 'MOVE_BACKWARD' | 'NONE';
@@ -265,21 +292,23 @@ type Colors = {
   threat: string;
   healthOn: string;
   healthOff: string;
+  powerUpHealth: string;
 };
 
 type Hits = {
   enemyId: number;
-  threatIds: string[];
+  threatId: string;
+  powerUpId: number; 
 }
 
-const getHits = (wave: Wave, groundOffset: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: number[]): Hits => {
+const getHits = (wave: Wave, groundOffset: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: number[], allPowerUpHitIds: number[]): Hits => {
   // Calculate wave Z position
   const waveZPos = Math.floor((groundOffset * -2) - 0.7 - playerZOffset);
 
   // Get remaining enemies
   const enemies = wave.enemies.filter(enemy => !allEnemyHitIds.includes(enemy.id));
 
-  // -- Check for hit threats
+  // -- Check for threat hits
   const hitThreats: ThreatInfo[] = [];
   for (let i=0; i<enemies.length; i++) {
     const foundThreats = enemies[i].threats.filter(threat => {
@@ -288,14 +317,23 @@ const getHits = (wave: Wave, groundOffset: number, playerXOffset: number, player
     hitThreats.push(...foundThreats);
   }
 
-  // -- Check for hit enemies
+  // -- Check for enemy hits
   const hitEnemies = enemies.filter(enemy => {
     return enemy.position[0] === playerXOffset && enemy.position[2] === waveZPos
   });
 
+  // Get remaining powerUps
+  const powerUps = wave.powerUps.filter(powerUp => !allPowerUpHitIds.includes(powerUp.id));
+
+  // -- Check for powerUp hits
+  const hitPowerUps = powerUps.filter(powerUp => {
+    return powerUp.position[0] === playerXOffset && powerUp.position[2] === waveZPos
+  });
+
   return {
     enemyId: hitEnemies.length > 0 ? hitEnemies[0].id : NO_ENEMY_ID,
-    threatIds: hitThreats.map(threat => threat.id)
+    threatId: hitThreats.length > 0 ? hitThreats[0].id : '',
+    powerUpId: hitPowerUps.length > 0 ? hitPowerUps[0].id : NO_POWER_UP_ID
   }
 };
 
@@ -320,9 +358,11 @@ export type GlobalState = {
   playerXOffset: number;
   playerZOffset: number;
   playerHealth: number;
+  powerUpHitId: number;
   threatHitId: string;
   enemyHitId: number;
   allEnemyHitIds: number[];
+  allPowerUpHitIds: number[];
   lastThreatHit: { id: string; time: number }
   wave: Wave;
   colors: Colors;
@@ -344,9 +384,11 @@ export const useGlobalStore = create<GlobalState>((set) => {
     playerXOffset: 0,
     playerZOffset: 0,
     playerHealth: 5,
+    powerUpHitId: NO_POWER_UP_ID,
     threatHitId: '',
     enemyHitId: NO_ENEMY_ID,
     allEnemyHitIds: [],
+    allPowerUpHitIds: [],
     lastThreatHit: { id: '', time: 0 },
     wave: populateWave(WAVE_DATA),
     colors: {
@@ -355,7 +397,8 @@ export const useGlobalStore = create<GlobalState>((set) => {
       enemy: '#ff4444',
       threat: '#ff4444',
       healthOn: 'green',
-      healthOff: 'black'
+      healthOff: 'black',
+      powerUpHealth: 'green'
     },
 
     setGroundSpeed: (groundSpeed: number) => set(() => {
@@ -370,11 +413,10 @@ export const useGlobalStore = create<GlobalState>((set) => {
       return { playing, playerAction };
     }),
 
-    setGroundOffset: (groundOffset: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds }) => {
-      const hits = getHits(wave, groundOffset, playerXOffset, playerZOffset, allEnemyHitIds)
-      const newThreatHitId = hits.threatIds.length > 0 ? hits.threatIds[0] : '';
-      if (isThreatHitValid(newThreatHitId, lastThreatHit)) {
-        threatHitId = newThreatHitId;
+    setGroundOffset: (groundOffset: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds }) => {
+      const hits = getHits(wave, groundOffset, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
+      if (isThreatHitValid(hits.threatId, lastThreatHit)) {
+        threatHitId = hits.threatId;
         lastThreatHit = { id: threatHitId, time: new Date().getTime() }
         playerHealth--;
       } else {
@@ -387,7 +429,17 @@ export const useGlobalStore = create<GlobalState>((set) => {
         enemyHitId = NO_ENEMY_ID;
       }
 
-      return { groundOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds };
+      if (hits.powerUpId !== NO_POWER_UP_ID) {
+        powerUpHitId = hits.powerUpId;
+        allPowerUpHitIds.push(powerUpHitId);
+        if (playerHealth < 5) {
+          playerHealth++;
+        }
+      } else {
+        powerUpHitId = NO_POWER_UP_ID;
+      }
+
+      return { groundOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds };
     }),
 
     setPlayerXOffset: (playerXOffset: number) => set(() => ({ playerXOffset })),

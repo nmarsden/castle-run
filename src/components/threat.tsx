@@ -68,5 +68,6 @@ export default function Threat ({ position, id }: { position: [number, number, n
       <meshStandardMaterial 
         color={colors.threat} 
       />
-    </mesh>  )
+    </mesh>  
+  )
 }

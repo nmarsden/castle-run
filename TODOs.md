@@ -47,6 +47,9 @@
 [ ] waves
   [x] setup enemy positions
 
+[ ] power-ups
+  [x] health power-up
+
 [ ] game over
   [ ] end game when player's health runs out
   [ ] show game over overlay
