@@ -261,6 +261,8 @@ type Colors = {
   ground: string;
   enemy: string;
   threat: string;
+  healthOn: string;
+  healthOff: string;
 };
 
 const getHitThreats = (wave: Wave, groundOffset: number, playerXOffset: number, playerZOffset: number): ThreatInfo[] => {
@@ -280,6 +282,19 @@ const getHitThreats = (wave: Wave, groundOffset: number, playerXOffset: number, 
   return threats.filter(threat => threat.position[0] === playerXOffset);
 };
 
+const isThreatHitValid = (threatHitId: string, lastThreatHit: { id: string, time: number }): boolean => {
+  // Threat is not valid if empty
+  if (threatHitId === '') return false;
+
+  // Threat is not valid if repeated in less than 1 second
+  if (threatHitId === lastThreatHit.id) {
+    const timeSinceLastThreatHit = new Date().getTime() - lastThreatHit.time;
+    if (timeSinceLastThreatHit < 1000) return false;
+  }
+
+  return true;
+}
+
 export type GlobalState = {
   playing: boolean;
   groundSpeed: number;
@@ -288,7 +303,9 @@ export type GlobalState = {
   playerXOffset: number;
   playerZOffset: number;
   playerHit: boolean;
+  playerHealth: number;
   threatHitId: string;
+  lastThreatHit: { id: string; time: number }
   wave: Wave;
   colors: Colors;
 
@@ -309,13 +326,17 @@ export const useGlobalStore = create<GlobalState>((set) => {
     playerXOffset: 0,
     playerZOffset: 0,
     playerHit: false,
+    playerHealth: 5,
     threatHitId: '',
+    lastThreatHit: { id: '', time: 0 },
     wave: populateWave(WAVE_DATA),
     colors: {
       player: '#ffa500',
       ground: '#ffffff',
       enemy: '#ff4444',
-      threat: '#ff4444'
+      threat: '#ff4444',
+      healthOn: 'green',
+      healthOff: 'black'
     },
 
     setGroundSpeed: (groundSpeed: number) => set(() => {
@@ -330,13 +351,19 @@ export const useGlobalStore = create<GlobalState>((set) => {
       return { playing, playerAction };
     }),
 
-    setGroundOffset: (groundOffset: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHit, threatHitId }) => {
+    setGroundOffset: (groundOffset: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHit, playerHealth, threatHitId, lastThreatHit }) => {
       const hitThreats = getHitThreats(wave, groundOffset, playerXOffset, playerZOffset)
-      if (hitThreats.length > 0) {
-        threatHitId = hitThreats[0].id;
+      const newThreatHitId = hitThreats.length > 0 ? hitThreats[0].id : '';
+      if (isThreatHitValid(newThreatHitId, lastThreatHit)) {
+        threatHitId = newThreatHitId;
+        lastThreatHit = { id: threatHitId, time: new Date().getTime() }
         playerHit = true;
+        playerHealth--;
+      } else {
+        threatHitId = '';
+        playerHit = false;
       }
-      return { groundOffset, playing, playerHit, threatHitId };
+      return { groundOffset, playing, playerHit, playerHealth, threatHitId, lastThreatHit };
     }),
 
     setPlayerXOffset: (playerXOffset: number) => set(() => ({ playerXOffset })),

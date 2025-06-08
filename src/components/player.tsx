@@ -3,6 +3,7 @@ import { GlobalState, PlayerAction, useGlobalStore } from "../stores/useGlobalSt
 import { Mesh, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import gsap from "gsap";
+import PlayerHealth from "./playerHealth";
 
 const OFFSET = 1;
 const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
@@ -91,6 +92,7 @@ export default function Player (){
         <meshStandardMaterial 
           color={colors.player}
         />
+        <PlayerHealth />
       </mesh>  
     </group>
   )

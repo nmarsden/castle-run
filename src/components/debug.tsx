@@ -23,10 +23,12 @@ export default function Debug (){
   useControls(
     'Colors',
     {
-      ground: { value: colors.ground, onChange: value => setColors({ ...colors, ground: value }) },
-      player: { value: colors.player, onChange: value => setColors({ ...colors, player: value }) },
-      enemy:  { value: colors.enemy,  onChange: value => setColors({ ...colors, enemy: value }) },
-      threat: { value: colors.threat, onChange: value => setColors({ ...colors, threat: value }) }
+      ground:    { value: colors.ground,    onChange: value => setColors({ ...colors, ground: value }) },
+      player:    { value: colors.player,    onChange: value => setColors({ ...colors, player: value }) },
+      enemy:     { value: colors.enemy,     onChange: value => setColors({ ...colors, enemy: value }) },
+      threat:    { value: colors.threat,    onChange: value => setColors({ ...colors, threat: value }) },
+      healthOn:  { value: colors.healthOn,  onChange: value => setColors({ ...colors, healthOn: value }) },
+      healthOff: { value: colors.healthOff, onChange: value => setColors({ ...colors, healthOff: value }) }
     }
   );
 
