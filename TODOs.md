@@ -32,7 +32,7 @@
 [ ] health indicator
   [x] show health indicator on player
   [x] decrease health when threat hit
-  [ ] increase health when health power-up collected
+  [x] increase health when health power-up collected
 
 [ ] enemy
   [x] move with the ground
@@ -51,6 +51,6 @@
   [x] health power-up
 
 [ ] game over
-  [ ] end game when player's health runs out
-  [ ] show game over overlay
-  [ ] allow restart
+  [x] end game when player's health runs out
+  [x] show game over overlay
+  [x] allow restart

@@ -62,6 +62,14 @@ const WAVE_DATA: WaveData = [
   '_____',
   '_____',
   '_____',
+  '_____',
+  '_____',
+  '_____',
+  '_____',
+  '_____',
+  '_____',
+  '_____',
+  '_____',
 ];
 // const WAVE_DATA: WaveData = [
 //   '_1_1_',
@@ -352,6 +360,7 @@ const isThreatHitValid = (threatHitId: string, lastThreatHit: { id: string, time
 
 export type GlobalState = {
   playing: boolean;
+  playCount: number;
   groundSpeed: number;
   groundOffset: number;
   playerAction: PlayerAction;
@@ -368,6 +377,7 @@ export type GlobalState = {
   colors: Colors;
 
   setGroundSpeed: (groundSpeed: number) => void;
+  play: () => void;
   setPlayerAction: (playerAction: PlayerAction) => void;
   setGroundOffset: (groundOffset: number) => void;
   setPlayerXOffset: (playerXOffset: number) => void;
@@ -378,6 +388,7 @@ export type GlobalState = {
 export const useGlobalStore = create<GlobalState>((set) => {
   return {
     playing: false,
+    playCount: 0,
     groundSpeed: 1.75,
     groundOffset: 0,
     playerAction: 'NONE',
@@ -390,7 +401,7 @@ export const useGlobalStore = create<GlobalState>((set) => {
     allEnemyHitIds: [],
     allPowerUpHitIds: [],
     lastThreatHit: { id: '', time: 0 },
-    wave: populateWave(WAVE_DATA),
+    wave: { enemies: [], powerUps: [] },
     colors: {
       player: '#ffa500',
       ground: '#ffffff',
@@ -405,9 +416,29 @@ export const useGlobalStore = create<GlobalState>((set) => {
       return { groundSpeed };
     }),
 
+    play: () => set(({ playCount }) => {
+      playCount++; 
+
+      return { 
+        playing: true, 
+        playCount,
+        wave: populateWave(WAVE_DATA),
+        groundOffset: 0,
+        playerAction: 'NONE',
+        playerXOffset: 0,
+        playerZOffset: 0,
+        playerHealth: 5,
+        powerUpHitId: NO_POWER_UP_ID,
+        threatHitId: '',
+        enemyHitId: NO_ENEMY_ID,
+        allEnemyHitIds: [],
+        allPowerUpHitIds: [],
+        lastThreatHit: { id: '', time: 0 },        
+      };
+    }),
+
     setPlayerAction: (playerAction: PlayerAction) => set(({ playing }) => {
-      // Trigger playing on any player action
-      if (!playing && playerAction !== 'NONE') playing = true;
+      if (!playing) return {};
 
       // Update playing & playerAction state
       return { playing, playerAction };
@@ -419,6 +450,9 @@ export const useGlobalStore = create<GlobalState>((set) => {
         threatHitId = hits.threatId;
         lastThreatHit = { id: threatHitId, time: new Date().getTime() }
         playerHealth--;
+        if (playerHealth === 0) {
+          playing = false;
+        }
       } else {
         threatHitId = '';
       }

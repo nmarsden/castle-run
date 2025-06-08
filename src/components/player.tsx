@@ -22,6 +22,7 @@ export default function Player (){
   const setPlayerXOffset = useGlobalStore((state: GlobalState) => state.setPlayerXOffset);
   const setPlayerZOffset = useGlobalStore((state: GlobalState) => state.setPlayerZOffset);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
+  const playCount = useGlobalStore((state: GlobalState) => state.playCount);  
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
 
@@ -71,6 +72,7 @@ export default function Player (){
   
   return (
     <group 
+      key={`player-${playCount}`}
       position={[0, 0, -1]} 
       rotation-x={Math.PI * -0.5}
     >
