@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Mesh } from "three";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
+import gsap from "gsap";
 
 type HealthBlockProps = {
   healthLevel: number;
@@ -21,8 +22,40 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);
 
+  const currentlyActive = useRef(false);
+
   useEffect(() => {
-    healthBlock.current.visible = (playerHealth >= healthLevel);
+    const active = (playerHealth >= healthLevel);
+
+    if (!currentlyActive.current && active) {
+      // activate
+      gsap.to(
+        healthBlock.current.scale, 
+        { 
+          x: 0.2, 
+          y: 0.2,
+          z: 0.2,
+          duration: 0.5,
+          ease: "bounce",
+          onComplete: () => { currentlyActive.current = true; } 
+        }
+      )
+    }
+    if (currentlyActive.current && !active) {
+      // de-activate
+      gsap.to(
+        healthBlock.current.scale, 
+        { 
+          x: 0, 
+          y: 0,
+          z: 0,
+          duration: 0.5,
+          ease: "bounce",
+          onComplete: () => { currentlyActive.current = false; } 
+        }
+      )
+    }
+
   }, [playerHealth]);
   
   return (
@@ -30,7 +63,7 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
       ref={healthBlock}
       castShadow={true}
       receiveShadow={true}
-      scale={[0.2, 0.2, 0.1]}
+      scale={[0, 0, 0]}
       position={position} 
     >
       <boxGeometry args={[1, 1, 1]} />

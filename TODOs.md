@@ -29,11 +29,14 @@
   [ ] animate when idle
   [ ] should bounds extend to cover the whole ground?
   [ ] react to hitting threat
+  [ ] react to gaining health
  
 [ ] health indicator
   [x] show health indicator on player
   [x] decrease health when threat hit
   [x] increase health when health power-up collected
+  [x] animate increase
+  [x] animate decrease
 
 [ ] enemy
   [x] move with the ground

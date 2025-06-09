@@ -319,7 +319,7 @@ export const useGlobalStore = create<GlobalState>((set) => {
     playerAction: 'NONE',
     playerXOffset: 0,
     playerZOffset: 0,
-    playerHealth: 5,
+    playerHealth: 0,
     powerUpHitId: NO_POWER_UP_ID,
     threatHitId: '',
     enemyHitId: NO_ENEMY_ID,
