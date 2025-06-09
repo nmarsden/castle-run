@@ -1,106 +1,5 @@
 import { create } from 'zustand'
-
-type WaveData = string[];
-
-const WAVE_DATA: WaveData = [
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_p___',
-  '__p__',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '__K__',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '__q__',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '__b__',
-  '_____',
-  '_____',
-  '_____',
-  '____h',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '__k__',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  'h____',
-  '_____',
-  '_____',
-  '_____',
-  '__p__',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-  '_____',
-];
-// const WAVE_DATA: WaveData = [
-//   '_1_1_',
-//   '_____',
-//   '_____',
-//   '1_1_1',
-//   '_____',
-//   '_____',
-//   '_1_1_',
-//   '_____',
-//   '_____',
-//   '_1_1_',
-//   '_____',
-//   '_____',
-//   '1_1_1',
-//   '_____',
-//   '_____',
-//   '_1_1_',
-//   '_____',
-//   '_____',
-//   '_1_1_',
-//   '_____',
-//   '_____',
-//   '4_5_1',
-//   '_____',
-//   '_____',
-//   '_2_3_',
-//   '_____',
-//   '_____',
-//   '__1__'
-// ];
+import { WAVE_DATA, WaveData } from './waveData';
 
 export type EnemyType = 'PAWN' | 'KNIGHT' | 'BISHOP' | 'QUEEN' | 'KING';
 
@@ -127,6 +26,13 @@ export type PowerUpInfo = {
 type Wave = {
   enemies: EnemyInfo[];
   powerUps: PowerUpInfo[];
+  length: number;
+};
+
+const EMPTY_WAVE: Wave = {
+  enemies: [],
+  powerUps: [],
+  length: 0
 };
 
 const NO_POWER_UP_ID = -1;
@@ -255,12 +161,13 @@ const calcThreats = (enemy: EnemyInfo): ThreatInfo[] => {
   });
 };
 
-const populateWave = (waveData: WaveData): Wave => {
+const populateWave = (waveNum: number, waveProgress: number): Wave => {
+  const waveData: WaveData = WAVE_DATA[waveNum - 1];
   const enemies: EnemyInfo[] = [];
   const powerUps: PowerUpInfo[] = [];
 
   // Populate enemies & powerUps
-  let z = -1;
+  let z = waveProgress - 1;
   let id = 0;
   for (let i = waveData.length-1; i >= 0; i--) {
     const squares = waveData[i].split('');
@@ -275,7 +182,7 @@ const populateWave = (waveData: WaveData): Wave => {
       }
       const powerUpType = getPowerUpType(square);
       if (powerUpType) {
-        const y = 0;
+        const y = -0.25;
         powerUps.push({ id, position: [x, y, z], type: powerUpType });
         id++;
       }
@@ -287,8 +194,11 @@ const populateWave = (waveData: WaveData): Wave => {
     const enemy = enemies[i];
     enemy.threats.push(...calcThreats(enemy));
   }
+  // Populate length
+  const waveEndBuffer = 5;
+  const length = waveData.length + waveEndBuffer;
 
-  return { enemies, powerUps };
+  return { enemies, powerUps, length };
 }
 
 export type PlayerAction = 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_FORWARD' | 'MOVE_BACKWARD' | 'NONE';
@@ -309,9 +219,13 @@ type Hits = {
   powerUpId: number; 
 }
 
-const getHits = (wave: Wave, groundOffset: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: number[], allPowerUpHitIds: number[]): Hits => {
+const isCloseTo = (a: number, b: number): boolean => {
+  return a > (b - 0.05) && a < (b + 0.05);
+};
+
+const getHits = (wave: Wave, waveProgress: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: number[], allPowerUpHitIds: number[]): Hits => {
   // Calculate wave Z position
-  const waveZPos = Math.floor((groundOffset * -2) - 0.7 - playerZOffset);
+  const waveZPos = Math.floor((waveProgress * -1) - 0.7 - playerZOffset);
 
   // Get remaining enemies
   const enemies = wave.enemies.filter(enemy => !allEnemyHitIds.includes(enemy.id));
@@ -320,14 +234,14 @@ const getHits = (wave: Wave, groundOffset: number, playerXOffset: number, player
   const hitThreats: ThreatInfo[] = [];
   for (let i=0; i<enemies.length; i++) {
     const foundThreats = enemies[i].threats.filter(threat => {
-      return threat.position[0] === playerXOffset && threat.position[2] === waveZPos
+      return threat.position[0] === playerXOffset && isCloseTo(threat.position[2], waveZPos)
     });
     hitThreats.push(...foundThreats);
   }
 
   // -- Check for enemy hits
   const hitEnemies = enemies.filter(enemy => {
-    return enemy.position[0] === playerXOffset && enemy.position[2] === waveZPos
+    return enemy.position[0] === playerXOffset && isCloseTo(enemy.position[2], waveZPos)
   });
 
   // Get remaining powerUps
@@ -335,7 +249,7 @@ const getHits = (wave: Wave, groundOffset: number, playerXOffset: number, player
 
   // -- Check for powerUp hits
   const hitPowerUps = powerUps.filter(powerUp => {
-    return powerUp.position[0] === playerXOffset && powerUp.position[2] === waveZPos
+    return powerUp.position[0] === playerXOffset && isCloseTo(powerUp.position[2], waveZPos)
   });
 
   return {
@@ -358,11 +272,19 @@ const isThreatHitValid = (threatHitId: string, lastThreatHit: { id: string, time
   return true;
 }
 
+const isWaveCompleted = (wave: Wave, waveProgress: number): boolean => {
+  // console.log('isWaveCompleted: waveProgress=', waveProgress);
+
+  return waveProgress > wave.length;
+};
+
 export type GlobalState = {
   playing: boolean;
   playCount: number;
+  waveNum: number;
+  waveProgress: number;
+  waveCompleted: boolean;
   groundSpeed: number;
-  groundOffset: number;
   playerAction: PlayerAction;
   playerXOffset: number;
   playerZOffset: number;
@@ -378,8 +300,9 @@ export type GlobalState = {
 
   setGroundSpeed: (groundSpeed: number) => void;
   play: () => void;
+  playNextWave: () => void;
   setPlayerAction: (playerAction: PlayerAction) => void;
-  setGroundOffset: (groundOffset: number) => void;
+  setWaveProgressDelta: (waveProgressDelta: number) => void;
   setPlayerXOffset: (playerXOffset: number) => void;
   setPlayerZOffset: (playerZOffset: number) => void;
   setColors: (colors: Colors) => void;
@@ -389,8 +312,10 @@ export const useGlobalStore = create<GlobalState>((set) => {
   return {
     playing: false,
     playCount: 0,
-    groundSpeed: 1.75,
-    groundOffset: 0,
+    waveNum: 0,
+    waveProgress: 0,
+    waveCompleted: false,
+    groundSpeed: 2,
     playerAction: 'NONE',
     playerXOffset: 0,
     playerZOffset: 0,
@@ -401,7 +326,7 @@ export const useGlobalStore = create<GlobalState>((set) => {
     allEnemyHitIds: [],
     allPowerUpHitIds: [],
     lastThreatHit: { id: '', time: 0 },
-    wave: { enemies: [], powerUps: [] },
+    wave: EMPTY_WAVE,
     colors: {
       player: '#ffa500',
       ground: '#ffffff',
@@ -422,12 +347,34 @@ export const useGlobalStore = create<GlobalState>((set) => {
       return { 
         playing: true, 
         playCount,
-        wave: populateWave(WAVE_DATA),
-        groundOffset: 0,
+        waveNum: 1,
+        waveProgress: 0,
+        waveCompleted: false,
+        wave: populateWave(1, 0),
         playerAction: 'NONE',
         playerXOffset: 0,
         playerZOffset: 0,
         playerHealth: 5,
+        powerUpHitId: NO_POWER_UP_ID,
+        threatHitId: '',
+        enemyHitId: NO_ENEMY_ID,
+        allEnemyHitIds: [],
+        allPowerUpHitIds: [],
+        lastThreatHit: { id: '', time: 0 },        
+      };
+    }),
+
+    playNextWave: () => set(({ waveNum, waveProgress }) => {
+      waveNum++;
+      if (waveNum > WAVE_DATA.length) {
+        waveNum = 1;
+      }
+
+      return { 
+        waveNum,
+        waveCompleted: false,
+        wave: populateWave(waveNum, waveProgress),
+        playerAction: 'NONE',
         powerUpHitId: NO_POWER_UP_ID,
         threatHitId: '',
         enemyHitId: NO_ENEMY_ID,
@@ -444,8 +391,10 @@ export const useGlobalStore = create<GlobalState>((set) => {
       return { playing, playerAction };
     }),
 
-    setGroundOffset: (groundOffset: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds }) => {
-      const hits = getHits(wave, groundOffset, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
+    setWaveProgressDelta: (waveProgressDelta: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted }) => {
+      waveProgress += waveProgressDelta;
+
+      const hits = getHits(wave, waveProgress, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
       if (isThreatHitValid(hits.threatId, lastThreatHit)) {
         threatHitId = hits.threatId;
         lastThreatHit = { id: threatHitId, time: new Date().getTime() }
@@ -473,7 +422,13 @@ export const useGlobalStore = create<GlobalState>((set) => {
         powerUpHitId = NO_POWER_UP_ID;
       }
 
-      return { groundOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds };
+      waveCompleted  = isWaveCompleted(wave, waveProgress);
+      if (waveCompleted) {
+        // Adjust waveProgress
+        waveProgress = waveProgress - wave.length;
+      }
+
+      return { playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted };
     }),
 
     setPlayerXOffset: (playerXOffset: number) => set(() => ({ playerXOffset })),

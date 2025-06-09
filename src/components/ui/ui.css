@@ -88,6 +88,39 @@
   font-size: 18px;
 }
 
+.messageContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+	z-index: 10;
+  opacity: 0;
+  transition: all 1s;
+  pointer-events: none;
+}
+
+.messageContainer.show {
+  opacity: 1;
+}
+
+.messageContainer.hide {
+  opacity: 0;
+}
+
+.message {
+  font-size: 50px;
+  line-height: 50px;
+  color: rgba(var(--light-color), 1.0);
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  padding: 20px;
+}
+
 @keyframes pulse {
   0%   { scale: 1; }
   50%  { scale: 1.2; }

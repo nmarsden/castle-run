@@ -12,6 +12,7 @@ import PlayerBounds from './playerBounds.tsx';
 import Enemies from './enemies.tsx';
 import PowerUps from './powerUps.tsx';
 import Ui from './ui/ui.tsx';
+import Waves from './waves.tsx';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <PlayerBounds />
           <Player />
           <Keyboard />
+          <Waves />
         </Suspense>
       </Canvas>
       <Ui />

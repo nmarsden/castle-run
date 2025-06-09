@@ -46,6 +46,13 @@
 
 [ ] waves
   [x] setup enemy positions
+  [x] setup multiple waves
+  [ ] show current wave number in HUD
+  [x] show new wave message
+  [ ] have different environment for each wave
+      [ ] background color
+      [ ] lighting
+      [ ] speed
 
 [ ] power-ups
   [x] health power-up
@@ -54,3 +61,19 @@
   [x] end game when player's health runs out
   [x] show game over overlay
   [x] allow restart
+
+[ ] ui improvements
+  [ ] fonts
+  [ ] icons
+
+[ ] audio
+  [ ] music
+  [ ] sfx
+    [ ] player movement
+    [ ] power-up pickup
+    [ ] enemy capture
+    [ ] threat hit
+    [ ] health increase
+    [ ] health decrease
+    [ ] die
+    [ ] wave complete
