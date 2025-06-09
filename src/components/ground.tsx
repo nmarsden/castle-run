@@ -12,7 +12,7 @@ export default function Ground(){
   const texture = useTexture("textures/checker_board.png");
   const groundClock = useRef(new Clock(false));
   const width = useRef(5);
-  const length = useRef(14);
+  const length = useRef(20);
   const groundOffset = useRef(0);
 
   useEffect(() => {
@@ -61,6 +61,6 @@ export default function Ground(){
         color={colors.ground} 
         map={texture}
       />
-    </mesh>  
+    </mesh>
   )
 }

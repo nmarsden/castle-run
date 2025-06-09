@@ -1,7 +1,8 @@
 import { useFrame } from "@react-three/fiber";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import { useEffect, useRef } from "react";
-import { Clock, Mesh, Vector3 } from "three";
+import { Clock, Mesh, MeshStandardMaterial, Vector3 } from "three";
+import gsap from "gsap";
 
 const getEnemyId = (threatId: string): number => {
   const threatIdParts: string[] = threatId.split('_');
@@ -10,6 +11,7 @@ const getEnemyId = (threatId: string): number => {
 
 export default function Threat ({ position, id }: { position: [number, number, number], id: string }){
   const threat = useRef<Mesh>(null!);
+  const material = useRef<MeshStandardMaterial>(null!);
   const enemyId = useRef<number>(getEnemyId(id));
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
@@ -52,7 +54,14 @@ export default function Threat ({ position, id }: { position: [number, number, n
 
     threatOffset.current.setZ(threatClock.current.getDelta() * groundSpeed);
     threat.current.position.add(threatOffset.current);
-    threat.current.visible = threat.current.position.z < 3 && threat.current.position.z > -12;
+
+    const prevVisible = threat.current.visible;
+
+    threat.current.visible = threat.current.position.z < 4 && threat.current.position.z > -14.5;
+
+    if (threat.current.visible && !prevVisible) {
+      gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });
+    }
   });
 
   return (
@@ -66,7 +75,10 @@ export default function Threat ({ position, id }: { position: [number, number, n
     >
       <planeGeometry />
       <meshStandardMaterial 
-        color={colors.threat} 
+        ref={material}
+        color={colors.threat}
+        opacity={0}
+        transparent={true}
       />
     </mesh>  
   )

@@ -10,7 +10,7 @@ export default function Camera({ children } : { children?: ReactNode }) {
   const fov = useRef(100);
   const cameraTarget = useRef<Vector3>(new Vector3(0, 0, -2.2));
   const cameraPositionPresets = useRef<Map<number, Vector3>>(new Map<number, Vector3>([
-    [2,  new Vector3(0, 3.76, -0.8)],
+    [2,  new Vector3(0, 3.42, -0.6)],
     [1,  new Vector3(0, 4.0, 0.0)],
     [0,  new Vector3(0, 4.2, 0.7)],
     [-1, new Vector3(0, 3.5, 2.2)],
@@ -58,8 +58,8 @@ export default function Camera({ children } : { children?: ReactNode }) {
       positionZ: { 
         value: cameraPosition.current.z, 
         label: 'positionZ', 
-        min: -50, 
-        max: 50, 
+        min: -20, 
+        max: 10, 
         step: 0.01,
         onChange: (value) => {
           cameraPosition.current.z = value;

@@ -1,9 +1,10 @@
 import { useFrame } from "@react-three/fiber";
 import { EnemyInfo, GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import { useEffect, useMemo, useRef } from "react";
-import { Clock, Mesh, Vector3 } from "three";
+import { Clock, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import Threat from "./threat";
+import gsap from "gsap";
 
 export default function Enemy ({ id, position, type, threats }: EnemyInfo){
   const pawn = useGLTF("models/Pawn.glb");
@@ -13,6 +14,8 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
   const king = useGLTF("models/King.glb");
 
   const enemy = useRef<Mesh>(null!);
+  const material = useRef<MeshStandardMaterial>(null!);
+  
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
@@ -53,7 +56,14 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
 
     enemyOffset.current.setZ(enemyClock.current.getDelta() * groundSpeed);
     enemy.current.position.add(enemyOffset.current);
-    enemy.current.visible = enemy.current.position.z < 3 && enemy.current.position.z > -12;
+
+    const prevVisible = enemy.current.visible;
+
+    enemy.current.visible = enemy.current.position.z < 4 && enemy.current.position.z > -14.5;
+
+    if (enemy.current.visible && !prevVisible) {
+      gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });
+    }
   });
 
   return (
@@ -69,7 +79,10 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
         visible={false}
       >
         <meshStandardMaterial 
+          ref={material}
           color={colors.enemy} 
+          opacity={0}
+          transparent={true}
         />
       </mesh>
       <>

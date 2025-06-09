@@ -14,7 +14,8 @@
   [x] show as checker board
   [x] scroll
   [x] extend ground off the bottom of the screen
-  [ ] fade leading & trailing edges
+  [x] extend leading edge out of camera view
+  [ ] fade trailing edge
 
 [ ] player
   [x] movement using keyboard
@@ -42,7 +43,7 @@
   [x] react to being hit by player
       [x] kill enemy
       [x] kill enemy's threats
-  [ ] fade in entering enemies & fade out leaving enemies
+  [x] fade in when entering
 
 [ ] waves
   [x] setup enemy positions
@@ -56,6 +57,7 @@
 
 [ ] power-ups
   [x] health power-up
+  [x] fade in when entering
 
 [ ] game over
   [x] end game when player's health runs out
