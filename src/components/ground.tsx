@@ -60,6 +60,7 @@ export default function Ground(){
       <meshStandardMaterial 
         color={colors.ground} 
         map={texture}
+        depthWrite={false}
       />
     </mesh>
   )
