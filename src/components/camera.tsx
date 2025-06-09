@@ -10,11 +10,11 @@ export default function Camera({ children } : { children?: ReactNode }) {
   const fov = useRef(100);
   const cameraTarget = useRef<Vector3>(new Vector3(0, 0, 1 - 2));
   const cameraPositionPresets = useRef<Map<number, Vector3>>(new Map<number, Vector3>([
-    [2,  new Vector3(0, 3.5, -2 + 1)],
-    [1,  new Vector3(0, 3.5, -1 + 1)],
+    [2,  new Vector3(0, 3.5, 2 + 1)],
+    [1,  new Vector3(0, 3.5, 1 + 1)],
     [0,  new Vector3(0, 3.5, 0 + 1)],
-    [-1, new Vector3(0, 3.5, 1 + 1)],
-    [-2, new Vector3(0, 3.5, 2 + 1)],
+    [-1, new Vector3(0, 3.5, -1 + 1)],
+    [-2, new Vector3(0, 3.5, -2 + 1)],
   ]));
   const cameraPosition = useRef<Vector3>(cameraPositionPresets.current.get(playerZOffset) as Vector3);
 

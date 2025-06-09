@@ -225,7 +225,7 @@ const isCloseTo = (a: number, b: number): boolean => {
 
 const getHits = (wave: Wave, waveProgress: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: number[], allPowerUpHitIds: number[]): Hits => {
   // Calculate wave Z position
-  const waveZPos = Math.floor((waveProgress * -1) - 0.7 - playerZOffset);
+  const waveZPos = Math.floor((waveProgress * -1) - 0.7 + playerZOffset);
 
   // Get remaining enemies
   const enemies = wave.enemies.filter(enemy => !allEnemyHitIds.includes(enemy.id));

@@ -43,16 +43,13 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
 
 export default function PlayerHealth (){
   return (
-    <group 
-      scale={(1 / 25)}
-      rotation-x={Math.PI * 0.5}
-    >
+    <>
       {HEALTH_BLOCKS.map((block, index) => 
         <HealthBlock 
           key={`health-block-${index}`} 
           healthLevel={block.healthLevel} 
           position={block.position}/>
       )}
-    </group>
+    </>
   )
 }

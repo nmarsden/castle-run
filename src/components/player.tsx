@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { GlobalState, PlayerAction, useGlobalStore } from "../stores/useGlobalStore";
 import { Mesh, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
@@ -7,8 +7,8 @@ import PlayerHealth from "./playerHealth";
 
 const OFFSET = 1;
 const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
-  ['MOVE_FORWARD', new Vector3(0, OFFSET, 0)],
-  ['MOVE_BACKWARD', new Vector3(0, -OFFSET, 0)],
+  ['MOVE_FORWARD', new Vector3(0, 0, -OFFSET)],
+  ['MOVE_BACKWARD', new Vector3(0, 0, OFFSET)],
   ['MOVE_LEFT', new Vector3(-OFFSET, 0, 0)],
   ['MOVE_RIGHT', new Vector3(OFFSET, 0, 0)],
   ['NONE', new Vector3(0, 0, 0)],
@@ -26,6 +26,15 @@ export default function Player (){
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
 
+  const geometry = useMemo(() => {
+    // TODO update model file in blender so that geometry changes are not required
+    const geometry = (rook.nodes.Rook as Mesh).geometry;
+    geometry.rotateX(Math.PI * -0.25);
+    geometry.scale(5, 5, 5);
+
+    return geometry;
+  }, []);
+
   useEffect(() => {
     if (isMoving.current) return;
     const playerOffset = PLAYER_OFFSETS.get(playerAction) as Vector3;
@@ -34,11 +43,11 @@ export default function Player (){
 
     if (tempPos.current.x > 2) return;
     if (tempPos.current.x < -2) return;
-    if (tempPos.current.y > 2) return;
-    if (tempPos.current.y < -2) return;
+    if (tempPos.current.z > 2) return;
+    if (tempPos.current.z < -2) return;
 
     setPlayerXOffset(tempPos.current.x);
-    setPlayerZOffset(tempPos.current.y);
+    setPlayerZOffset(tempPos.current.z);
 
     isMoving.current = true;
     const duration = 0.15;
@@ -47,7 +56,7 @@ export default function Player (){
       player.current.position, 
       { 
         x: tempPos.current.x, 
-        y: tempPos.current.y, 
+        z: tempPos.current.z, 
         duration,
         ease: "power1.inOut",
         onComplete: () => { isMoving.current = false; } 
@@ -60,11 +69,11 @@ export default function Player (){
       { 
         keyframes: 
           playerOffset.x === 0 ? [
-            { x: angle * -playerOffset.y, duration: duration * 0.5 },
+            { x: angle * playerOffset.z,  duration: duration * 0.5 },
             { x: 0,                       duration: duration * 0.5 }
           ] : [
-            { y: angle * playerOffset.x, duration: duration * 0.5 },
-            { y: 0,                      duration: duration * 0.5 }
+            { z: angle * -playerOffset.x, duration: duration * 0.5 },
+            { z: 0,                       duration: duration * 0.5 }
           ]
       }
     )
@@ -74,14 +83,12 @@ export default function Player (){
     <group 
       key={`player-${playCount}`}
       position={[0, 0, -1]} 
-      rotation-x={Math.PI * -0.5}
     >
       <mesh
         ref={player}
         castShadow={true}
         receiveShadow={true}
-        geometry={(rook.nodes.Rook as Mesh).geometry}
-        scale={25}
+        geometry={geometry}
       >
         <meshStandardMaterial 
           color={colors.player}
