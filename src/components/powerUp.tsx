@@ -70,7 +70,7 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
 
     // Make visible when Z position is on the ground area
     const prevVisible = powerUp.current.visible;
-    powerUp.current.visible = powerUp.current.position.z < 4 && powerUp.current.position.z > -14.5;
+    powerUp.current.visible = powerUp.current.position.z < 5 && powerUp.current.position.z > -14.5;
     if (powerUp.current.visible && !prevVisible) {
       // Animate fade-in
       gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });

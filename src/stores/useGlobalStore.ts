@@ -195,7 +195,7 @@ const populateWave = (waveNum: number, waveProgress: number): Wave => {
     enemy.threats.push(...calcThreats(enemy));
   }
   // Populate length
-  const waveEndBuffer = 5;
+  const waveEndBuffer = 7;
   const length = waveData.length + waveEndBuffer;
 
   return { enemies, powerUps, length };

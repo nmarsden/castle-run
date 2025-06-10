@@ -59,7 +59,7 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
 
     const prevVisible = enemy.current.visible;
 
-    enemy.current.visible = enemy.current.position.z < 4 && enemy.current.position.z > -14.5;
+    enemy.current.visible = enemy.current.position.z < 5 && enemy.current.position.z > -14.5;
 
     if (enemy.current.visible && !prevVisible) {
       gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });

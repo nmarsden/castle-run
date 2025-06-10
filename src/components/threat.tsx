@@ -57,7 +57,7 @@ export default function Threat ({ position, id }: { position: [number, number, n
 
     const prevVisible = threat.current.visible;
 
-    threat.current.visible = threat.current.position.z < 4 && threat.current.position.z > -14.5;
+    threat.current.visible = threat.current.position.z < 5 && threat.current.position.z > -14.5;
 
     if (threat.current.visible && !prevVisible) {
       gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });
