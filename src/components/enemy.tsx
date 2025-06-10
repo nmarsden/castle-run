@@ -44,7 +44,6 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
     if (isDead.current) return;
 
     if (enemyHitId === id) {
-      // console.log('Enemy Hit: id=', id);
       // Die
       isDead.current = true;
       // Animate up & fade-out

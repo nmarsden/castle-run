@@ -27,6 +27,9 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
 
     } else {
       powerUpClock.current.stop();
+
+      // Stop bouncing
+      bounceTween.current.pause();
     }
   }, [playing]);
 

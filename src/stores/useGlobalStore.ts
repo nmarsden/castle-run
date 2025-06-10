@@ -273,8 +273,6 @@ const isThreatHitValid = (threatHitId: string, lastThreatHit: { id: string, time
 }
 
 const isWaveCompleted = (wave: Wave, waveProgress: number): boolean => {
-  // console.log('isWaveCompleted: waveProgress=', waveProgress);
-
   return waveProgress > wave.length;
 };
 

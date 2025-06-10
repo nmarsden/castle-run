@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import { useEffect, useRef } from "react";
-import { Clock, Mesh, MeshStandardMaterial, Vector3 } from "three";
+import { Clock, Color, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import gsap from "gsap";
 
 const getEnemyId = (threatId: string): number => {
@@ -34,7 +34,24 @@ export default function Threat ({ position, id }: { position: [number, number, n
     if (isDead.current) return;
 
     if (id == threatHitId) {
-      console.log('Threat Hit: id=', id);
+      // Animate flash
+      const originalColor = material.current.color.clone();
+      const flashColor = new Color("orange");
+      gsap.to(
+        material.current.color, 
+        { 
+          keyframes: [
+            { r: flashColor.r,    g: flashColor.g,    b: flashColor.b },
+            { r: originalColor.r, g: originalColor.g, b: originalColor.b }
+          ],
+          duration: 0.1, 
+          ease: "power1.inOut",
+          repeat: 5,
+          // Note: since multiple threats can be in the same position, raise slightly before animating
+          onStart:    () => { threat.current.position.y += 0.01; },
+          onComplete: () => { threat.current.position.y -= 0.01; }
+        }
+      );      
     }
   }, [threatHitId]);
 
@@ -43,7 +60,6 @@ export default function Threat ({ position, id }: { position: [number, number, n
 
     if (enemyId.current === enemyHitId) {
       // Die
-      // console.log('Threat Enemy Hit: id=', id);
       isDead.current = true;
       // Animate fade-out
       gsap.to(
@@ -88,6 +104,7 @@ export default function Threat ({ position, id }: { position: [number, number, n
         color={colors.threat}
         opacity={0}
         transparent={true}
+        depthWrite={false}
       />
     </mesh>  
   )
