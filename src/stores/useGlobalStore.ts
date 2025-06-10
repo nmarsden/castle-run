@@ -392,6 +392,8 @@ export const useGlobalStore = create<GlobalState>((set) => {
     }),
 
     setWaveProgressDelta: (waveProgressDelta: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted }) => {
+      if (!playing) return {};
+
       waveProgress += waveProgressDelta;
 
       const hits = getHits(wave, waveProgress, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)

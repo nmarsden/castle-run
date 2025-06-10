@@ -16,10 +16,15 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
   const powerUpOffset = useRef<Vector3>(new Vector3());
   const powerUpClock = useRef(new Clock(false));
   const isDead = useRef(false);
+  const bounceTween = useRef<GSAPTween>(null!);
 
   useEffect(() => {
     if (playing) {
       powerUpClock.current.start();
+      
+      // Start bouncing
+      bounceTween.current = gsap.to(powerUp.current.position, { y: 0.25, duration: 0.5, ease: "power1.inOut", repeat: -1, yoyo: true });
+
     } else {
       powerUpClock.current.stop();
     }
@@ -31,7 +36,9 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
     if (powerUpHitId === id) {
       // Die
       isDead.current = true;
-      // animate position & scale
+      // Stop bouncing
+      bounceTween.current.pause();
+      // Animate death
       gsap.to(
         powerUp.current.position, 
         { 
@@ -55,16 +62,17 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
   }, [powerUpHitId]);
 
   useFrame(() => {
-    if (isDead.current) return;
+    if (!playing || isDead.current) return;
 
+    // Adjust Z position
     powerUpOffset.current.setZ(powerUpClock.current.getDelta() * groundSpeed);
     powerUp.current.position.add(powerUpOffset.current);
 
+    // Make visible when Z position is on the ground area
     const prevVisible = powerUp.current.visible;
-
     powerUp.current.visible = powerUp.current.position.z < 4 && powerUp.current.position.z > -14.5;
-
     if (powerUp.current.visible && !prevVisible) {
+      // Animate fade-in
       gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });
     }
   });

@@ -65,7 +65,7 @@
 [ ] power-ups
   [x] health power-up
   [x] fade in when entering
-  [ ] animate idle
+  [x] animate idle as bouncing
   [x] animate being picked up
 
 [ ] game over
