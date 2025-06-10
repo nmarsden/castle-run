@@ -49,8 +49,8 @@
       [x] kill enemy
       [x] kill enemy's threats
   [x] fade in when entering
-  [ ] animate killed enemy
-  [ ] animate killed threat
+  [x] animate killed enemy
+  [x] animate killed threat
 
 [ ] waves
   [x] setup enemy positions

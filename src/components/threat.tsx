@@ -45,15 +45,24 @@ export default function Threat ({ position, id }: { position: [number, number, n
       // Die
       // console.log('Threat Enemy Hit: id=', id);
       isDead.current = true;
-      threat.current.visible = false;
+      // Animate fade-out
+      gsap.to(
+        material.current, 
+        { 
+          opacity: 0, 
+          duration: 0.5, 
+          ease: "power1.inOut",
+          onComplete: () => { threat.current.visible = false; } 
+        }
+      );      
     }
   }, [enemyHitId]);
 
   useFrame(() => {
-    if (isDead.current) return;
-
     threatOffset.current.setZ(threatClock.current.getDelta() * groundSpeed);
     threat.current.position.add(threatOffset.current);
+
+    if (isDead.current) return;
 
     const prevVisible = threat.current.visible;
 

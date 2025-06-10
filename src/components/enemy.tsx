@@ -47,7 +47,25 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
       // console.log('Enemy Hit: id=', id);
       // Die
       isDead.current = true;
-      enemy.current.visible = false;
+      // Animate up & fade-out
+      gsap.to(
+        enemy.current.position, 
+        { 
+          y: 1,
+          duration: 0.5, 
+          ease: "power1.inOut",
+        }
+      );      
+
+      gsap.to(
+        material.current, 
+        { 
+          opacity: 0, 
+          duration: 0.5, 
+          ease: "power1.inOut",
+          onComplete: () => { enemy.current.visible = false; } 
+        }
+      );      
     }
   }, [enemyHitId]);
 
