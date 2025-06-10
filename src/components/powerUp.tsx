@@ -29,10 +29,28 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
     if (isDead.current) return;
 
     if (powerUpHitId === id) {
-      console.log('PowerUp Hit: id=', id);
       // Die
       isDead.current = true;
-      powerUp.current.visible = false;
+      // animate position & scale
+      gsap.to(
+        powerUp.current.position, 
+        { 
+          y: 1,
+          duration: 0.1,
+          ease: "power1.inOut",
+        }
+      )      
+      gsap.to(
+        powerUp.current.scale, 
+        { 
+          x: 0, 
+          y: 0,
+          z: 0,
+          duration: 0.5,
+          ease: "power1.inOut",
+          onComplete: () => { powerUp.current.visible = false; } 
+        }
+      )
     }
   }, [powerUpHitId]);
 

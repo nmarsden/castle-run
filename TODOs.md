@@ -28,8 +28,10 @@
   [ ] add thruster(s)
   [ ] animate when idle
   [ ] should bounds extend to cover the whole ground?
-  [ ] react to hitting threat
-  [ ] react to gaining health
+  [ ] animate hitting threat
+  [ ] animate hitting enemy
+  [ ] animate gaining health
+  [ ] animate losing health
  
 [ ] health indicator
   [x] show health indicator on player
@@ -47,6 +49,8 @@
       [x] kill enemy
       [x] kill enemy's threats
   [x] fade in when entering
+  [ ] animate killed enemy
+  [ ] animate killed threat
 
 [ ] waves
   [x] setup enemy positions
@@ -61,6 +65,8 @@
 [ ] power-ups
   [x] health power-up
   [x] fade in when entering
+  [ ] animate idle
+  [x] animate being picked up
 
 [ ] game over
   [x] end game when player's health runs out
