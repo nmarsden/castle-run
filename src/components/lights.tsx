@@ -20,7 +20,7 @@ export default function Lights() {
       'Directional': folder(
         {
           directionalColor: {value: 'white', label: 'color'},
-          directionalIntensity: {value: 2, min: 0, max: 10, step: 0.1, label: 'intensity'},
+          directionalIntensity: {value: 3.1, min: 0, max: 10, step: 0.01, label: 'intensity'},
           directionalPosition: {value: [6.5, 3.25, -6.5], label: 'position'},
         }
       )
