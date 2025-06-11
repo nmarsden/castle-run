@@ -46,13 +46,13 @@ export default function Lights() {
       shadow-mapSize-width={512}
       shadow-mapSize-height={512}
 
-      shadow-camera-top={4}
+      shadow-camera-top={3}
       shadow-camera-bottom={-4}
-      shadow-camera-left={-4}
-      shadow-camera-right={10}
+      shadow-camera-left={-6}
+      shadow-camera-right={12}
 
       shadow-camera-near={0.1}
-      shadow-camera-far={13}      
+      shadow-camera-far={15}      
 
       castShadow={true}
     />
