@@ -68,6 +68,7 @@
   [x] fade in when entering
   [x] animate idle as bouncing
   [x] animate being picked up
+  [ ] coins power-up
 
 [ ] game over
   [x] end game when player's health runs out

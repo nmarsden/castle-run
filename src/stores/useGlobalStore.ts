@@ -326,13 +326,13 @@ export const useGlobalStore = create<GlobalState>((set) => {
     lastThreatHit: { id: '', time: 0 },
     wave: EMPTY_WAVE,
     colors: {
-      player: '#ffa500',
-      ground: '#ffffff',
-      enemy: '#ff4444',
-      threat: '#ff4444',
-      healthOn: 'green',
+      player: '#FABA13',
+      ground: '#e0e0e0',
+      enemy: '#FFFFFF',
+      threat: '#E25636',
+      healthOn: '#3BB52E',
       healthOff: 'black',
-      powerUpHealth: 'green'
+      powerUpHealth: '#3BB52E'
     },
 
     setGroundSpeed: (groundSpeed: number) => set(() => {
