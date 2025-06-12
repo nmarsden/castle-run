@@ -91,7 +91,7 @@ export default function Camera({ children } : { children?: ReactNode }) {
         makeDefault={true}
         fov={fov.current}
         near={0.1}
-        far={20}
+        far={150}
         position={[cameraPosition.current.x, cameraPosition.current.y, cameraPosition.current.z]}
         rotation-x={Math.PI * -0.25}
       >
