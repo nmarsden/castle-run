@@ -94,5 +94,4 @@
     [ ] die
     [ ] wave complete
 
-[ ] fix bug: at the end of a wave, player no longer reacts to keypress when on the right or left edge of the ground
-             unless you stop spamming the keyboard
+[x] fix bug: player stopped moving if pressing one direction followed by the opposite direction multiple times

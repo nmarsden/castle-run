@@ -36,7 +36,7 @@ export default function Player (){
   }, []);
 
   useEffect(() => {
-    if (isMoving.current) return;
+    if (isMoving.current || playerAction === 'NONE') return;
     const playerOffset = PLAYER_OFFSETS.get(playerAction) as Vector3;
     tempPos.current.set(player.current.position.x, player.current.position.y, player.current.position.z);
     tempPos.current.add(playerOffset);
@@ -46,10 +46,11 @@ export default function Player (){
     if (tempPos.current.z > 2) return;
     if (tempPos.current.z < -2) return;
 
+    isMoving.current = true;
+
     setPlayerXOffset(tempPos.current.x);
     setPlayerZOffset(tempPos.current.z);
 
-    isMoving.current = true;
     const duration = 0.15;
     // animate position
     gsap.to(
