@@ -85,7 +85,12 @@ export default function Threat ({ position, id }: { position: [number, number, n
     threat.current.visible = threat.current.position.z < 5 && threat.current.position.z > -14.5;
 
     if (threat.current.visible && !prevVisible) {
-      gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });
+      gsap.to(material.current, { 
+        delay: 0.5, // appear after the enemy
+        opacity: 1, 
+        duration: 0.5, 
+        ease: "power1.inOut" 
+      });
     }
   });
 

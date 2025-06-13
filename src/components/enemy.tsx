@@ -79,7 +79,13 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
     enemy.current.visible = enemy.current.position.z < 5 && enemy.current.position.z > -14.5;
 
     if (enemy.current.visible && !prevVisible) {
-      gsap.to(material.current, { opacity: 0.7, duration: 0.5, ease: "power1.inOut" });
+      gsap.to(enemy.current.scale, {           
+        x: 25, 
+        y: 25,
+        z: 25,
+        duration: 0.5, 
+        ease: "power1.inOut" 
+      });
     }
   });
 
@@ -91,14 +97,14 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
         receiveShadow={true}
         position={position}
         geometry={geometry}
-        scale={25}
+        scale={0}
         rotation-x={Math.PI * -0.5}
         visible={false}
       >
         <meshStandardMaterial 
           ref={material}
           color={colors.enemy} 
-          opacity={0}
+          opacity={0.7}
           transparent={true}
         />
       </mesh>
