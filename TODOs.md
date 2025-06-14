@@ -33,7 +33,8 @@
   [ ] animate gaining health
   [ ] animate losing health
   [x] animate dead
- 
+  [x] edit model to simplify geometry
+
 [ ] health indicator
   [x] show health indicator on player
   [x] decrease health when threat hit

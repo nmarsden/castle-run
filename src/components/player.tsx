@@ -35,15 +35,6 @@ export default function Player (){
   const originalColor = useRef(new Color(colors.player));
   const flashColor = useRef(new Color(colors.playerFlash));
 
-  const geometry = useMemo(() => {
-    // TODO update model file in blender so that geometry changes are not required
-    const geometry = (rook.nodes.Rook as Mesh).geometry;
-    geometry.rotateX(Math.PI * -0.25);
-    geometry.scale(5, 5, 5);
-
-    return geometry;
-  }, []);
-
   useEffect(() => {
     originalColor.current = new Color(colors.player);
     flashColor.current = new Color(colors.playerFlash);
@@ -139,7 +130,7 @@ export default function Player (){
         ref={player}
         castShadow={true}
         receiveShadow={true}
-        geometry={geometry}
+        geometry={(rook.nodes.Rook as Mesh).geometry}
       >
         <meshStandardMaterial 
           ref={material}
