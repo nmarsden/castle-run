@@ -20,6 +20,7 @@ export default function Player (){
 
   const player = useRef<Mesh>(null!);
   const material = useRef<MeshStandardMaterial>(null!);
+
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
   const setPlayerXOffset = useGlobalStore((state: GlobalState) => state.setPlayerXOffset);
   const setPlayerZOffset = useGlobalStore((state: GlobalState) => state.setPlayerZOffset);
@@ -27,8 +28,12 @@ export default function Player (){
   const playCount = useGlobalStore((state: GlobalState) => state.playCount);  
   const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);  
   const waveProgress = useGlobalStore((state: GlobalState) => state.waveProgress);  
+  const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
+
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
+  const originalColor = useRef(new Color(colors.player));
+  const flashColor = useRef(new Color(colors.playerFlash));
 
   const geometry = useMemo(() => {
     // TODO update model file in blender so that geometry changes are not required
@@ -45,21 +50,34 @@ export default function Player (){
     if (playerHealth === 0) {
       // Die
       Sounds.getInstance().playSoundFX('PLAYER_DIE');
-      const flashColor = new Color("#E25636");
       gsap.to(
-        material.current.color, 
-        { 
-          r: flashColor.r,    
-          g: flashColor.g,    
-          b: flashColor.b,
-          duration: 0.1, 
+        material.current.color,
+        {
+          r: flashColor.current.r,
+          g: flashColor.current.g,
+          b: flashColor.current.b,
+          duration: 0.1,
           ease: "power1.inOut",
           repeat: 5,
           loop: true
         }
       );      
+    } else if (threatHitId !== '') {
+      // Hit Threat
+      gsap.to(
+        material.current.color, 
+        { 
+          keyframes: [
+            { r: flashColor.current.r,    g: flashColor.current.g,    b: flashColor.current.b },
+            { r: originalColor.current.r, g: originalColor.current.g, b: originalColor.current.b }
+          ],
+          duration: 0.1, 
+          ease: "power1.inOut",
+          repeat: 5
+        }
+      );      
     }
-  }, [playerHealth]);
+  }, [playerHealth, threatHitId]);
 
   useEffect(() => {
     if (isMoving.current || playerAction === 'NONE') return;

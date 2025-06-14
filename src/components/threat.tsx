@@ -14,14 +14,18 @@ export default function Threat ({ position, id }: { position: [number, number, n
   const threat = useRef<Mesh>(null!);
   const material = useRef<MeshStandardMaterial>(null!);
   const enemyId = useRef<number>(getEnemyId(id));
+
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
   const enemyHitId = useGlobalStore((state: GlobalState) => state.enemyHitId);
+
   const threatOffset = useRef<Vector3>(new Vector3());
   const threatClock = useRef(new Clock(false));
   const isDead = useRef(false);
+  const originalColor = useRef(new Color(colors.threat));
+  const flashColor = useRef(new Color(colors.threatFlash));
 
   useEffect(() => {
     if (playing) {
@@ -37,15 +41,12 @@ export default function Threat ({ position, id }: { position: [number, number, n
     if (id == threatHitId) {
       // Hit
       Sounds.getInstance().playSoundFX('THREAT_HIT');
-  
-      const originalColor = material.current.color.clone();
-      const flashColor = new Color("orange");
       gsap.to(
         material.current.color, 
         { 
           keyframes: [
-            { r: flashColor.r,    g: flashColor.g,    b: flashColor.b },
-            { r: originalColor.r, g: originalColor.g, b: originalColor.b }
+            { r: flashColor.current.r,    g: flashColor.current.g,    b: flashColor.current.b },
+            { r: originalColor.current.r, g: originalColor.current.g, b: originalColor.current.b }
           ],
           duration: 0.1, 
           ease: "power1.inOut",

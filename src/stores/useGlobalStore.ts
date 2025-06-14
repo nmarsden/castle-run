@@ -207,9 +207,11 @@ export type PlayerAction = 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_FORWARD' | 'MOVE_B
 
 type Colors = {
   player: string;
+  playerFlash: string;
   ground: string;
   enemy: string;
   threat: string;
+  threatFlash: string;
   healthOn: string;
   healthOff: string;
   powerUpHealth: string;
@@ -333,9 +335,11 @@ export const useGlobalStore = create<GlobalState>()(
         wave: EMPTY_WAVE,
         colors: {
           player: '#FABA13',
+          playerFlash: '#E25636',
           ground: '#e0e0e0',
           enemy: '#FFFFFF',
           threat: '#E25636',
+          threatFlash: 'orange',
           healthOn: '#3BB52E',
           healthOff: 'black',
           powerUpHealth: '#3BB52E'

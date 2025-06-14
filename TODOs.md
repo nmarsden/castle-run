@@ -28,11 +28,11 @@
   [ ] add thruster(s)
   [ ] animate when idle
   [ ] should bounds extend to cover the whole ground?
-  [ ] animate hitting threat
+  [x] animate hitting threat
   [ ] animate hitting enemy
   [ ] animate gaining health
   [ ] animate losing health
-  [ ] animate dead
+  [x] animate dead
  
 [ ] health indicator
   [x] show health indicator on player
