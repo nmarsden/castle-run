@@ -97,3 +97,6 @@
   [x] sfx on/off controls
 
 [x] fix bug: player stopped moving if pressing one direction followed by the opposite direction multiple times
+
+[ ] use local storage
+    [x] sfx on/off

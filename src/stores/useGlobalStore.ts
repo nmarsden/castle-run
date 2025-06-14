@@ -1,4 +1,5 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { WAVE_DATA, WaveData } from './waveData';
 import { Sounds } from '../utils/sounds';
 
@@ -309,140 +310,150 @@ export type GlobalState = {
   setColors: (colors: Colors) => void;
 };
 
-export const useGlobalStore = create<GlobalState>((set) => {
-  return {
-    playing: false,
-    playCount: 0,
-    waveNum: 0,
-    waveProgress: 0,
-    waveCompleted: false,
-    groundSpeed: 2,
-    playerAction: 'NONE',
-    playerXOffset: 0,
-    playerZOffset: 0,
-    playerHealth: 0,
-    powerUpHitId: NO_POWER_UP_ID,
-    threatHitId: '',
-    enemyHitId: NO_ENEMY_ID,
-    allEnemyHitIds: [],
-    allPowerUpHitIds: [],
-    lastThreatHit: { id: '', time: 0 },
-    wave: EMPTY_WAVE,
-    colors: {
-      player: '#FABA13',
-      ground: '#e0e0e0',
-      enemy: '#FFFFFF',
-      threat: '#E25636',
-      healthOn: '#3BB52E',
-      healthOff: 'black',
-      powerUpHealth: '#3BB52E'
-    },
-    soundFXOn: false,
-
-    setGroundSpeed: (groundSpeed: number) => set(() => {
-      return { groundSpeed };
-    }),
-
-    play: () => set(({ playCount }) => {
-      playCount++; 
-
-      return { 
-        playing: true, 
-        playCount,
-        waveNum: 1,
+export const useGlobalStore = create<GlobalState>()(
+  persist(  
+    (set) => {
+      return {
+        playing: false,
+        playCount: 0,
+        waveNum: 0,
         waveProgress: 0,
         waveCompleted: false,
-        wave: populateWave(1, 0),
+        groundSpeed: 2,
         playerAction: 'NONE',
         playerXOffset: 0,
         playerZOffset: 0,
-        playerHealth: 5,
+        playerHealth: 0,
         powerUpHitId: NO_POWER_UP_ID,
         threatHitId: '',
         enemyHitId: NO_ENEMY_ID,
         allEnemyHitIds: [],
         allPowerUpHitIds: [],
-        lastThreatHit: { id: '', time: 0 },        
-      };
-    }),
+        lastThreatHit: { id: '', time: 0 },
+        wave: EMPTY_WAVE,
+        colors: {
+          player: '#FABA13',
+          ground: '#e0e0e0',
+          enemy: '#FFFFFF',
+          threat: '#E25636',
+          healthOn: '#3BB52E',
+          healthOff: 'black',
+          powerUpHealth: '#3BB52E'
+        },
+        soundFXOn: true,
 
-    playNextWave: () => set(({ waveNum, waveProgress }) => {
-      waveNum++;
-      if (waveNum > WAVE_DATA.length) {
-        waveNum = 1;
+        setGroundSpeed: (groundSpeed: number) => set(() => {
+          return { groundSpeed };
+        }),
+
+        play: () => set(({ playCount }) => {
+          playCount++; 
+
+          return { 
+            playing: true, 
+            playCount,
+            waveNum: 1,
+            waveProgress: 0,
+            waveCompleted: false,
+            wave: populateWave(1, 0),
+            playerAction: 'NONE',
+            playerXOffset: 0,
+            playerZOffset: 0,
+            playerHealth: 5,
+            powerUpHitId: NO_POWER_UP_ID,
+            threatHitId: '',
+            enemyHitId: NO_ENEMY_ID,
+            allEnemyHitIds: [],
+            allPowerUpHitIds: [],
+            lastThreatHit: { id: '', time: 0 },        
+          };
+        }),
+
+        playNextWave: () => set(({ waveNum, waveProgress }) => {
+          waveNum++;
+          if (waveNum > WAVE_DATA.length) {
+            waveNum = 1;
+          }
+
+          return { 
+            waveNum,
+            waveCompleted: false,
+            wave: populateWave(waveNum, waveProgress),
+            playerAction: 'NONE',
+            powerUpHitId: NO_POWER_UP_ID,
+            threatHitId: '',
+            enemyHitId: NO_ENEMY_ID,
+            allEnemyHitIds: [],
+            allPowerUpHitIds: [],
+            lastThreatHit: { id: '', time: 0 },        
+          };
+        }),
+
+        toggleSoundFx: () => set(({ soundFXOn }) => ({ soundFXOn: !soundFXOn })),
+        
+        setPlayerAction: (playerAction: PlayerAction) => set(({ playing }) => {
+          if (!playing) return {};
+
+          // Update playing & playerAction state
+          return { playing, playerAction };
+        }),
+
+        setWaveProgressDelta: (waveProgressDelta: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted }) => {
+          if (!playing) return {};
+
+          waveProgress += waveProgressDelta;
+
+          const hits = getHits(wave, waveProgress, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
+          if (isThreatHitValid(hits.threatId, lastThreatHit)) {
+            threatHitId = hits.threatId;
+            lastThreatHit = { id: threatHitId, time: new Date().getTime() }
+            playerHealth--;
+            if (playerHealth === 0) {
+              Sounds.getInstance().playSoundFX('PLAYER_DIE');
+              playing = false;
+            }
+          } else {
+            threatHitId = '';
+          }
+          if (hits.enemyId !== NO_ENEMY_ID) {
+            enemyHitId = hits.enemyId;
+            allEnemyHitIds.push(enemyHitId);
+          } else {
+            enemyHitId = NO_ENEMY_ID;
+          }
+
+          if (hits.powerUpId !== NO_POWER_UP_ID) {
+            powerUpHitId = hits.powerUpId;
+            allPowerUpHitIds.push(powerUpHitId);
+            if (playerHealth < 5) {
+              playerHealth++;
+            }
+          } else {
+            powerUpHitId = NO_POWER_UP_ID;
+          }
+
+          waveCompleted  = isWaveCompleted(wave, waveProgress);
+          if (waveCompleted) {
+            Sounds.getInstance().playSoundFX('WAVE_COMPLETE');
+            // Adjust waveProgress
+            waveProgress = waveProgress - wave.length;
+          }
+
+          return { playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted };
+        }),
+
+        setPlayerXOffset: (playerXOffset: number) => set(() => ({ playerXOffset })),
+
+        setPlayerZOffset: (playerZOffset: number) => set(() => ({ playerZOffset })),
+
+        setColors: (colors: Colors) => set(() => ({ colors }))
       }
-
-      return { 
-        waveNum,
-        waveCompleted: false,
-        wave: populateWave(waveNum, waveProgress),
-        playerAction: 'NONE',
-        powerUpHitId: NO_POWER_UP_ID,
-        threatHitId: '',
-        enemyHitId: NO_ENEMY_ID,
-        allEnemyHitIds: [],
-        allPowerUpHitIds: [],
-        lastThreatHit: { id: '', time: 0 },        
-      };
-    }),
-
-    toggleSoundFx: () => set(({ soundFXOn }) => ({ soundFXOn: !soundFXOn })),
-    
-    setPlayerAction: (playerAction: PlayerAction) => set(({ playing }) => {
-      if (!playing) return {};
-
-      // Update playing & playerAction state
-      return { playing, playerAction };
-    }),
-
-    setWaveProgressDelta: (waveProgressDelta: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted }) => {
-      if (!playing) return {};
-
-      waveProgress += waveProgressDelta;
-
-      const hits = getHits(wave, waveProgress, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
-      if (isThreatHitValid(hits.threatId, lastThreatHit)) {
-        threatHitId = hits.threatId;
-        lastThreatHit = { id: threatHitId, time: new Date().getTime() }
-        playerHealth--;
-        if (playerHealth === 0) {
-          Sounds.getInstance().playSoundFX('PLAYER_DIE');
-          playing = false;
-        }
-      } else {
-        threatHitId = '';
-      }
-      if (hits.enemyId !== NO_ENEMY_ID) {
-        enemyHitId = hits.enemyId;
-        allEnemyHitIds.push(enemyHitId);
-      } else {
-        enemyHitId = NO_ENEMY_ID;
-      }
-
-      if (hits.powerUpId !== NO_POWER_UP_ID) {
-        powerUpHitId = hits.powerUpId;
-        allPowerUpHitIds.push(powerUpHitId);
-        if (playerHealth < 5) {
-          playerHealth++;
-        }
-      } else {
-        powerUpHitId = NO_POWER_UP_ID;
-      }
-
-      waveCompleted  = isWaveCompleted(wave, waveProgress);
-      if (waveCompleted) {
-        Sounds.getInstance().playSoundFX('WAVE_COMPLETE');
-        // Adjust waveProgress
-        waveProgress = waveProgress - wave.length;
-      }
-
-      return { playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted };
-    }),
-
-    setPlayerXOffset: (playerXOffset: number) => set(() => ({ playerXOffset })),
-
-    setPlayerZOffset: (playerZOffset: number) => set(() => ({ playerZOffset })),
-
-    setColors: (colors: Colors) => set(() => ({ colors }))
-  }
-});
+    },
+    {
+      name: 'castle-run',
+      partialize: (state) => ({ 
+        soundFXOn: state.soundFXOn
+      }),
+    }
+  )
+);
