@@ -32,6 +32,7 @@
   [ ] animate hitting enemy
   [ ] animate gaining health
   [ ] animate losing health
+  [ ] animate dead
  
 [ ] health indicator
   [x] show health indicator on player
@@ -93,5 +94,6 @@
     [x] health decrease.  - 25
     [x] die               - 05, 33, 27, 18, 17, 08
     [x] wave complete.    - 45
+  [x] sfx on/off controls
 
 [x] fix bug: player stopped moving if pressing one direction followed by the opposite direction multiple times

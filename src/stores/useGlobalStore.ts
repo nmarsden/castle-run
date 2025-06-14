@@ -296,10 +296,12 @@ export type GlobalState = {
   lastThreatHit: { id: string; time: number }
   wave: Wave;
   colors: Colors;
+  soundFXOn: boolean;
 
   setGroundSpeed: (groundSpeed: number) => void;
   play: () => void;
   playNextWave: () => void;
+  toggleSoundFx: () => void;
   setPlayerAction: (playerAction: PlayerAction) => void;
   setWaveProgressDelta: (waveProgressDelta: number) => void;
   setPlayerXOffset: (playerXOffset: number) => void;
@@ -335,6 +337,7 @@ export const useGlobalStore = create<GlobalState>((set) => {
       healthOff: 'black',
       powerUpHealth: '#3BB52E'
     },
+    soundFXOn: false,
 
     setGroundSpeed: (groundSpeed: number) => set(() => {
       return { groundSpeed };
@@ -383,6 +386,8 @@ export const useGlobalStore = create<GlobalState>((set) => {
       };
     }),
 
+    toggleSoundFx: () => set(({ soundFXOn }) => ({ soundFXOn: !soundFXOn })),
+    
     setPlayerAction: (playerAction: PlayerAction) => set(({ playing }) => {
       if (!playing) return {};
 

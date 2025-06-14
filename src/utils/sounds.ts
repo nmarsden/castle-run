@@ -30,6 +30,7 @@ const SOUND_EFFECTS: Map<SoundEffect, Howl> = new Map<SoundEffect, Howl>([
 class Sounds {
   static instance: Sounds;
 
+  soundFXOn: boolean;
   soundFXs: Map<SoundEffect, Howl>;
 
   static getInstance(): Sounds {
@@ -42,10 +43,20 @@ class Sounds {
   private constructor() {
     Howler.autoUnlock = false;
 
+    this.soundFXOn = false;
     this.soundFXs = SOUND_EFFECTS;
   }
 
+  enableSoundFX(): void {
+    this.soundFXOn = true;
+  }
+
+  disableSoundFX(): void {
+    this.soundFXOn = false;
+  }
+
   playSoundFX(soundEffect: SoundEffect): void {
+    if (!this.soundFXOn) return;
     // console.log('playSoundFx: ', soundEffect);
 
     // For testing!!!

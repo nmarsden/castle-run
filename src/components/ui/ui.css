@@ -145,3 +145,8 @@
 .stacked-icons .fa-solid {
   position: absolute;
 }
+
+.optionsContainer {
+  display: flex;
+  margin-top: 50px;
+}

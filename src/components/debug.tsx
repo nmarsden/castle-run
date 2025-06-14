@@ -9,6 +9,7 @@ export default function Debug (){
   const setColors = useGlobalStore((state: GlobalState) => state.setColors);
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const setGroundSpeed = useGlobalStore((state: GlobalState) => state.setGroundSpeed);
+  const toggleSoundFx = useGlobalStore((state: GlobalState) => state.toggleSoundFx);  
 
   const initialGroundSpeed = useRef(groundSpeed);  
 
@@ -41,6 +42,8 @@ export default function Debug (){
         setHidden(hidden => !hidden);
       } else if (event.key === 'p') {
         setPaused(paused => !paused);
+      } else if (event.key === 's') {
+        toggleSoundFx();
       }
     });
   }, []);
