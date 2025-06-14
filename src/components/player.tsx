@@ -45,6 +45,11 @@ export default function Player (){
   }, []);
 
   useEffect(() => {
+    originalColor.current = new Color(colors.player);
+    flashColor.current = new Color(colors.playerFlash);
+  }, [colors]);
+
+  useEffect(() => {
     if (waveProgress < 1) return;
 
     if (playerHealth === 0) {
