@@ -35,9 +35,9 @@ export default function Threat ({ position, id }: { position: [number, number, n
     if (isDead.current) return;
 
     if (id == threatHitId) {
+      // Hit
       Sounds.getInstance().playSoundFX('THREAT_HIT');
   
-      // Animate flash
       const originalColor = material.current.color.clone();
       const flashColor = new Color("orange");
       gsap.to(

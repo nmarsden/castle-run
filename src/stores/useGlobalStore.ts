@@ -409,7 +409,6 @@ export const useGlobalStore = create<GlobalState>()(
             lastThreatHit = { id: threatHitId, time: new Date().getTime() }
             playerHealth--;
             if (playerHealth === 0) {
-              Sounds.getInstance().playSoundFX('PLAYER_DIE');
               playing = false;
             }
           } else {

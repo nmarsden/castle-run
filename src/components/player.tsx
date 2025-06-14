@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { GlobalState, PlayerAction, useGlobalStore } from "../stores/useGlobalStore";
-import { Mesh, Vector3 } from "three";
+import { Color, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import gsap from "gsap";
 import PlayerHealth from "./playerHealth";
@@ -19,11 +19,14 @@ export default function Player (){
   const rook = useGLTF("models/Rook.glb");
 
   const player = useRef<Mesh>(null!);
+  const material = useRef<MeshStandardMaterial>(null!);
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
   const setPlayerXOffset = useGlobalStore((state: GlobalState) => state.setPlayerXOffset);
   const setPlayerZOffset = useGlobalStore((state: GlobalState) => state.setPlayerZOffset);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const playCount = useGlobalStore((state: GlobalState) => state.playCount);  
+  const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);  
+  const waveProgress = useGlobalStore((state: GlobalState) => state.waveProgress);  
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
 
@@ -35,6 +38,28 @@ export default function Player (){
 
     return geometry;
   }, []);
+
+  useEffect(() => {
+    if (waveProgress < 1) return;
+
+    if (playerHealth === 0) {
+      // Die
+      Sounds.getInstance().playSoundFX('PLAYER_DIE');
+      const flashColor = new Color("#E25636");
+      gsap.to(
+        material.current.color, 
+        { 
+          r: flashColor.r,    
+          g: flashColor.g,    
+          b: flashColor.b,
+          duration: 0.1, 
+          ease: "power1.inOut",
+          repeat: 5,
+          loop: true
+        }
+      );      
+    }
+  }, [playerHealth]);
 
   useEffect(() => {
     if (isMoving.current || playerAction === 'NONE') return;
@@ -94,6 +119,7 @@ export default function Player (){
         geometry={geometry}
       >
         <meshStandardMaterial 
+          ref={material}
           color={colors.player}
         />
         <PlayerHealth />
