@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { WAVE_DATA, WaveData } from './waveData';
+import { Sounds } from '../utils/sounds';
 
 export type EnemyType = 'PAWN' | 'KNIGHT' | 'BISHOP' | 'QUEEN' | 'KING';
 
@@ -400,6 +401,7 @@ export const useGlobalStore = create<GlobalState>((set) => {
         lastThreatHit = { id: threatHitId, time: new Date().getTime() }
         playerHealth--;
         if (playerHealth === 0) {
+          Sounds.getInstance().playSoundFX('PLAYER_DIE');
           playing = false;
         }
       } else {
@@ -424,6 +426,7 @@ export const useGlobalStore = create<GlobalState>((set) => {
 
       waveCompleted  = isWaveCompleted(wave, waveProgress);
       if (waveCompleted) {
+        Sounds.getInstance().playSoundFX('WAVE_COMPLETE');
         // Adjust waveProgress
         waveProgress = waveProgress - wave.length;
       }

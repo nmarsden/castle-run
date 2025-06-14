@@ -3,6 +3,7 @@ import { GlobalState, PowerUpInfo, useGlobalStore } from "../stores/useGlobalSto
 import { useEffect, useRef } from "react";
 import { Clock, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import gsap from "gsap";
+import { Sounds } from "../utils/sounds";
 
 export default function PowerUp ({ id, position, type }: PowerUpInfo){
   const powerUp = useRef<Mesh>(null!);
@@ -37,6 +38,9 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
     if (isDead.current) return;
 
     if (powerUpHitId === id) {
+      if (type === 'HEALTH') {
+        Sounds.getInstance().playSoundFX('HEALTH_HIT');
+      }
       // Die
       isDead.current = true;
       // Stop bouncing
@@ -75,8 +79,15 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
     const prevVisible = powerUp.current.visible;
     powerUp.current.visible = powerUp.current.position.z < 5 && powerUp.current.position.z > -14.5;
     if (powerUp.current.visible && !prevVisible) {
-      // Animate fade-in
-      gsap.to(material.current, { opacity: 1, duration: 0.5, ease: "power1.inOut" });
+      // Spawn
+      Sounds.getInstance().playSoundFX('HEALTH_SPAWN')
+      gsap.to(powerUp.current.scale, {           
+        x: 0.5, 
+        y: 0.5,
+        z: 0.5,
+        duration: 0.5, 
+        ease: "power1.inOut" 
+      });
     }
   });
 
@@ -87,13 +98,13 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
       receiveShadow={true}
       position={position}
       visible={false}
-      scale={0.5}
+      scale={0}
     >
       <boxGeometry/>
       <meshStandardMaterial 
         ref={material}
         color={colors.powerUpHealth} 
-        opacity={0}
+        opacity={1}
         transparent={true}
       />
     </mesh>  

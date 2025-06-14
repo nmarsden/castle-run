@@ -4,6 +4,7 @@ import { Mesh, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import gsap from "gsap";
 import PlayerHealth from "./playerHealth";
+import { Sounds } from "../utils/sounds";
 
 const OFFSET = 1;
 const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
@@ -47,6 +48,7 @@ export default function Player (){
     if (tempPos.current.z < -2) return;
 
     isMoving.current = true;
+    Sounds.getInstance().playSoundFX('PLAYER_MOVE');
 
     setPlayerXOffset(tempPos.current.x);
     setPlayerZOffset(tempPos.current.z);

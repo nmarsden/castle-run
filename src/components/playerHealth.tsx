@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Mesh } from "three";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import gsap from "gsap";
+import { Sounds } from "../utils/sounds";
 
 type HealthBlockProps = {
   healthLevel: number;
@@ -29,6 +30,7 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
 
     if (!currentlyActive.current && active) {
       // activate
+      Sounds.getInstance().playSoundFX('HEALTH_INCREASE');
       gsap.to(
         healthBlock.current.scale, 
         { 
@@ -43,6 +45,7 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
     }
     if (currentlyActive.current && !active) {
       // de-activate
+      Sounds.getInstance().playSoundFX('HEALTH_DECREASE');
       gsap.to(
         healthBlock.current.scale, 
         { 

@@ -5,6 +5,7 @@ import { Clock, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import Threat from "./threat";
 import gsap from "gsap";
+import { Sounds } from "../utils/sounds";
 
 export default function Enemy ({ id, position, type, threats }: EnemyInfo){
   const pawn = useGLTF("models/Pawn.glb");
@@ -44,6 +45,7 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
     if (isDead.current) return;
 
     if (enemyHitId === id) {
+      Sounds.getInstance().playSoundFX('ENEMY_HIT');
       // Die
       isDead.current = true;
       // Animate up & fade-out
@@ -79,6 +81,8 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
     enemy.current.visible = enemy.current.position.z < 5 && enemy.current.position.z > -14.5;
 
     if (enemy.current.visible && !prevVisible) {
+      // Spawn
+      Sounds.getInstance().playSoundFX('ENEMY_SPAWN');
       gsap.to(enemy.current.scale, {           
         x: 25, 
         y: 25,

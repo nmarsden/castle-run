@@ -82,16 +82,16 @@
 [ ] audio
   [ ] music
   [ ] sfx
-    [ ] player movement
-    [ ] power-up pickup
-    [ ] enemy spawn
-    [ ] threat spawn
-    [ ] power-up spawn
-    [ ] enemy capture
-    [ ] threat hit
-    [ ] health increase
-    [ ] health decrease
-    [ ] die
-    [ ] wave complete
+    [x] player movement.  - 40, 46, 47
+    [x] power-up pickup.  - 15, 23
+    [x] enemy spawn       - 22, 35, 37
+    [x] threat spawn.     - 21
+    [x] power-up spawn.   - 22
+    [x] enemy hit.        - 19, 20, 30, 31
+    [x] threat hit.       - 27, 29
+    [x] health increase.  - 24
+    [x] health decrease.  - 25
+    [x] die               - 05, 33, 27, 18, 17, 08
+    [x] wave complete.    - 45
 
 [x] fix bug: player stopped moving if pressing one direction followed by the opposite direction multiple times

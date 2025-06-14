@@ -3,6 +3,7 @@ import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import { useEffect, useRef } from "react";
 import { Clock, Color, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import gsap from "gsap";
+import { Sounds } from "../utils/sounds";
 
 const getEnemyId = (threatId: string): number => {
   const threatIdParts: string[] = threatId.split('_');
@@ -34,6 +35,8 @@ export default function Threat ({ position, id }: { position: [number, number, n
     if (isDead.current) return;
 
     if (id == threatHitId) {
+      Sounds.getInstance().playSoundFX('THREAT_HIT');
+  
       // Animate flash
       const originalColor = material.current.color.clone();
       const flashColor = new Color("orange");
@@ -85,11 +88,13 @@ export default function Threat ({ position, id }: { position: [number, number, n
     threat.current.visible = threat.current.position.z < 5 && threat.current.position.z > -14.5;
 
     if (threat.current.visible && !prevVisible) {
+      // Spawn
       gsap.to(material.current, { 
         delay: 0.5, // appear after the enemy
         opacity: 1, 
         duration: 0.5, 
-        ease: "power1.inOut" 
+        ease: "power1.inOut",
+        onStart: () => Sounds.getInstance().playSoundFX('THREAT_SPAWN') 
       });
     }
   });
