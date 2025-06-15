@@ -169,7 +169,9 @@ const populateWave = (waveNum: number, waveProgress: number): Wave => {
   const powerUps: PowerUpInfo[] = [];
 
   // Populate enemies & powerUps
-  let z = waveProgress - 1;
+  const waveStartBuffer = 20;
+  let z = waveProgress - waveStartBuffer;
+  // let z = waveProgress - 1;
   let id = 0;
   for (let i = waveData.length-1; i >= 0; i--) {
     const squares = waveData[i].split('');
@@ -198,7 +200,7 @@ const populateWave = (waveNum: number, waveProgress: number): Wave => {
   }
   // Populate length
   const waveEndBuffer = 7;
-  const length = waveData.length + waveEndBuffer;
+  const length = waveStartBuffer + waveData.length + waveEndBuffer;
 
   return { enemies, powerUps, length };
 }
