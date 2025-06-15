@@ -206,6 +206,8 @@ const populateWave = (waveNum: number, waveProgress: number): Wave => {
 export type PlayerAction = 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_FORWARD' | 'MOVE_BACKWARD' | 'NONE';
 
 type Colors = {
+  background1: string;
+  background2: string;
   player: string;
   playerFlash: string;
   ground: string;
@@ -326,7 +328,7 @@ export const useGlobalStore = create<GlobalState>()(
         waveNum: 0,
         waveProgress: 0,
         waveCompleted: false,
-        groundSpeed: 2,
+        groundSpeed: 4,
         playerAction: 'NONE',
         playerXOffset: 0,
         playerZOffset: 0,
@@ -339,6 +341,8 @@ export const useGlobalStore = create<GlobalState>()(
         lastThreatHit: { id: '', time: 0 },
         wave: EMPTY_WAVE,
         colors: {
+          background1: '#000000',   // #000000
+          background2: '#FFFFFF',   // #FFFFFF
           player: '#EBAE13',        // #EBAE13
           playerFlash: '#E25636',   // #E25636
           ground: '#E0E0E0',        // #E0E0E0

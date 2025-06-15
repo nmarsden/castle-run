@@ -13,7 +13,7 @@ import Enemies from './enemies.tsx';
 import PowerUps from './powerUps.tsx';
 import Ui from './ui/ui.tsx';
 import Waves from './waves.tsx';
-import Portal from './portal.tsx';
+import Background from './background.tsx';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { KernelSize, Resolution } from 'postprocessing'
 import { GlobalState, useGlobalStore } from '../stores/useGlobalStore.ts';
@@ -32,7 +32,7 @@ export default function App() {
           <Performance />
           <Lights />
           <Camera />
-          <Portal />
+          <Background />
           <Ground />
           <Enemies />
           <PowerUps />

@@ -28,9 +28,11 @@ export default function Debug (){
   useControls(
     'Colors',
     {
-      ground:         { value: colors.ground,         onChange: value => setColors({ ...colors, ground: value }) },
+      background1:    { value: colors.background1,    onChange: value => setColors({ ...colors, background1: value }) },
+      background2:    { value: colors.background2,    onChange: value => setColors({ ...colors, background2: value }) },
       player:         { value: colors.player,         onChange: value => setColors({ ...colors, player: value }) },
       playerFlash:    { value: colors.playerFlash,    onChange: value => setColors({ ...colors, playerFlash: value }) },
+      ground:         { value: colors.ground,         onChange: value => setColors({ ...colors, ground: value }) },
       enemy:          { value: colors.enemy,          onChange: value => setColors({ ...colors, enemy: value }) },
       threat1:        { value: colors.threat1,        onChange: value => setColors({ ...colors, threat1: value }) },
       threat2:        { value: colors.threat2,        onChange: value => setColors({ ...colors, threat2: value }) },
@@ -46,6 +48,13 @@ export default function Debug (){
     {
       enabled:           { value: bloomEffect, onChange: value => setBloomEffect(value) },
       emissiveIntensity: { value: emissiveIntensity, min: 0.0, max: 10.0, step: 0.01, onChange: value => setEmissiveIntensity(value) }
+    }
+  );
+
+  useControls(
+    'Ground',
+    {
+      speed: { value: groundSpeed, min: 0.0, max: 10.0, step: 0.01, onChange: value => setGroundSpeed(value) },
     }
   );
 

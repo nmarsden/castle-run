@@ -41,6 +41,7 @@ export default function Threat ({ position, id }: { position: [number, number, n
         uAlpha: new Uniform(0),
         uOffset: new Uniform(Math.random() * 100),
         uFrequency: new Uniform(2),
+        uSpeedFactor: new Uniform(1),
         uTime: new Uniform(0),
       }
     });

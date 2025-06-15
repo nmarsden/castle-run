@@ -3,6 +3,7 @@ uniform vec3 uColor2;
 uniform float uAlpha;
 uniform float uFrequency;
 uniform float uOffset;
+uniform float uSpeedFactor;
 uniform float uTime;
 
 varying vec2 vUv;
@@ -83,11 +84,10 @@ float cnoise(vec3 P){
 }
 
 void main() {
-    vec2 displacedUv = vUv + cnoise(vec3(vUv * uFrequency, uOffset + (uTime * 0.1)));
-    float strength = cnoise(vec3(displacedUv * uFrequency, uOffset + (uTime * 0.5)));
+    vec2 displacedUv = vUv + cnoise(vec3(vUv * uFrequency, uOffset + (uSpeedFactor * uTime * 0.1)));
+    float strength = cnoise(vec3(displacedUv * uFrequency, uOffset + (uSpeedFactor * uTime * 0.5)));
 
     vec3 color = mix(uColor1, uColor2, strength);
 
     gl_FragColor = vec4(color, uAlpha);
-    // gl_FragColor = vec4(strength, strength, strength, 1.0);
 }
