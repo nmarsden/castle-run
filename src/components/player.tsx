@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { GlobalState, PlayerAction, useGlobalStore } from "../stores/useGlobalStore";
 import { Color, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";

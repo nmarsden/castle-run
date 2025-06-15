@@ -8,7 +8,7 @@
   [x] enemy
 
 [ ] camera
-    [ ] shake when player hit
+    [x] shake when threat hit
 
 [ ] background
   [ ] color

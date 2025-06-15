@@ -9,8 +9,8 @@ export default function Enemies (){
   return (
     <>
       {wave.enemies.map((enemy, index) => (
-        <group renderOrder={index}>
-          <Enemy key={`enemy-${playCount}-${waveNum}-${index}`} {...enemy} />
+        <group key={`enemy-${playCount}-${waveNum}-${index}`} renderOrder={index}>
+          <Enemy {...enemy} />
         </group>
       ))}
     </>

@@ -1,11 +1,15 @@
 import {CameraControls, PerspectiveCamera} from "@react-three/drei";
 import {useControls} from "leva";
 import {ReactNode, useEffect, useRef} from "react";
-import {PerspectiveCamera as PerspectiveCameraType, Vector3} from "three";
+import {Group, PerspectiveCamera as PerspectiveCameraType, Vector3} from "three";
 import {GlobalState, useGlobalStore} from "../stores/useGlobalStore";
+import gsap from "gsap";
 
 export default function Camera({ children } : { children?: ReactNode }) {
   const playerZOffset = useGlobalStore((state: GlobalState) => state.playerZOffset);
+  const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
+
+  const cameraGroup = useRef<Group>(null!);
   const cameraControls = useRef<CameraControls>(null!);
   const fov = useRef(100);
   const cameraTarget = useRef<Vector3>(new Vector3(0, 0, 1 - 2));
@@ -31,6 +35,24 @@ export default function Camera({ children } : { children?: ReactNode }) {
     cameraControls.current.setPosition(camPos.x, camPos.y, camPos.z, true);
     cameraControls.current.setTarget(cameraTarget.current.x, cameraTarget.current.y, cameraTarget.current.z, true);
   }, [playerZOffset]);
+
+  useEffect(() => {
+    if (threatHitId !== '') {
+      // Hit Threat - Shake camera group
+      gsap.to(
+        cameraGroup.current.position,
+        { 
+          keyframes: [
+            { x: 0.05 },
+            { x: 0.0 }
+          ],
+          duration: 0.05, 
+          ease: "power1.inOut",
+          repeat: 5,
+        }
+      );      
+    }
+  }, [threatHitId]);
 
   useControls(
     'Camera',
@@ -87,25 +109,27 @@ export default function Camera({ children } : { children?: ReactNode }) {
 
   return (
     <>
-      <PerspectiveCamera
-        makeDefault={true}
-        fov={fov.current}
-        near={0.1}
-        far={150}
-        position={[cameraPosition.current.x, cameraPosition.current.y, cameraPosition.current.z]}
-        rotation-x={Math.PI * -0.25}
-      >
-        { children }
-      </PerspectiveCamera>
-      <CameraControls 
-        ref={cameraControls}
-        // truckSpeed={0}
-        // minPolarAngle={0}
-        // maxPolarAngle={Math.PI * 0.45}
-        // minDistance={0.1}
-        // maxDistance={71.0}
-        // draggingSmoothTime={0.3}
-      />
+      <group ref={cameraGroup}>
+        <PerspectiveCamera
+          makeDefault={true}
+          fov={fov.current}
+          near={0.1}
+          far={150}
+          position={[cameraPosition.current.x, cameraPosition.current.y, cameraPosition.current.z]}
+          rotation-x={Math.PI * -0.25}
+        >
+          { children }
+        </PerspectiveCamera>
+        <CameraControls 
+          ref={cameraControls}
+          // truckSpeed={0}
+          // minPolarAngle={0}
+          // maxPolarAngle={Math.PI * 0.45}
+          // minDistance={0.1}
+          // maxDistance={71.0}
+          // draggingSmoothTime={0.3}
+        />
+      </group>
     </>
   );
 }
