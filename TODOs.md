@@ -11,7 +11,7 @@
     [x] shake when threat hit
 
 [ ] background
-  [ ] color
+  [x] color
 
 [ ] ground
   [x] show as checker board
@@ -86,8 +86,8 @@
   [ ] icons
 
 [ ] audio
-  [ ] music
-  [ ] sfx
+  [x] music
+  [x] sfx
     [x] player movement.  - 40, 46, 47
     [x] power-up pickup.  - 15, 23
     [x] enemy spawn       - 22, 35, 37
@@ -100,8 +100,11 @@
     [x] die               - 05, 33, 27, 18, 17, 08
     [x] wave complete.    - 45
   [x] sfx on/off controls
+  [x] music on/off controls
+  [ ] convert audio files to mp3 & webm
 
 [x] fix bug: player stopped moving if pressing one direction followed by the opposite direction multiple times
 
 [ ] use local storage
     [x] sfx on/off
+    [x] bloom on/off

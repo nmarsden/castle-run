@@ -5,12 +5,14 @@ import './ui.css';
 
 export default function Ui() {
   const play = useGlobalStore((state: GlobalState) => state.play);  
+  const toggleMusic = useGlobalStore((state: GlobalState) => state.toggleMusic);
   const toggleSoundFx = useGlobalStore((state: GlobalState) => state.toggleSoundFx);
   const setBloomEffect = useGlobalStore((state: GlobalState) => state.setBloomEffect);
 
   const playing = useGlobalStore((state: GlobalState) => state.playing);  
   const playCount = useGlobalStore((state: GlobalState) => state.playCount);
   const waveNum = useGlobalStore((state: GlobalState) => state.waveNum);
+  const musicOn = useGlobalStore((state: GlobalState) => state.musicOn);
   const soundFXOn = useGlobalStore((state: GlobalState) => state.soundFXOn);
   const bloomEffect = useGlobalStore((state: GlobalState) => state.bloomEffect);
 
@@ -19,13 +21,33 @@ export default function Ui() {
   const toggleBloom = useCallback(() => {
     setBloomEffect(!bloomEffect);
   }, [bloomEffect]);
-  
+
+  useEffect(() => {
+    Sounds.getInstance().playMusicTrack('IDLE');
+  }, []);
+
+  useEffect(() => {
+    if (playing) {
+      Sounds.getInstance().playMusicTrack('PLAYING');
+    } else {
+      Sounds.getInstance().playMusicTrack('IDLE');
+    }
+  }, [playing]);
+
   useEffect(() => {
     if (waveNum !== 0) {
       setShowNewWaveMsg(true);
       setTimeout(() => setShowNewWaveMsg(false), 2000);
     }
   }, [waveNum]);
+
+  useEffect(() => {
+    if (musicOn) {
+      Sounds.getInstance().enableMusic();
+    } else {
+      Sounds.getInstance().disableMusic();
+    }
+  }, [musicOn]);
 
   useEffect(() => {
     if (soundFXOn) {
@@ -49,6 +71,7 @@ export default function Ui() {
           )}
           <div className="button-light button-pulse" onClick={() => play()}>PLAY</div>
           <div className="optionsContainer">
+            <div className="button-light" onClick={() => toggleMusic()}>MUSIC: {musicOn ? 'ON' : 'OFF'}</div>
             <div className="button-light" onClick={() => toggleSoundFx()}>SFX: {soundFXOn ? 'ON' : 'OFF'}</div>
             <div className="button-light" onClick={() => toggleBloom()}>BLOOM: {bloomEffect ? 'ON' : 'OFF'}</div>
           </div>

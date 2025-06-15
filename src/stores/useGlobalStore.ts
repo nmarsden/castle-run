@@ -303,12 +303,14 @@ export type GlobalState = {
   wave: Wave;
   colors: Colors;
   soundFXOn: boolean;
+  musicOn: boolean;
   bloomEffect: boolean;
   emissiveIntensity: number;
 
   setGroundSpeed: (groundSpeed: number) => void;
   play: () => void;
   playNextWave: () => void;
+  toggleMusic: () => void;
   toggleSoundFx: () => void;
   setPlayerAction: (playerAction: PlayerAction) => void;
   setWaveProgressDelta: (waveProgressDelta: number) => void;
@@ -355,6 +357,7 @@ export const useGlobalStore = create<GlobalState>()(
           powerUpHealth: '#52FF3F'  // #52FF3F
         },
         soundFXOn: true,
+        musicOn: true,
         bloomEffect: false,
         emissiveIntensity: 1.32,
 
@@ -404,6 +407,8 @@ export const useGlobalStore = create<GlobalState>()(
             lastThreatHit: { id: '', time: 0 },        
           };
         }),
+
+        toggleMusic: () => set(({ musicOn }) => ({ musicOn: !musicOn })),
 
         toggleSoundFx: () => set(({ soundFXOn }) => ({ soundFXOn: !soundFXOn })),
         
@@ -473,6 +478,7 @@ export const useGlobalStore = create<GlobalState>()(
       name: 'castle-run',
       partialize: (state) => ({ 
         soundFXOn: state.soundFXOn,
+        musicOn: state.musicOn,
         bloomEffect: state.bloomEffect,
       }),
     }
