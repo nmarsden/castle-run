@@ -47,28 +47,25 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
     if (isDead.current) return;
 
     if (enemyHitId === id) {
-      Sounds.getInstance().playSoundFX('ENEMY_HIT');
       // Die
+      Sounds.getInstance().playSoundFX('ENEMY_HIT');
       isDead.current = true;
-      // Animate up & fade-out
       gsap.to(
         enemy.current.position, 
         { 
           y: 1,
-          duration: 0.5, 
+          duration: 0.25, 
           ease: "power1.inOut",
         }
       );      
-
-      gsap.to(
-        material.current, 
-        { 
-          opacity: 0, 
-          duration: 0.5, 
-          ease: "power1.inOut",
-          onComplete: () => { enemy.current.visible = false; } 
-        }
-      );      
+      gsap.to(enemy.current.scale, {           
+        x: 0, 
+        y: 0,
+        z: 0,
+        delay: 0.25,
+        duration: 0.25, 
+        ease: "power1.inOut" 
+      });
     }
   }, [enemyHitId]);
 
