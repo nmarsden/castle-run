@@ -1,6 +1,6 @@
 import vertexShader from '../shaders/portal/vertex.glsl';
 import fragmentShader from '../shaders/portal/fragment.glsl';
-import { Uniform, ShaderMaterial } from 'three';
+import { Uniform, ShaderMaterial, Color } from 'three';
 import { useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 
@@ -10,6 +10,11 @@ export default function Portal(){
       vertexShader,
       fragmentShader,
       uniforms: {
+        uColor1: new Uniform(new Color("black")),
+        uColor2: new Uniform(new Color("white")),
+        uAlpha: new Uniform(1),
+        uOffset: new Uniform(0),
+        uFrequency: new Uniform(10),
         uTime: new Uniform(0),
       }
     });

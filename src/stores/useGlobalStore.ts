@@ -210,8 +210,9 @@ type Colors = {
   playerFlash: string;
   ground: string;
   enemy: string;
-  threat: string;
-  threatFlash: string;
+  threat1: string;
+  threat2: string;
+  threatHit: string;
   healthOn: string;
   healthOff: string;
   powerUpHealth: string;
@@ -338,15 +339,16 @@ export const useGlobalStore = create<GlobalState>()(
         lastThreatHit: { id: '', time: 0 },
         wave: EMPTY_WAVE,
         colors: {
-          player: '#EBAE13',
-          playerFlash: '#E25636',
-          ground: '#e0e0e0',
-          enemy: '#BABABA',
-          threat: '#FF2929', // #E25636', // #c72424, #FF2929
-          threatFlash: '#FFA500',
-          healthOn: '#52FF3F',
-          healthOff: '#000000',
-          powerUpHealth: '#52FF3F'
+          player: '#EBAE13',        // #EBAE13
+          playerFlash: '#E25636',   // #E25636
+          ground: '#E0E0E0',        // #E0E0E0
+          enemy: '#BABABA',         // #BABABA
+          threat1: '#FF2929',       // #FF2929
+          threat2: '#000000',       // #000000
+          threatHit: '#FFA500',     // #FFA500
+          healthOn: '#52FF3F',      // #52FF3F
+          healthOff: '#000000',     // #000000
+          powerUpHealth: '#52FF3F'  // #52FF3F
         },
         soundFXOn: true,
         bloomEffect: false,
@@ -417,6 +419,7 @@ export const useGlobalStore = create<GlobalState>()(
           if (isThreatHitValid(hits.threatId, lastThreatHit)) {
             threatHitId = hits.threatId;
             lastThreatHit = { id: threatHitId, time: new Date().getTime() }
+            // DEBUG: comment out next line to be invincible
             playerHealth--;
             if (playerHealth === 0) {
               playing = false;

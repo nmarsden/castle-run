@@ -57,7 +57,7 @@
   [x] animate killed enemy
   [x] animate killed threat
   [x] animate threat hit by player
-  [ ] threat material - use shader
+  [x] threat material - use shader
 
 [ ] waves
   [x] setup enemy positions

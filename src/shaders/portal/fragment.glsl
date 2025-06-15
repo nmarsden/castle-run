@@ -1,4 +1,10 @@
+uniform vec3 uColor1;
+uniform vec3 uColor2;
+uniform float uAlpha;
+uniform float uFrequency;
+uniform float uOffset;
 uniform float uTime;
+
 varying vec2 vUv;
 
 //	Classic Perlin 3D Noise 
@@ -77,8 +83,11 @@ float cnoise(vec3 P){
 }
 
 void main() {
-    vec2 displacedUv = vUv + cnoise(vec3(vUv * 50.0, uTime * 0.1));
-    float strength = cnoise(vec3(displacedUv * 50.0, uTime * 0.5));
+    vec2 displacedUv = vUv + cnoise(vec3(vUv * uFrequency, uOffset + (uTime * 0.1)));
+    float strength = cnoise(vec3(displacedUv * uFrequency, uOffset + (uTime * 0.5)));
 
-    gl_FragColor = vec4(strength, strength, strength, 1.0);
+    vec3 color = mix(uColor1, uColor2, strength);
+
+    gl_FragColor = vec4(color, uAlpha);
+    // gl_FragColor = vec4(strength, strength, strength, 1.0);
 }
