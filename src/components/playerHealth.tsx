@@ -22,6 +22,7 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
   const healthBlock = useRef<Mesh>(null!);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);
+  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
 
   const currentlyActive = useRef(false);
 
@@ -72,6 +73,10 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial 
         color={colors.healthOn}
+        emissive={colors.healthOn}
+        emissiveIntensity={emissiveIntensity} 
+        opacity={0.9}
+        transparent={true}
       />
     </mesh>  
   );

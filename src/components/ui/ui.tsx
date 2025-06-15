@@ -1,18 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { GlobalState, useGlobalStore } from '../../stores/useGlobalStore';
-import './ui.css';
 import { Sounds } from '../../utils/sounds';
+import './ui.css';
 
 export default function Ui() {
   const play = useGlobalStore((state: GlobalState) => state.play);  
   const toggleSoundFx = useGlobalStore((state: GlobalState) => state.toggleSoundFx);
+  const setBloomEffect = useGlobalStore((state: GlobalState) => state.setBloomEffect);
+
   const playing = useGlobalStore((state: GlobalState) => state.playing);  
   const playCount = useGlobalStore((state: GlobalState) => state.playCount);
   const waveNum = useGlobalStore((state: GlobalState) => state.waveNum);
   const soundFXOn = useGlobalStore((state: GlobalState) => state.soundFXOn);
+  const bloomEffect = useGlobalStore((state: GlobalState) => state.bloomEffect);
 
   const [showNewWaveMsg, setShowNewWaveMsg] = useState(false);
 
+  const toggleBloom = useCallback(() => {
+    setBloomEffect(!bloomEffect);
+  }, [bloomEffect]);
+  
   useEffect(() => {
     if (waveNum !== 0) {
       setShowNewWaveMsg(true);
@@ -43,6 +50,7 @@ export default function Ui() {
           <div className="button-light button-pulse" onClick={() => play()}>PLAY</div>
           <div className="optionsContainer">
             <div className="button-light" onClick={() => toggleSoundFx()}>SFX: {soundFXOn ? 'ON' : 'OFF'}</div>
+            <div className="button-light" onClick={() => toggleBloom()}>BLOOM: {bloomEffect ? 'ON' : 'OFF'}</div>
           </div>
       </div>
     </>

@@ -21,6 +21,8 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const enemyHitId = useGlobalStore((state: GlobalState) => state.enemyHitId);
+  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
+
   const enemyOffset = useRef<Vector3>(new Vector3());
   const enemyClock = useRef(new Clock(false));
   const isDead = useRef(false);
@@ -108,7 +110,9 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
         <meshStandardMaterial 
           ref={material}
           color={colors.enemy} 
-          opacity={0.7}
+          emissive={colors.enemy}
+          emissiveIntensity={emissiveIntensity} 
+          opacity={0.9}
           transparent={true}
         />
       </mesh>

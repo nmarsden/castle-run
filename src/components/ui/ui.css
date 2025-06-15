@@ -149,4 +149,5 @@
 .optionsContainer {
   display: flex;
   margin-top: 50px;
+  gap: 10px;
 }

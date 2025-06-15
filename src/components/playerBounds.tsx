@@ -35,6 +35,9 @@ export default function PlayerBounds() {
       points={linePoints}
       lineWidth={lineWidth.current}
       worldUnits={true}
+      opacity={0.9}
+      transparent={true}
+      color={"#BABABA"}
     />
   )
 }

@@ -13,7 +13,8 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const powerUpHitId = useGlobalStore((state: GlobalState) => state.powerUpHitId);
-  
+  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
+
   const powerUpOffset = useRef<Vector3>(new Vector3());
   const powerUpClock = useRef(new Clock(false));
   const isDead = useRef(false);
@@ -101,10 +102,12 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
       scale={0}
     >
       <boxGeometry/>
-      <meshStandardMaterial 
+      <meshStandardMaterial
         ref={material}
         color={colors.powerUpHealth} 
-        opacity={1}
+        emissive={colors.powerUpHealth}
+        emissiveIntensity={emissiveIntensity} 
+        opacity={0.9}
         transparent={true}
       />
     </mesh>  

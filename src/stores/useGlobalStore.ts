@@ -300,6 +300,8 @@ export type GlobalState = {
   wave: Wave;
   colors: Colors;
   soundFXOn: boolean;
+  bloomEffect: boolean;
+  emissiveIntensity: number;
 
   setGroundSpeed: (groundSpeed: number) => void;
   play: () => void;
@@ -310,6 +312,8 @@ export type GlobalState = {
   setPlayerXOffset: (playerXOffset: number) => void;
   setPlayerZOffset: (playerZOffset: number) => void;
   setColors: (colors: Colors) => void;
+  setBloomEffect: (bloomEffect: boolean) => void;
+  setEmissiveIntensity: (emissiveIntensity: number) => void;
 };
 
 export const useGlobalStore = create<GlobalState>()(
@@ -334,17 +338,19 @@ export const useGlobalStore = create<GlobalState>()(
         lastThreatHit: { id: '', time: 0 },
         wave: EMPTY_WAVE,
         colors: {
-          player: '#FABA13',
+          player: '#EBAE13',
           playerFlash: '#E25636',
           ground: '#e0e0e0',
-          enemy: '#FFFFFF',
-          threat: '#E25636',
-          threatFlash: 'orange',
-          healthOn: '#3BB52E',
-          healthOff: 'black',
-          powerUpHealth: '#3BB52E'
+          enemy: '#BABABA',
+          threat: '#FF2929', // #E25636', // #c72424, #FF2929
+          threatFlash: '#FFA500',
+          healthOn: '#52FF3F',
+          healthOff: '#000000',
+          powerUpHealth: '#52FF3F'
         },
         soundFXOn: true,
+        bloomEffect: false,
+        emissiveIntensity: 1.32,
 
         setGroundSpeed: (groundSpeed: number) => set(() => {
           return { groundSpeed };
@@ -449,13 +455,18 @@ export const useGlobalStore = create<GlobalState>()(
 
         setPlayerZOffset: (playerZOffset: number) => set(() => ({ playerZOffset })),
 
-        setColors: (colors: Colors) => set(() => ({ colors }))
+        setColors: (colors: Colors) => set(() => ({ colors })),
+
+        setBloomEffect: (bloomEffect: boolean) => set(() => ({ bloomEffect })),
+
+        setEmissiveIntensity: (emissiveIntensity: number) => set(() => ({ emissiveIntensity })),
       }
     },
     {
       name: 'castle-run',
       partialize: (state) => ({ 
-        soundFXOn: state.soundFXOn
+        soundFXOn: state.soundFXOn,
+        bloomEffect: state.bloomEffect,
       }),
     }
   )

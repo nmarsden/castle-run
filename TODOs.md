@@ -7,6 +7,9 @@
   [x] player
   [x] enemy
 
+[ ] camera
+    [ ] shake when player hit
+
 [ ] background
   [ ] color
 
@@ -54,6 +57,7 @@
   [x] animate killed enemy
   [x] animate killed threat
   [x] animate threat hit by player
+  [ ] threat material - use shader
 
 [ ] waves
   [x] setup enemy positions

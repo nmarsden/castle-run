@@ -20,6 +20,7 @@ export default function Threat ({ position, id }: { position: [number, number, n
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
   const enemyHitId = useGlobalStore((state: GlobalState) => state.enemyHitId);
+  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
 
   const threatOffset = useRef<Vector3>(new Vector3());
   const threatClock = useRef(new Clock(false));
@@ -42,7 +43,7 @@ export default function Threat ({ position, id }: { position: [number, number, n
       // Hit
       Sounds.getInstance().playSoundFX('THREAT_HIT');
       gsap.to(
-        material.current.color, 
+        material.current.emissive, 
         { 
           keyframes: [
             { r: flashColor.current.r,    g: flashColor.current.g,    b: flashColor.current.b },
@@ -113,6 +114,8 @@ export default function Threat ({ position, id }: { position: [number, number, n
       <meshStandardMaterial 
         ref={material}
         color={colors.threat}
+        emissive={colors.threat}
+        emissiveIntensity={emissiveIntensity} 
         opacity={0}
         transparent={true}
         depthWrite={false}

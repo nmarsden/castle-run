@@ -29,6 +29,7 @@ export default function Player (){
   const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);  
   const waveProgress = useGlobalStore((state: GlobalState) => state.waveProgress);  
   const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
+  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
 
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
@@ -47,7 +48,7 @@ export default function Player (){
       // Die
       Sounds.getInstance().playSoundFX('PLAYER_DIE');
       gsap.to(
-        material.current.color,
+        material.current.emissive,
         {
           r: flashColor.current.r,
           g: flashColor.current.g,
@@ -61,7 +62,7 @@ export default function Player (){
     } else if (threatHitId !== '') {
       // Hit Threat
       gsap.to(
-        material.current.color, 
+        material.current.emissive, 
         { 
           keyframes: [
             { r: flashColor.current.r,    g: flashColor.current.g,    b: flashColor.current.b },
@@ -135,6 +136,10 @@ export default function Player (){
         <meshStandardMaterial 
           ref={material}
           color={colors.player}
+          emissive={colors.player}
+          emissiveIntensity={emissiveIntensity} 
+          opacity={0.9}
+          transparent={true}
         />
         <PlayerHealth />
       </mesh>  

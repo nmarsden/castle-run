@@ -7,6 +7,10 @@ export default function Debug (){
   const [paused, setPaused] = useState(false);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const setColors = useGlobalStore((state: GlobalState) => state.setColors);
+  const bloomEffect = useGlobalStore((state: GlobalState) => state.bloomEffect);
+  const setBloomEffect = useGlobalStore((state: GlobalState) => state.setBloomEffect);
+  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
+  const setEmissiveIntensity = useGlobalStore((state: GlobalState) => state.setEmissiveIntensity);
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const setGroundSpeed = useGlobalStore((state: GlobalState) => state.setGroundSpeed);
   const toggleSoundFx = useGlobalStore((state: GlobalState) => state.toggleSoundFx);  
@@ -33,6 +37,14 @@ export default function Debug (){
       healthOn:       { value: colors.healthOn,       onChange: value => setColors({ ...colors, healthOn: value }) },
       healthOff:      { value: colors.healthOff,      onChange: value => setColors({ ...colors, healthOff: value }) },
       powerUpHealth:  { value: colors.powerUpHealth,  onChange: value => setColors({ ...colors, powerUpHealth: value }) },
+    }
+  );
+
+  useControls(
+    'Bloom',
+    {
+      enabled:           { value: bloomEffect, onChange: value => setBloomEffect(value) },
+      emissiveIntensity: { value: emissiveIntensity, min: 0.0, max: 10.0, step: 0.01, onChange: value => setEmissiveIntensity(value) }
     }
   );
 

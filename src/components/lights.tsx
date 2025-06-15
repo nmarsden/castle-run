@@ -14,13 +14,13 @@ export default function Lights() {
       'Ambient': folder(
         {
           ambientColor: {value: 'white', label: 'color'},
-          ambientIntensity: {value: 1.1, min: 0, max: 10, step: 0.1, label: 'intensity'}
+          ambientIntensity: {value: 1.0, min: 0, max: 10, step: 0.1, label: 'intensity'}
         }
       ),
       'Directional': folder(
         {
           directionalColor: {value: 'white', label: 'color'},
-          directionalIntensity: {value: 3.1, min: 0, max: 10, step: 0.01, label: 'intensity'},
+          directionalIntensity: {value: 1.0, min: 0, max: 10, step: 0.01, label: 'intensity'},
           directionalPosition: {value: [6.5, 3.25, -6.5], label: 'position'},
         }
       )
