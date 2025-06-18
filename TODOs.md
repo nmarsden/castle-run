@@ -68,6 +68,12 @@
       [ ] background color
       [ ] lighting
       [ ] speed
+  [x] use Segment-Based Generation:
+      * How it works: Create a library of pre-designed "segments" (e.g., "single enemy dodge," "double enemy dodge with gap," "zig-zag pattern," "all lanes blocked but one").
+      * Generation Process:
+        1. Define a target difficulty/density for the current segment.
+        2. Randomly select a segment from your library that matches the difficulty.
+        3. Stitch segments together. Ensure smooth transitions.
 
 [ ] power-ups
   [x] health power-up

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { WAVE_DATA, WaveData } from './waveData';
+import { SEGMENT_DIFFICULT_BAGS_BY_WAVE_NUM, SegmentDifficulty, TOTAL_NUM_WAVES, WAVE_DATA_SEGMENTS_BY_DIFFICULTY, WaveData } from './waveData';
 import { Sounds } from '../utils/sounds';
 
 export type EnemyType = 'PAWN' | 'KNIGHT' | 'BISHOP' | 'QUEEN' | 'KING';
@@ -163,15 +163,49 @@ const calcThreats = (enemy: EnemyInfo): ThreatInfo[] => {
   });
 };
 
+const pickSegmentDifficulties = (waveNum: number): SegmentDifficulty[] => {
+  const numSegments = 50;
+  const difficultyBag = SEGMENT_DIFFICULT_BAGS_BY_WAVE_NUM.get(waveNum) as SegmentDifficulty[];
+
+  // Pick random difficulties from the bag
+  const difficulties: SegmentDifficulty[] = [];
+  for (let i=0; i<numSegments; i++) {
+    const index = Math.floor(Math.random() * difficultyBag.length);
+    const difficulty = difficultyBag[index];
+
+    difficulties.push(difficulty);
+  }
+  return difficulties;
+}
+
+const pickRandomWaveDataSegment = (difficulty: SegmentDifficulty): WaveData => {
+  const waveDataSegments = WAVE_DATA_SEGMENTS_BY_DIFFICULTY.get(difficulty) as WaveData[];
+  const numAvailableSegments = waveDataSegments.length;
+  const index = Math.floor(Math.random() * numAvailableSegments);
+  return waveDataSegments[index];
+};
+
+const generateWaveData = (waveNum: number): WaveData => {
+  const waveData: WaveData = [];
+
+  // Add wave data segments according to the picked segment difficulties for the waveNum
+  const difficulties = pickSegmentDifficulties(waveNum); 
+  difficulties.forEach(difficulty => {
+    const waveDataSegment = pickRandomWaveDataSegment(difficulty);
+    waveData.push(...waveDataSegment);
+  });
+  return waveData;
+};
+
 const populateWave = (waveNum: number, waveProgress: number): Wave => {
-  const waveData: WaveData = WAVE_DATA[waveNum - 1];
+  const waveData: WaveData = generateWaveData(waveNum);
+  // const waveData: WaveData = WAVE_DATA[waveNum - 1];
   const enemies: EnemyInfo[] = [];
   const powerUps: PowerUpInfo[] = [];
 
   // Populate enemies & powerUps
   const waveStartBuffer = 20;
   let z = waveProgress - waveStartBuffer;
-  // let z = waveProgress - 1;
   let id = 0;
   for (let i = waveData.length-1; i >= 0; i--) {
     const squares = waveData[i].split('');
@@ -198,6 +232,11 @@ const populateWave = (waveNum: number, waveProgress: number): Wave => {
     const enemy = enemies[i];
     enemy.threats.push(...calcThreats(enemy));
   }
+  // TODO Populate powerUps
+  // TODO Calculate how many health powerUps to add
+  // TODO Calculate available positions for powerUps
+  // TODO Place powerUps
+
   // Populate length
   const waveEndBuffer = 7;
   const length = waveStartBuffer + waveData.length + waveEndBuffer;
@@ -392,7 +431,7 @@ export const useGlobalStore = create<GlobalState>()(
 
         playNextWave: () => set(({ waveNum, waveProgress }) => {
           waveNum++;
-          if (waveNum > WAVE_DATA.length) {
+          if (waveNum > TOTAL_NUM_WAVES) {
             waveNum = 1;
           }
 
