@@ -25,7 +25,7 @@ export default function App() {
     <>
       <Debug />
       <Canvas
-        gl={{ logarithmicDepthBuffer: true }}
+        gl={{ logarithmicDepthBuffer: false }}
         shadows={true}
       >
         <Suspense>

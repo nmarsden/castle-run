@@ -44,6 +44,8 @@
   [x] increase health when health power-up collected
   [x] animate increase
   [x] animate decrease
+  [x] use a custom shader
+  [x] use a non-box geometry
 
 [ ] enemy
   [x] move with the ground
@@ -80,6 +82,9 @@
   [x] fade in when entering
   [x] animate idle as bouncing
   [x] animate being picked up
+  [x] animate idle as bouncing & rotating
+  [x] use a custom shader
+  [x] use a non-box geometry
   [ ] coins power-up
 
 [ ] game over
@@ -109,8 +114,12 @@
   [x] music on/off controls
   [ ] convert audio files to mp3 & webm
 
-[x] fix bug: player stopped moving if pressing one direction followed by the opposite direction multiple times
-
 [ ] use local storage
     [x] sfx on/off
     [x] bloom on/off
+
+[x] fix bugs
+    [ ] player stopped moving if pressing one direction followed by the opposite direction multiple times
+    [ ] enemy's z position is shifted out of alignment with the ground over time
+
+

@@ -256,8 +256,8 @@ type Colors = {
   threat1: string;
   threat2: string;
   threatHit: string;
-  healthOn: string;
-  healthOff: string;
+  health1: string;
+  health2: string;
   powerUpHealth: string;
 };
 
@@ -393,8 +393,8 @@ export const useGlobalStore = create<GlobalState>()(
           threat1: '#FF2929',       // #FF2929
           threat2: '#000000',       // #000000
           threatHit: '#FFA500',     // #FFA500
-          healthOn: '#52FF3F',      // #52FF3F
-          healthOff: '#000000',     // #000000
+          health1: '#15d100',       // #52FF3F #94ff88 #15d100
+          health2: '#ffffff',       // #01440a #0aad20 #ffffff
           powerUpHealth: '#52FF3F'  // #52FF3F
         },
         soundFXOn: true,

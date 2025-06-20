@@ -1,8 +1,11 @@
-import { useEffect, useRef } from "react";
-import { Mesh } from "three";
+import { useEffect, useMemo, useRef } from "react";
+import { Color, Mesh, ShaderMaterial, Uniform } from "three";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import gsap from "gsap";
 import { Sounds } from "../utils/sounds";
+import vertexShader from '../shaders/portal2/vertex.glsl';
+import fragmentShader from '../shaders/portal2/fragment.glsl';
+import { useFrame } from "@react-three/fiber";
 
 type HealthBlockProps = {
   healthLevel: number;
@@ -14,7 +17,7 @@ const HEALTH_BLOCKS: HealthBlockProps[] = [];
 for (let i=0; i<NUM_HEALTH_BLOCKS; i++) {
   HEALTH_BLOCKS.push({
     healthLevel: i + 1,
-    position: [0, (i * 0.25), 0.5]
+    position: [0, (i * 0.3), 0.5]
   })
 }
 
@@ -22,9 +25,37 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
   const healthBlock = useRef<Mesh>(null!);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);
-  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
+  const originalColor1 = useRef(new Color(colors.health1));
+  const originalColor2 = useRef(new Color(colors.health2));
 
   const currentlyActive = useRef(false);
+
+  const material: ShaderMaterial = useMemo(() => {
+    const shaderMaterial = new ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+      uniforms: {
+        uColor1: new Uniform(originalColor1.current),
+        uColor2: new Uniform(originalColor2.current),
+        uAlpha: new Uniform(1),
+        uOffset: new Uniform(0),
+        uFrequency: new Uniform(10),
+        uSpeedFactor: new Uniform(8),
+        uTime: new Uniform(0),
+        uBlendSharpness: new Uniform(1)
+      }
+    });
+    return shaderMaterial;
+  }, []);
+
+  useEffect(() => {
+    originalColor1.current = new Color(colors.health1);
+    originalColor2.current = new Color(colors.health2);
+
+    material.uniforms.uColor1.value = originalColor1.current;
+    material.uniforms.uColor2.value = originalColor2.current;
+  }, [colors]);
 
   useEffect(() => {
     const active = (playerHealth >= healthLevel);
@@ -62,22 +93,20 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
 
   }, [playerHealth]);
   
+  useFrame(({ clock }) => {
+    material.uniforms.uTime.value = clock.elapsedTime;
+  });
+
   return (
     <mesh
       ref={healthBlock}
       castShadow={true}
       receiveShadow={true}
       scale={[0, 0, 0]}
-      position={position} 
+      position={position}
+      material={material} 
     >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial 
-        color={colors.healthOn}
-        emissive={colors.healthOn}
-        emissiveIntensity={emissiveIntensity} 
-        opacity={0.9}
-        transparent={true}
-      />
+      <icosahedronGeometry args={[0.9, 0]} />
     </mesh>  
   );
 }

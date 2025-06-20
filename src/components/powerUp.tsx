@@ -1,37 +1,86 @@
 import { useFrame } from "@react-three/fiber";
 import { GlobalState, PowerUpInfo, useGlobalStore } from "../stores/useGlobalStore";
-import { useEffect, useRef } from "react";
-import { Clock, Mesh, MeshStandardMaterial, Vector3 } from "three";
+import { useEffect, useMemo, useRef } from "react";
+import { Clock, Color, Mesh, ShaderMaterial, Uniform, Vector3 } from "three";
 import gsap from "gsap";
 import { Sounds } from "../utils/sounds";
+import vertexShader from '../shaders/portal2/vertex.glsl';
+import fragmentShader from '../shaders/portal2/fragment.glsl';
 
 export default function PowerUp ({ id, position, type }: PowerUpInfo){
   const powerUp = useRef<Mesh>(null!);
-  const material = useRef<MeshStandardMaterial>(null!);
 
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const powerUpHitId = useGlobalStore((state: GlobalState) => state.powerUpHitId);
-  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
 
   const powerUpOffset = useRef<Vector3>(new Vector3());
   const powerUpClock = useRef(new Clock(false));
   const isDead = useRef(false);
   const bounceTween = useRef<GSAPTween>(null!);
+  const rotationTween = useRef<GSAPTween>(null!);
+
+  const originalColor1 = useRef(new Color(colors.health1));
+  const originalColor2 = useRef(new Color(colors.health2));
+
+  const material: ShaderMaterial = useMemo(() => {
+    const shaderMaterial = new ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+      uniforms: {
+        uColor1: new Uniform(originalColor1.current),
+        uColor2: new Uniform(originalColor2.current),
+        uAlpha: new Uniform(1),
+        uOffset: new Uniform(0),
+        uFrequency: new Uniform(2),
+        uSpeedFactor: new Uniform(0),
+        uTime: new Uniform(0),
+        uBlendSharpness: new Uniform(1)
+      }
+    });
+    return shaderMaterial;
+  }, []);
+
+  useEffect(() => {
+    originalColor1.current = new Color(colors.health1);
+    originalColor2.current = new Color(colors.health2);
+
+    material.uniforms.uColor1.value = originalColor1.current;
+    material.uniforms.uColor2.value = originalColor2.current;
+  }, [colors]);
 
   useEffect(() => {
     if (playing) {
       powerUpClock.current.start();
       
-      // Start bouncing
-      bounceTween.current = gsap.to(powerUp.current.position, { y: 0.25, duration: 0.5, ease: "power1.inOut", repeat: -1, yoyo: true });
-
+      // Start bouncing & rotating
+      bounceTween.current = gsap.to(
+        powerUp.current.position, 
+        { 
+          y: 0.25, 
+          duration: 0.5, 
+          ease: "power1.inOut", 
+          repeat: -1, 
+          yoyo: true 
+        }
+      );
+      rotationTween.current = gsap.to(
+        powerUp.current.rotation, 
+        { 
+          y: Math.PI * 2, 
+          duration: 1, 
+          ease: "power1.inOut", 
+          repeat: -1
+        }
+      );
     } else {
       powerUpClock.current.stop();
 
-      // Stop bouncing
+      // Stop bouncing & rotating
       bounceTween.current.pause();
+      rotationTween.current.pause();
     }
   }, [playing]);
 
@@ -44,8 +93,9 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
       }
       // Die
       isDead.current = true;
-      // Stop bouncing
+      // Stop bouncing & rotating
       bounceTween.current.pause();
+      rotationTween.current.pause();
       // Animate death
       gsap.to(
         powerUp.current.position, 
@@ -100,16 +150,9 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
       position={position}
       visible={false}
       scale={0}
+      material={material} 
     >
-      <boxGeometry/>
-      <meshStandardMaterial
-        ref={material}
-        color={colors.powerUpHealth} 
-        emissive={colors.powerUpHealth}
-        emissiveIntensity={emissiveIntensity} 
-        opacity={0.9}
-        transparent={true}
-      />
+      <icosahedronGeometry args={[0.9, 0]} />
     </mesh>  
   )
 }

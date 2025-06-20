@@ -37,8 +37,8 @@ export default function Debug (){
       threat1:        { value: colors.threat1,        onChange: value => setColors({ ...colors, threat1: value }) },
       threat2:        { value: colors.threat2,        onChange: value => setColors({ ...colors, threat2: value }) },
       threatHit:      { value: colors.threatHit,      onChange: value => setColors({ ...colors, threatHit: value }) },
-      healthOn:       { value: colors.healthOn,       onChange: value => setColors({ ...colors, healthOn: value }) },
-      healthOff:      { value: colors.healthOff,      onChange: value => setColors({ ...colors, healthOff: value }) },
+      health1:        { value: colors.health1,        onChange: value => setColors({ ...colors, health1: value }) },
+      health2:        { value: colors.health2,        onChange: value => setColors({ ...colors, health2: value }) },
       powerUpHealth:  { value: colors.powerUpHealth,  onChange: value => setColors({ ...colors, powerUpHealth: value }) },
     }
   );
