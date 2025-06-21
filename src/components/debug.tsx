@@ -40,6 +40,7 @@ export default function Debug (){
       threatHit:      { value: colors.threatHit,      onChange: value => setColors({ ...colors, threatHit: value }) },
       health1:        { value: colors.health1,        onChange: value => setColors({ ...colors, health1: value }) },
       health2:        { value: colors.health2,        onChange: value => setColors({ ...colors, health2: value }) },
+      healthContainer:{ value: colors.healthContainer,onChange: value => setColors({ ...colors, healthContainer: value }) },
       powerUpHealth:  { value: colors.powerUpHealth,  onChange: value => setColors({ ...colors, powerUpHealth: value }) },
     }
   );

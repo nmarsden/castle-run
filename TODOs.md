@@ -50,7 +50,7 @@
   [x] animate decrease
   [x] use a custom shader
   [x] use a non-box geometry
-  [ ] add container
+  [x] add container
 
 [ ] enemy
   [x] move with the ground

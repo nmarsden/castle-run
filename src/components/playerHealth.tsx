@@ -1,15 +1,35 @@
 import { useEffect, useMemo, useRef } from "react";
-import { Color, Mesh, ShaderMaterial, Uniform } from "three";
+import { Color, DoubleSide, Mesh, ShaderMaterial, Uniform } from "three";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 import gsap from "gsap";
 import { Sounds } from "../utils/sounds";
 import vertexShader from '../shaders/portal2/vertex.glsl';
 import fragmentShader from '../shaders/portal2/fragment.glsl';
 import { useFrame } from "@react-three/fiber";
+import { useControls } from "leva";
 
 type HealthBlockProps = {
   healthLevel: number;
   position: [number, number, number];
+}
+
+function HealthContainer () {
+  const colors = useGlobalStore((state: GlobalState) => state.colors);
+
+  return (
+    <mesh
+      castShadow={true}
+      receiveShadow={true}
+      position={[0, 0.45, 0.51]}
+      rotation-y={Math.PI * 0.5}
+    >
+      <meshStandardMaterial 
+        color={new Color(colors.healthContainer)}
+        side={DoubleSide}
+      />
+      <cylinderGeometry args={[0.2, 0.2, 1.2, 7, 1, true, Math.PI * -0.35, Math.PI * 1.7]}/>
+    </mesh>  
+  );
 }
 
 function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
@@ -104,7 +124,6 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
 
 export default function PlayerHealth (){
   const playerHealthMax = useGlobalStore((state: GlobalState) => state.playerHealthMax);
-
   const healthBlocks: HealthBlockProps[] = useMemo(() => {
     const hb: HealthBlockProps[] = [];
     for (let i=0; i<playerHealthMax; i++) {
@@ -118,6 +137,7 @@ export default function PlayerHealth (){
 
   return (
     <>
+      <HealthContainer />
       {healthBlocks.map((block, index) => 
         <HealthBlock 
           key={`health-block-${index}`} 

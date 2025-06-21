@@ -259,6 +259,7 @@ type Colors = {
   threatHit: string;
   health1: string;
   health2: string;
+  healthContainer: string;
   powerUpHealth: string;
 };
 
@@ -387,19 +388,20 @@ export const useGlobalStore = create<GlobalState>()(
         lastThreatHit: { id: '', time: 0 },
         wave: EMPTY_WAVE,
         colors: {
-          background1: '#000000',   // #000000
-          background2: '#FFFFFF',   // #FFFFFF
-          player1: '#ebe013',       // #EBAE13 #ebe013
-          player2: '#f2cc6c',       // #9b7411 #efbe44 #f2cc6c
-          playerFlash: '#ebd013',   // #eb2913 #e25636 #ebd013
-          ground: '#E0E0E0',        // #E0E0E0
-          enemy: '#BABABA',         // #BABABA
-          threat1: '#FF2929',       // #FF2929
-          threat2: '#000000',       // #000000
-          threatHit: '#FFA500',     // #FFA500
-          health1: '#15d100',       // #52FF3F #94ff88 #15d100
-          health2: '#ffffff',       // #01440a #0aad20 #ffffff
-          powerUpHealth: '#52FF3F'  // #52FF3F
+          background1: '#000000',     // #000000
+          background2: '#FFFFFF',     // #FFFFFF
+          player1: '#ebe013',         // #EBAE13 #ebe013
+          player2: '#f2cc6c',         // #9b7411 #efbe44 #f2cc6c
+          playerFlash: '#ebd013',     // #eb2913 #e25636 #ebd013
+          ground: '#E0E0E0',          // #E0E0E0
+          enemy: '#BABABA',           // #BABABA
+          threat1: '#FF2929',         // #FF2929
+          threat2: '#000000',         // #000000
+          threatHit: '#FFA500',       // #FFA500
+          health1: '#15d100',         // #52FF3F #94ff88 #15d100
+          health2: '#ffffff',         // #01440a #0aad20 #ffffff
+          healthContainer: '#623d3d', // #ebe013 #623d3d
+          powerUpHealth: '#52FF3F'    // #52FF3F
         },
         soundFXOn: true,
         musicOn: true,
