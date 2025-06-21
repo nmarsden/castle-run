@@ -128,4 +128,5 @@
     [x] player stopped moving if pressing one direction followed by the opposite direction multiple times
     [ ] enemy's z position is shifted out of alignment with the ground over time
     [x] fix camera shake when player hit
+    [x] fix things becoming invisible too early before being out of view
 

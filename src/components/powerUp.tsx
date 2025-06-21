@@ -128,7 +128,7 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
 
     // Make visible when Z position is on the ground area
     const prevVisible = powerUp.current.visible;
-    powerUp.current.visible = powerUp.current.position.z < 5 && powerUp.current.position.z > -14.5;
+    powerUp.current.visible = powerUp.current.position.z < 7 && powerUp.current.position.z > -14.5;
     if (powerUp.current.visible && !prevVisible) {
       // Spawn
       Sounds.getInstance().playSoundFX('HEALTH_SPAWN')

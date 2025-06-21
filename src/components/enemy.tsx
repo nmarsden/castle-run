@@ -77,7 +77,7 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
 
     const prevVisible = enemy.current.visible;
 
-    enemy.current.visible = enemy.current.position.z < 5 && enemy.current.position.z > -14.5;
+    enemy.current.visible = enemy.current.position.z < 7 && enemy.current.position.z > -14.5;
 
     if (enemy.current.visible && !prevVisible) {
       // Spawn

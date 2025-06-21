@@ -138,7 +138,7 @@ export default function Threat ({ position, id }: { position: [number, number, n
 
     const prevVisible = threat.current.visible;
 
-    threat.current.visible = threat.current.position.z < 5 && threat.current.position.z > -14.5;
+    threat.current.visible = threat.current.position.z < 7 && threat.current.position.z > -14.5;
 
     if (threat.current.visible && !prevVisible) {
       // Spawn
