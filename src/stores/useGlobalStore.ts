@@ -400,7 +400,7 @@ export const useGlobalStore = create<GlobalState>()(
           threatHit: '#FFA500',       // #FFA500
           health1: '#15d100',         // #52FF3F #94ff88 #15d100
           health2: '#ffffff',         // #01440a #0aad20 #ffffff
-          healthContainer: '#623d3d', // #ebe013 #623d3d
+          healthContainer: '#a3a3a3', // #ebe013 #623d3d #a3a3a3
           powerUpHealth: '#52FF3F'    // #52FF3F
         },
         soundFXOn: true,

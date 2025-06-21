@@ -22,10 +22,13 @@ function HealthContainer () {
       receiveShadow={true}
       position={[0, 0.45, 0.51]}
       rotation-y={Math.PI * 0.5}
+      renderOrder={1000}
     >
       <meshStandardMaterial 
         color={new Color(colors.healthContainer)}
         side={DoubleSide}
+        opacity={0.5}
+        transparent={true}
       />
       <cylinderGeometry args={[0.2, 0.2, 1.2, 7, 1, true, Math.PI * -0.35, Math.PI * 1.7]}/>
     </mesh>  
