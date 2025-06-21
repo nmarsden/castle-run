@@ -98,7 +98,7 @@
   [x] allow restart
 
 [ ] ui improvements
-  [ ] fonts
+  [x] fonts
   [ ] icons
   [x] toggle buttons
 

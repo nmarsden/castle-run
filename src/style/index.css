@@ -7,6 +7,11 @@
 	--selected-colour: 255, 255, 0;
 }
 
+@font-face {
+    font-family: 'Orbitron';
+    src: url('/fonts/Orbitron-VariableFont_wght.ttf');
+}
+
 html,
 body,
 #root
@@ -36,9 +41,11 @@ body {
 }
 
 body {
-	font-family: 'Arimo', arial, sans-serif;
-	font-size: 22px;
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
   font-weight: 600;
+  font-style: normal;
+	font-size: 22px;
 	line-height: 28px;
 	color: var(--main-text-colour);
 }

@@ -25,10 +25,13 @@
 }
 
 .overlayHeading {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
   font-size: 50px;
   line-height: 50px;
   margin-bottom: 50px;
-  font-family: 'Shrikhand', sans-serif;  
 }
 
 .button-light {
