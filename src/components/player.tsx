@@ -103,6 +103,18 @@ export default function Player (){
           ease: "power1.inOut",
           repeat: 5
         }
+      );
+      gsap.to(
+        material.uniforms.uFrequency, 
+        { 
+          keyframes: [
+            { value: 7.25 },
+            { value: 8 }
+          ],
+          duration: 0.1, 
+          ease: "power1.inOut",
+          repeat: 5
+        }
       );      
     }
   }, [playerHealth, threatHitId]);

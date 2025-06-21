@@ -42,11 +42,14 @@ export default function Camera({ children } : { children?: ReactNode }) {
         { 
           keyframes: [
             { x: 0.05 },
-            { x: 0.0 }
+            { x: -0.05 }
           ],
-          duration: 0.05, 
+          duration: 0.075, 
           ease: "power1.inOut",
           repeat: 5,
+          onComplete: () => {
+            cameraGroup.current.position.x = 0;
+          }
         }
       );      
     }

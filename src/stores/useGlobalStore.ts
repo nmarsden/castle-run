@@ -389,9 +389,9 @@ export const useGlobalStore = create<GlobalState>()(
         colors: {
           background1: '#000000',   // #000000
           background2: '#FFFFFF',   // #FFFFFF
-          player1: '#ebe013',        // #EBAE13 #ebe013
-          player2: '#f2cc6c',        // #9b7411 #efbe44 #f2cc6c
-          playerFlash: '#E25636',   // #E25636
+          player1: '#ebe013',       // #EBAE13 #ebe013
+          player2: '#f2cc6c',       // #9b7411 #efbe44 #f2cc6c
+          playerFlash: '#ebd013',   // #eb2913 #e25636 #ebd013
           ground: '#E0E0E0',        // #E0E0E0
           enemy: '#BABABA',         // #BABABA
           threat1: '#FF2929',       // #FF2929

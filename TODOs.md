@@ -39,6 +39,8 @@
   [x] edit model to simplify geometry
   [x] use a custom shader
   [ ] player color depends on health, the less health the more red
+  [x] improve hitting threat animation
+
 
 [ ] health indicator
   [x] show health indicator on player
@@ -48,6 +50,7 @@
   [x] animate decrease
   [x] use a custom shader
   [x] use a non-box geometry
+  [ ] add container
 
 [ ] enemy
   [x] move with the ground
@@ -121,8 +124,8 @@
     [x] sfx on/off
     [x] bloom on/off
 
-[x] fix bugs
-    [ ] player stopped moving if pressing one direction followed by the opposite direction multiple times
+[ ] fix bugs
+    [x] player stopped moving if pressing one direction followed by the opposite direction multiple times
     [ ] enemy's z position is shifted out of alignment with the ground over time
-
+    [x] fix camera shake when player hit
 
