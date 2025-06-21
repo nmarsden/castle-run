@@ -335,6 +335,7 @@ export type GlobalState = {
   playerAction: PlayerAction;
   playerXOffset: number;
   playerZOffset: number;
+  playerHealthMax: number;
   playerHealth: number;
   powerUpHitId: number;
   threatHitId: string;
@@ -376,6 +377,7 @@ export const useGlobalStore = create<GlobalState>()(
         playerAction: 'NONE',
         playerXOffset: 0,
         playerZOffset: 0,
+        playerHealthMax: 4,
         playerHealth: 0,
         powerUpHitId: NO_POWER_UP_ID,
         threatHitId: '',
@@ -408,7 +410,7 @@ export const useGlobalStore = create<GlobalState>()(
           return { groundSpeed };
         }),
 
-        play: () => set(({ playCount }) => {
+        play: () => set(({ playCount, playerHealthMax }) => {
           playCount++; 
 
           return { 
@@ -421,7 +423,7 @@ export const useGlobalStore = create<GlobalState>()(
             playerAction: 'NONE',
             playerXOffset: 0,
             playerZOffset: 0,
-            playerHealth: 5,
+            playerHealth: playerHealthMax,
             powerUpHitId: NO_POWER_UP_ID,
             threatHitId: '',
             enemyHitId: NO_ENEMY_ID,
@@ -462,7 +464,7 @@ export const useGlobalStore = create<GlobalState>()(
           return { playing, playerAction };
         }),
 
-        setWaveProgressDelta: (waveProgressDelta: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted }) => {
+        setWaveProgressDelta: (waveProgressDelta: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealthMax, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted }) => {
           if (!playing) return {};
 
           waveProgress += waveProgressDelta;
@@ -489,7 +491,7 @@ export const useGlobalStore = create<GlobalState>()(
           if (hits.powerUpId !== NO_POWER_UP_ID) {
             powerUpHitId = hits.powerUpId;
             allPowerUpHitIds.push(powerUpHitId);
-            if (playerHealth < 5) {
+            if (playerHealth < playerHealthMax) {
               playerHealth++;
             }
           } else {

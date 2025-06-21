@@ -12,15 +12,6 @@ type HealthBlockProps = {
   position: [number, number, number];
 }
 
-const NUM_HEALTH_BLOCKS = 5;
-const HEALTH_BLOCKS: HealthBlockProps[] = [];
-for (let i=0; i<NUM_HEALTH_BLOCKS; i++) {
-  HEALTH_BLOCKS.push({
-    healthLevel: i + 1,
-    position: [0, (i * 0.3), 0.5]
-  })
-}
-
 function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
   const healthBlock = useRef<Mesh>(null!);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
@@ -112,9 +103,22 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
 }
 
 export default function PlayerHealth (){
+  const playerHealthMax = useGlobalStore((state: GlobalState) => state.playerHealthMax);
+
+  const healthBlocks: HealthBlockProps[] = useMemo(() => {
+    const hb: HealthBlockProps[] = [];
+    for (let i=0; i<playerHealthMax; i++) {
+      hb.push({
+        healthLevel: i + 1,
+        position: [0, (i * 0.3), 0.5]
+      })
+    }
+    return hb;
+  }, []);
+
   return (
     <>
-      {HEALTH_BLOCKS.map((block, index) => 
+      {healthBlocks.map((block, index) => 
         <HealthBlock 
           key={`health-block-${index}`} 
           healthLevel={block.healthLevel} 

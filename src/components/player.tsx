@@ -160,7 +160,7 @@ export default function Player (){
   return (
     <group 
       key={`player-${playCount}`}
-      position={[0, 0, -1]} 
+      position={[0, -0.4, -1]} 
     >
       <mesh
         ref={player}

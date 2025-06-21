@@ -11,16 +11,10 @@ export default function Camera({ children } : { children?: ReactNode }) {
 
   const cameraGroup = useRef<Group>(null!);
   const cameraControls = useRef<CameraControls>(null!);
-  const fov = useRef(100);
-  const cameraTarget = useRef<Vector3>(new Vector3(0, 0, 1 - 2));
-  const cameraPositionPresets = useRef<Map<number, Vector3>>(new Map<number, Vector3>([
-    [2,  new Vector3(0, 3.5, 2 + 1)],
-    [1,  new Vector3(0, 3.5, 1 + 1)],
-    [0,  new Vector3(0, 3.5, 0 + 1)],
-    [-1, new Vector3(0, 3.5, -1 + 1)],
-    [-2, new Vector3(0, 3.5, -2 + 1)],
-  ]));
-  const cameraPosition = useRef<Vector3>(cameraPositionPresets.current.get(playerZOffset) as Vector3);
+
+  const fov = useRef(40);
+  const cameraPosition = useRef<Vector3>(new Vector3(0, 5, 10));
+  const cameraTarget = useRef<Vector3>(new Vector3(0, 0, -4));
 
   useEffect(() => {
     setTimeout(() => {
@@ -29,12 +23,16 @@ export default function Camera({ children } : { children?: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const camPos = cameraPositionPresets.current.get(playerZOffset) as Vector3;
-    cameraTarget.current.setZ(camPos.z - 2); 
+    const newCamPos = cameraPosition.current.clone();
+    newCamPos.z = newCamPos.z + playerZOffset;
 
-    cameraControls.current.setPosition(camPos.x, camPos.y, camPos.z, true);
-    cameraControls.current.setTarget(cameraTarget.current.x, cameraTarget.current.y, cameraTarget.current.z, true);
-  }, [playerZOffset]);
+    const newCamTarget = cameraTarget.current.clone();
+    newCamTarget.z = newCamTarget.z + playerZOffset;
+
+    cameraControls.current.setPosition(newCamPos.x, newCamPos.y, newCamPos.z, true);
+    cameraControls.current.setTarget(newCamTarget.x, newCamTarget.y, newCamTarget.z, true);
+    
+  }, [playerZOffset, cameraPosition, cameraTarget]);
 
   useEffect(() => {
     if (threatHitId !== '') {
