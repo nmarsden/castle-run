@@ -37,6 +37,8 @@
   [ ] animate losing health
   [x] animate dead
   [x] edit model to simplify geometry
+  [x] use a custom shader
+  [ ] player color depends on health, the less health the more red
 
 [ ] health indicator
   [x] show health indicator on player

@@ -36,8 +36,8 @@ export default function Threat ({ position, id }: { position: [number, number, n
       transparent: true,
       depthWrite: false,
       uniforms: {
-        uColor1: new Uniform(originalColor1.current),
-        uColor2: new Uniform(originalColor2.current),
+        uColor1: new Uniform(originalColor1.current.clone()),
+        uColor2: new Uniform(originalColor2.current.clone()),
         uAlpha: new Uniform(0),
         uOffset: new Uniform(Math.random() * 100),
         uFrequency: new Uniform(2),
@@ -53,8 +53,8 @@ export default function Threat ({ position, id }: { position: [number, number, n
     originalColor2.current = new Color(colors.threat2);
     hitColor.current = new Color(colors.threatHit);
 
-    material.uniforms.uColor1.value = originalColor1.current;
-    material.uniforms.uColor2.value = originalColor2.current;
+    material.uniforms.uColor1.value = originalColor1.current.clone();
+    material.uniforms.uColor2.value = originalColor2.current.clone();
   }, [colors]);
 
   useEffect(() => {

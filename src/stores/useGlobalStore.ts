@@ -249,7 +249,8 @@ export type PlayerAction = 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_FORWARD' | 'MOVE_B
 type Colors = {
   background1: string;
   background2: string;
-  player: string;
+  player1: string;
+  player2: string;
   playerFlash: string;
   ground: string;
   enemy: string;
@@ -386,7 +387,8 @@ export const useGlobalStore = create<GlobalState>()(
         colors: {
           background1: '#000000',   // #000000
           background2: '#FFFFFF',   // #FFFFFF
-          player: '#EBAE13',        // #EBAE13
+          player1: '#ebe013',        // #EBAE13 #ebe013
+          player2: '#f2cc6c',        // #9b7411 #efbe44 #f2cc6c
           playerFlash: '#E25636',   // #E25636
           ground: '#E0E0E0',        // #E0E0E0
           enemy: '#BABABA',         // #BABABA

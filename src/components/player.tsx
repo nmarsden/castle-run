@@ -1,10 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { GlobalState, PlayerAction, useGlobalStore } from "../stores/useGlobalStore";
-import { Color, Mesh, MeshStandardMaterial, Vector3 } from "three";
+import { Color, Mesh, ShaderMaterial, Uniform, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import gsap from "gsap";
 import PlayerHealth from "./playerHealth";
 import { Sounds } from "../utils/sounds";
+import vertexShader from '../shaders/portal2/vertex.glsl';
+import fragmentShader from '../shaders/portal2/fragment.glsl';
+import { useFrame } from "@react-three/fiber";
 
 const OFFSET = 1;
 const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
@@ -19,7 +22,6 @@ export default function Player (){
   const rook = useGLTF("models/Rook.glb");
 
   const player = useRef<Mesh>(null!);
-  const material = useRef<MeshStandardMaterial>(null!);
 
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
   const setPlayerXOffset = useGlobalStore((state: GlobalState) => state.setPlayerXOffset);
@@ -29,17 +31,46 @@ export default function Player (){
   const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);  
   const waveProgress = useGlobalStore((state: GlobalState) => state.waveProgress);  
   const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
-  const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
 
   const tempPos = useRef<Vector3>(new Vector3());
   const isMoving = useRef(false);
-  const originalColor = useRef(new Color(colors.player));
+  const originalColor1 = useRef(new Color(colors.player1));
+  const originalColor2 = useRef(new Color(colors.player2));
   const flashColor = useRef(new Color(colors.playerFlash));
 
+  const material: ShaderMaterial = useMemo(() => {
+    const shaderMaterial = new ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+      uniforms: {
+        uColor1: new Uniform(originalColor1.current.clone()),
+        uColor2: new Uniform(originalColor2.current.clone()),
+        uAlpha: new Uniform(1),
+        uOffset: new Uniform(0),
+        uFrequency: new Uniform(8),
+        uSpeedFactor: new Uniform(8),
+        uTime: new Uniform(0),
+        uBlendSharpness: new Uniform(1)
+      }
+    });
+    return shaderMaterial;
+  }, []);
+  
   useEffect(() => {
-    originalColor.current = new Color(colors.player);
+    originalColor1.current = new Color(colors.player1);
+    originalColor2.current = new Color(colors.player2);
     flashColor.current = new Color(colors.playerFlash);
+
+    material.uniforms.uColor1.value = originalColor1.current.clone();
+    material.uniforms.uColor2.value = originalColor2.current.clone();    
   }, [colors]);
+
+  useEffect(() => {
+    material.uniforms.uColor1.value = originalColor1.current.clone();
+    material.uniforms.uColor2.value = originalColor2.current.clone();    
+
+  }, [playCount]);
 
   useEffect(() => {
     if (waveProgress < 1) return;
@@ -48,7 +79,7 @@ export default function Player (){
       // Die
       Sounds.getInstance().playSoundFX('PLAYER_DIE');
       gsap.to(
-        material.current.emissive,
+        material.uniforms.uColor1.value,
         {
           r: flashColor.current.r,
           g: flashColor.current.g,
@@ -62,11 +93,11 @@ export default function Player (){
     } else if (threatHitId !== '') {
       // Hit Threat
       gsap.to(
-        material.current.emissive, 
+        material.uniforms.uColor1.value, 
         { 
           keyframes: [
             { r: flashColor.current.r,    g: flashColor.current.g,    b: flashColor.current.b },
-            { r: originalColor.current.r, g: originalColor.current.g, b: originalColor.current.b }
+            { r: originalColor1.current.r, g: originalColor1.current.g, b: originalColor1.current.b }
           ],
           duration: 0.1, 
           ease: "power1.inOut",
@@ -122,6 +153,10 @@ export default function Player (){
     )
   }, [playerAction]);
   
+  useFrame(({ clock }) => {
+    material.uniforms.uTime.value = clock.elapsedTime;
+  });
+    
   return (
     <group 
       key={`player-${playCount}`}
@@ -132,15 +167,8 @@ export default function Player (){
         castShadow={true}
         receiveShadow={true}
         geometry={(rook.nodes.Rook as Mesh).geometry}
+        material={material}
       >
-        <meshStandardMaterial 
-          ref={material}
-          color={colors.player}
-          emissive={colors.player}
-          emissiveIntensity={emissiveIntensity} 
-          opacity={0.9}
-          transparent={true}
-        />
         <PlayerHealth />
       </mesh>  
     </group>
