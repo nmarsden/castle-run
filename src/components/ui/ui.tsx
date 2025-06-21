@@ -71,9 +71,18 @@ export default function Ui() {
           )}
           <div className="button-light button-pulse" onClick={() => play()}>PLAY</div>
           <div className="optionsContainer">
-            <div className="button-light" onClick={() => toggleMusic()}>MUSIC: {musicOn ? 'ON' : 'OFF'}</div>
-            <div className="button-light" onClick={() => toggleSoundFx()}>SFX: {soundFXOn ? 'ON' : 'OFF'}</div>
-            <div className="button-light" onClick={() => toggleBloom()}>BLOOM: {bloomEffect ? 'ON' : 'OFF'}</div>
+            <div className="button-light button-toggle" onClick={() => toggleMusic()}>
+              <span>MUSIC</span>
+              <span>{musicOn ? 'ON' : 'OFF'}</span>
+            </div>
+            <div className="button-light button-toggle" onClick={() => toggleSoundFx()}>
+              <span>SFX</span>
+              <span>{soundFXOn ? 'ON' : 'OFF'}</span>
+            </div>
+            <div className="button-light button-toggle" onClick={() => toggleBloom()}>
+              <span>BLOOM</span>
+              <span>{bloomEffect ? 'ON' : 'OFF'}</span>
+            </div>
           </div>
       </div>
     </>

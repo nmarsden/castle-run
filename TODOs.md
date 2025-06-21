@@ -97,6 +97,7 @@
 [ ] ui improvements
   [ ] fonts
   [ ] icons
+  [x] toggle buttons
 
 [ ] audio
   [x] music
