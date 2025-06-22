@@ -123,6 +123,7 @@ export default function Camera({ children } : { children?: ReactNode }) {
         </PerspectiveCamera>
         <CameraControls 
           ref={cameraControls}
+          enabled={false}
           // truckSpeed={0}
           // minPolarAngle={0}
           // maxPolarAngle={Math.PI * 0.45}

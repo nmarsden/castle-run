@@ -8,6 +8,7 @@ import Camera from "./camera.tsx";
 import Ground from "./ground.tsx";
 import Player from "./player.tsx";
 import Keyboard from './keyboard.tsx';
+import Touch from './touch.tsx';
 import PlayerBounds from './playerBounds.tsx';
 import Enemies from './enemies.tsx';
 import PowerUps from './powerUps.tsx';
@@ -31,7 +32,9 @@ export default function App() {
         <Suspense>
           <Performance />
           <Lights />
-          <Camera />
+          <Camera>
+            <Touch />
+          </Camera>
           <Background />
           <Ground />
           <Enemies />

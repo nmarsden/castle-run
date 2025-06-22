@@ -22,7 +22,7 @@
 
 [ ] player
   [x] movement using keyboard
-  [ ] movement using touch
+  [x] movement using touch
   [x] restrict player movement
   [x] visually indicate player movement bounds, eg. boundary lines
   [x] use Rook model
