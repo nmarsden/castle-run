@@ -96,8 +96,8 @@
   [x] end game when player's health runs out
   [x] show game over overlay
   [x] allow restart
-  [ ] show number of waves completed
-  [ ] show best number of waves completed
+  [x] show number of waves completed
+  [x] show best number of waves completed
 
 [ ] ui improvements
   [x] fonts

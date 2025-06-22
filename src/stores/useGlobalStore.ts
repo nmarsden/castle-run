@@ -330,6 +330,8 @@ export type GlobalState = {
   playing: boolean;
   playCount: number;
   waveNum: number;
+  waveNumCompleted: number;
+  waveNumCompletedBest: number;
   waveProgress: number;
   waveCompleted: boolean;
   groundSpeed: number;
@@ -372,6 +374,8 @@ export const useGlobalStore = create<GlobalState>()(
         playing: false,
         playCount: 0,
         waveNum: 0,
+        waveNumCompleted: 0,
+        waveNumCompletedBest: 0,
         waveProgress: 0,
         waveCompleted: false,
         groundSpeed: 4,
@@ -419,6 +423,7 @@ export const useGlobalStore = create<GlobalState>()(
             playing: true, 
             playCount,
             waveNum: 1,
+            waveNumCompleted: 0,
             waveProgress: 0,
             waveCompleted: false,
             wave: populateWave(1, 0),
@@ -435,14 +440,21 @@ export const useGlobalStore = create<GlobalState>()(
           };
         }),
 
-        playNextWave: () => set(({ waveNum, waveProgress }) => {
+        playNextWave: () => set(({ waveNum, waveNumCompleted, waveNumCompletedBest, waveProgress }) => {
           waveNum++;
+          waveNumCompleted++;
           if (waveNum > TOTAL_NUM_WAVES) {
             waveNum = 1;
+            waveNumCompleted = 0;
+          }
+          if (waveNumCompleted > waveNumCompletedBest) {
+            waveNumCompletedBest++;
           }
 
           return { 
             waveNum,
+            waveNumCompleted,
+            waveNumCompletedBest,
             waveCompleted: false,
             wave: populateWave(waveNum, waveProgress),
             playerAction: 'NONE',
@@ -527,6 +539,7 @@ export const useGlobalStore = create<GlobalState>()(
         soundFXOn: state.soundFXOn,
         musicOn: state.musicOn,
         bloomEffect: state.bloomEffect,
+        waveNumCompletedBest: state.waveNumCompletedBest,
       }),
     }
   )

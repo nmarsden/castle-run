@@ -15,6 +15,8 @@ export default function Ui() {
   const musicOn = useGlobalStore((state: GlobalState) => state.musicOn);
   const soundFXOn = useGlobalStore((state: GlobalState) => state.soundFXOn);
   const bloomEffect = useGlobalStore((state: GlobalState) => state.bloomEffect);
+  const waveNumCompleted = useGlobalStore((state: GlobalState) => state.waveNumCompleted);
+  const waveNumCompletedBest = useGlobalStore((state: GlobalState) => state.waveNumCompletedBest);
 
   const [showNewWaveMsg, setShowNewWaveMsg] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -76,7 +78,19 @@ export default function Ui() {
               <div>RUN</div>
             </div>
           ) : (
-            <div className="overlayHeading">GAME OVER</div>
+            <>
+              <div className="overlayHeading">GAME OVER</div>
+              <div className="resultsContainer">
+                <div>
+                  <div className="resultLabel">COMPLETED</div>
+                  <div>{waveNumCompleted} {waveNumCompleted === 1 ? 'WAVE' : 'WAVES'}</div>
+                </div>
+                <div>
+                  <div className="resultLabel">BEST</div>
+                  <div>{waveNumCompletedBest} {waveNumCompletedBest === 1 ? 'WAVE' : 'WAVES'}</div>
+                </div>
+              </div>
+            </>
           )}
           <div className="button-light button-pulse" onClick={() => play()}>PLAY</div>
           <div className="buttonGroup">

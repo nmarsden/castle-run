@@ -213,3 +213,14 @@
   font-size: 25px;
   text-shadow: 13px 0 #CCCCCC, 26px 0 #999999;
 }
+
+.resultsContainer {
+  display: flex;
+  gap: 40px;
+  padding-bottom: 20px;
+  font-size: 20px;
+}
+
+.resultLabel {
+  font-size: 14px;
+}
