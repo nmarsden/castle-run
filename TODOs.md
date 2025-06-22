@@ -134,7 +134,7 @@
     [ ] enemy's z position is shifted out of alignment with the ground over time
     [x] fix camera shake when player hit
     [x] fix things becoming invisible too early before being out of view
-    [ ] fix loading behaviour - do not show ui until loaded
+    [x] fix loading behaviour - do not show ui until loaded
 
 [x] push to github
 [x] deploy

@@ -57,7 +57,7 @@ export default function App() {
         </Suspense>
       </Canvas>
       <Ui />
-      <Loader containerStyles={{ background: '#07046380' }}/>
+      <Loader containerStyles={{ background: '#0A0A0A' }}/>
     </>
   );
 }
