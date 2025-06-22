@@ -6,7 +6,6 @@ import { Sounds } from "../utils/sounds";
 import vertexShader from '../shaders/portal2/vertex.glsl';
 import fragmentShader from '../shaders/portal2/fragment.glsl';
 import { useFrame } from "@react-three/fiber";
-import { useControls } from "leva";
 
 type HealthBlockProps = {
   healthLevel: number;

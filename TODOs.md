@@ -131,3 +131,4 @@
     [x] fix camera shake when player hit
     [x] fix things becoming invisible too early before being out of view
 
+[ ] deploy
