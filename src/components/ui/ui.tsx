@@ -17,10 +17,15 @@ export default function Ui() {
   const bloomEffect = useGlobalStore((state: GlobalState) => state.bloomEffect);
 
   const [showNewWaveMsg, setShowNewWaveMsg] = useState(false);
+  const [showControls, setShowControls] = useState(false);
 
   const toggleBloom = useCallback(() => {
     setBloomEffect(!bloomEffect);
   }, [bloomEffect]);
+
+  const toggleShowControls = useCallback(() => {
+    setShowControls(!showControls);
+  }, [showControls]);
 
   useEffect(() => {
     Sounds.getInstance().playMusicTrack('IDLE');
@@ -63,14 +68,18 @@ export default function Ui() {
         <div className="message">WAVE #{waveNum}</div>
       </div>
 
-      <div className={`overlay ${playing ? 'hide' : 'show'}`}>
+      <div className={`overlay ${(playing || showControls) ? 'hide' : 'show'}`}>
           {playCount === 0 ? (
-            <div className="overlayHeading">CASTLE RUN</div>
+            <div className="overlayHeading">
+              <div className="fa-solid fa-chess-rook"></div>
+              <div>CASTLE</div>
+              <div>RUN</div>
+            </div>
           ) : (
             <div className="overlayHeading">GAME OVER</div>
           )}
           <div className="button-light button-pulse" onClick={() => play()}>PLAY</div>
-          <div className="optionsContainer">
+          <div className="buttonGroup">
             <div className="button-light button-toggle" onClick={() => toggleMusic()}>
               <span>MUSIC</span>
               <span>{musicOn ? 'ON' : 'OFF'}</span>
@@ -84,6 +93,40 @@ export default function Ui() {
               <span>{bloomEffect ? 'ON' : 'OFF'}</span>
             </div>
           </div>
+          <div className="buttonGroup">
+            <div className="button-light" onClick={() => toggleShowControls()}>CONTROLS</div>
+          </div>
+      </div>
+      <div className={`overlay ${showControls ? 'show' : 'hide'}`}>
+        <div className="overlayHeading">Controls</div>
+        <div className="controlsSection">
+          <div className="controlsGroup">
+            <div className="fa-solid fa-keyboard"></div>
+            <div className="controlsInfo">
+              <div className="key">W</div>
+              <div className="controlsText">
+                <div className="key">A</div>
+                <div className="key">S</div>
+                <div className="key">D</div>
+              </div>
+            </div>
+          </div>
+          <div className="controlsGroup">
+            <div className="fa-solid fa-mobile-screen"></div>
+            <div className="controlsInfo mobile">
+              <span className="swipe-arrow"><i className="fa-solid fa-greater-than fa-rotate-270"></i></span>
+              <div className="controlsText">
+                <span className="swipe-arrow"><i className="fa-solid fa-greater-than fa-rotate-180"></i></span>
+                <span className="swipe-text">SWIPE</span>
+                <span className="swipe-arrow"><i className="fa-solid fa-greater-than"></i></span>
+              </div>
+              <span className="swipe-arrow"><i className="fa-solid fa-greater-than fa-rotate-90"></i></span>
+            </div>
+          </div>
+        </div>
+        <div className="buttonGroup">
+          <div className="button-light" onClick={() => toggleShowControls()}>CLOSE</div>
+        </div>
       </div>
     </>
   )

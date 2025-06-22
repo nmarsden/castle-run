@@ -99,8 +99,9 @@
 
 [ ] ui improvements
   [x] fonts
-  [ ] icons
+  [x] icons
   [x] toggle buttons
+  [x] controls info
 
 [ ] audio
   [x] music

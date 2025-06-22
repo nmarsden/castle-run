@@ -32,6 +32,9 @@
   font-size: 50px;
   line-height: 50px;
   margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .button-light {
@@ -157,8 +160,56 @@
   position: absolute;
 }
 
-.optionsContainer {
+.buttonGroup {
   display: flex;
   margin-top: 50px;
   gap: 10px;
+}
+
+.controlsSection {
+  display: flex;
+  padding-bottom: 30px;
+}
+
+.controlsGroup {
+  font-size: 80px;
+
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.controlsInfo {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 20px;
+  align-items: center;
+}
+.controlsInfo.mobile {
+  padding-top: 40px;
+}
+
+.controlsText {
+  display: flex;
+  gap: 10px;
+}
+
+.key {
+  border: 2px solid #FFFFFF;
+  padding: 5px;
+  border-radius: 5px;
+  width: 40px;
+}
+
+.swipe-text {
+  font-size: 15px;
+  line-height: 30px;
+}
+.swipe-arrow {
+  font-size: 25px;
+  text-shadow: 13px 0 #CCCCCC, 26px 0 #999999;
 }
