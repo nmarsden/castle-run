@@ -96,6 +96,8 @@
   [x] end game when player's health runs out
   [x] show game over overlay
   [x] allow restart
+  [ ] show number of waves completed
+  [ ] show best number of waves completed
 
 [ ] ui improvements
   [x] fonts
@@ -125,10 +127,15 @@
     [x] sfx on/off
     [x] bloom on/off
 
+[x] favicon
+
 [ ] fix bugs
     [x] player stopped moving if pressing one direction followed by the opposite direction multiple times
     [ ] enemy's z position is shifted out of alignment with the ground over time
     [x] fix camera shake when player hit
     [x] fix things becoming invisible too early before being out of view
+    [ ] fix loading behaviour - do not show ui until loaded
 
-[ ] deploy
+[x] push to github
+[x] deploy
+
