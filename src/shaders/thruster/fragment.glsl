@@ -13,7 +13,7 @@ void main() {
     float glow = 1.0 - smoothstep(0.0, 0.5, dist);
 
     // Add some flickering/animation based on time
-    float flicker = sin(uTime * 10.0 + pos.y * 5.0) * 0.1 + 0.9;
+    float flicker = sin(uTime * 30.0 + pos.y * 30.0) * 0.1 + 0.4;
     glow *= flicker;
 
     // Apply power and color

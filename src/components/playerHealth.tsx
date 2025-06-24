@@ -19,7 +19,7 @@ function HealthContainer () {
     <mesh
       castShadow={true}
       receiveShadow={true}
-      position={[0, 0.45, 0.51]}
+      position={[0, 0.7, 0.51]}
       rotation-y={Math.PI * 0.5}
       renderOrder={1000}
     >
@@ -29,7 +29,7 @@ function HealthContainer () {
         opacity={0.5}
         transparent={true}
       />
-      <cylinderGeometry args={[0.2, 0.2, 1.2, 7, 1, true, Math.PI * -0.35, Math.PI * 1.7]}/>
+      <cylinderGeometry args={[0.2, 0.2, 0.45, 7, 1, true, Math.PI * -0.35, Math.PI * 1.7]}/>
     </mesh>  
   );
 }
@@ -119,7 +119,7 @@ function HealthBlock ({ healthLevel, position }: HealthBlockProps) {
       position={position}
       material={material} 
     >
-      <icosahedronGeometry args={[0.9, 0]} />
+      <cylinderGeometry args={[0.9, 0.9, 0.5, 7, 1, false]}/>
     </mesh>  
   );
 }
@@ -131,7 +131,7 @@ export default function PlayerHealth (){
     for (let i=0; i<playerHealthMax; i++) {
       hb.push({
         healthLevel: i + 1,
-        position: [0, (i * 0.3), 0.5]
+        position: [0, (0.5 + (i * 0.12)), 0.5]
       })
     }
     return hb;
