@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { GlobalState, PlayerAction, useGlobalStore } from "../stores/useGlobalStore";
-import { Color, Mesh, ShaderMaterial, Uniform, Vector3 } from "three";
+import { Color, Group, Mesh, ShaderMaterial, Uniform, Vector3 } from "three";
 import { useGLTF } from "@react-three/drei";
 import gsap from "gsap";
 import PlayerHealth from "./playerHealth";
@@ -22,6 +22,7 @@ const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
 export default function Player (){
   const rook = useGLTF("models/Rook.glb");
 
+  const group = useRef<Group>(null!);
   const player = useRef<Mesh>(null!);
 
   const playerAction = useGlobalStore((state: GlobalState) => state.playerAction);
@@ -38,6 +39,7 @@ export default function Player (){
   const originalColor1 = useRef(new Color(colors.player1));
   const originalColor2 = useRef(new Color(colors.player2));
   const flashColor = useRef(new Color(colors.playerFlash));
+  const hoverAnimation = useRef<GSAPTween>(null!);
 
   const material: ShaderMaterial = useMemo(() => {
     const shaderMaterial = new ShaderMaterial({
@@ -68,6 +70,18 @@ export default function Player (){
   }, [colors]);
 
   useEffect(() => {
+    // Hover animation
+    hoverAnimation.current = gsap.to(
+      group.current.position,
+      {
+        y: -0.3,        
+        duration: 0.5,
+        ease: "power1.inOut",
+        repeat: -1,
+        yoyo: true,
+      }
+    );
+
     material.uniforms.uColor1.value = originalColor1.current.clone();
     material.uniforms.uColor2.value = originalColor2.current.clone();    
 
@@ -172,6 +186,7 @@ export default function Player (){
     
   return (
     <group 
+      ref={group}
       key={`player-${playCount}`}
       position={[0, -0.4, -1]} 
     >

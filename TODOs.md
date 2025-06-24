@@ -29,7 +29,7 @@
   [x] animate movement
   [x] adjust camera when player moves
   [x] add thruster(s)
-  [ ] animate when idle
+  [x] animate when idle
   [ ] should bounds extend to cover the whole ground?
   [x] animate hitting threat
   [ ] animate hitting enemy
