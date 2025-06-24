@@ -8,6 +8,7 @@ import { Sounds } from "../utils/sounds";
 import vertexShader from '../shaders/portal2/vertex.glsl';
 import fragmentShader from '../shaders/portal2/fragment.glsl';
 import { useFrame } from "@react-three/fiber";
+import Thruster from "./thruster";
 
 const OFFSET = 1;
 const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
@@ -181,6 +182,7 @@ export default function Player (){
         geometry={(rook.nodes.Rook as Mesh).geometry}
         material={material}
       >
+        <Thruster />
         <PlayerHealth />
       </mesh>  
     </group>

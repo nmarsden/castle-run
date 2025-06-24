@@ -252,6 +252,7 @@ type Colors = {
   player1: string;
   player2: string;
   playerFlash: string;
+  thruster: string;
   ground: string;
   enemy: string;
   threat1: string;
@@ -397,6 +398,7 @@ export const useGlobalStore = create<GlobalState>()(
           player1: '#ebe013',         // #EBAE13 #ebe013
           player2: '#f2cc6c',         // #9b7411 #efbe44 #f2cc6c
           playerFlash: '#ebd013',     // #eb2913 #e25636 #ebd013
+          thruster: '#33ccff',        // #33ccff
           ground: '#E0E0E0',          // #E0E0E0
           enemy: '#BABABA',           // #BABABA
           threat1: '#FF2929',         // #FF2929

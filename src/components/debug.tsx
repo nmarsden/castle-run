@@ -33,6 +33,7 @@ export default function Debug (){
       player1:        { value: colors.player1,        onChange: value => setColors({ ...colors, player1: value }) },
       player2:        { value: colors.player2,        onChange: value => setColors({ ...colors, player2: value }) },
       playerFlash:    { value: colors.playerFlash,    onChange: value => setColors({ ...colors, playerFlash: value }) },
+      thruster:       { value: colors.thruster,       onChange: value => setColors({ ...colors, thruster: value }) },
       ground:         { value: colors.ground,         onChange: value => setColors({ ...colors, ground: value }) },
       enemy:          { value: colors.enemy,          onChange: value => setColors({ ...colors, enemy: value }) },
       threat1:        { value: colors.threat1,        onChange: value => setColors({ ...colors, threat1: value }) },

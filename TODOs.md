@@ -28,7 +28,7 @@
   [x] use Rook model
   [x] animate movement
   [x] adjust camera when player moves
-  [ ] add thruster(s)
+  [x] add thruster(s)
   [ ] animate when idle
   [ ] should bounds extend to cover the whole ground?
   [x] animate hitting threat
