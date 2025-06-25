@@ -136,7 +136,7 @@
     [x] fix camera shake when player hit
     [x] fix things becoming invisible too early before being out of view
     [x] fix loading behaviour - do not show ui until loaded
-    [ ] fix y position of kings and queens
+    [x] fix y position of kings and queens
 
 [x] push to github
 [x] deploy
