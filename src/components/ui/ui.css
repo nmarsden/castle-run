@@ -97,9 +97,10 @@
 .button-toggle {
   flex-direction: column;
   min-width: 100px;
+  font-size: 20px;
 }
 .button-toggle > span:last-child {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .messageContainer {

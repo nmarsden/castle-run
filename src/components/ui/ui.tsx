@@ -108,7 +108,7 @@ export default function Ui() {
             </div>
           </div>
           <div className="buttonGroup">
-            <div className="button-light" onClick={() => toggleShowControls()}>CONTROLS</div>
+            <div className="button-light button-toggle" onClick={() => toggleShowControls()}>CONTROLS</div>
           </div>
       </div>
       <div className={`overlay ${showControls ? 'show' : 'hide'}`}>

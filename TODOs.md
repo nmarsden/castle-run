@@ -105,6 +105,7 @@
   [x] icons
   [x] toggle buttons
   [x] controls info
+  [ ] game info - credits
 
 [ ] audio
   [x] music
