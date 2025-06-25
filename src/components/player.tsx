@@ -9,6 +9,7 @@ import vertexShader from '../shaders/portal2/vertex.glsl';
 import fragmentShader from '../shaders/portal2/fragment.glsl';
 import { useFrame } from "@react-three/fiber";
 import Thruster from "./thruster";
+import Explosion from "./explosion";
 
 const OFFSET = 1;
 const PLAYER_OFFSETS: Map<PlayerAction, Vector3> = new Map([
@@ -199,6 +200,7 @@ export default function Player (){
       >
         <Thruster />
         <PlayerHealth />
+        <Explosion position={[0, 0, 0]} />
       </mesh>  
     </group>
   )

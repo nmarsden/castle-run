@@ -5,7 +5,7 @@ import fragmentShader from '../shaders/thruster/fragment.glsl';
 import { useFrame } from "@react-three/fiber";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 
-export default function Player (){
+export default function Thruster (){
   const colors = useGlobalStore((state: GlobalState) => state.colors);
 
   const material: ShaderMaterial = useMemo(() => {

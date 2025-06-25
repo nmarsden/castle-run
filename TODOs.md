@@ -32,6 +32,7 @@
   [x] animate when idle
   [ ] should bounds extend to cover the whole ground?
   [x] animate hitting threat
+  [x] show explosion when hitting threat
   [ ] animate hitting enemy
   [ ] animate gaining health
   [ ] animate losing health
@@ -135,6 +136,7 @@
     [x] fix camera shake when player hit
     [x] fix things becoming invisible too early before being out of view
     [x] fix loading behaviour - do not show ui until loaded
+    [ ] fix y position of kings and queens
 
 [x] push to github
 [x] deploy
