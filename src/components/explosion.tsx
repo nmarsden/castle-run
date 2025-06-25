@@ -78,7 +78,7 @@ export default function Explosion ({ position = [0, 0, 0] }: { position: [number
       tempColors[i3 + 2] = b;
 
       // Sizes
-      tempSizes[i] = 100;
+      tempSizes[i] = 200;
     }
 
     const bufferGeometry = new BufferGeometry();
