@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
+import { GlobalState, ThreatInfo, useGlobalStore } from "../stores/useGlobalStore";
 import { useEffect, useMemo, useRef } from "react";
 import { Clock, Color, Mesh, ShaderMaterial, Uniform, Vector3 } from "three";
 import gsap from "gsap";
@@ -7,20 +7,21 @@ import { Sounds } from "../utils/sounds";
 import vertexShader from '../shaders/portal/vertex.glsl';
 import fragmentShader from '../shaders/portal/fragment.glsl';
 
-const getEnemyId = (threatId: string): number => {
+const getEnemyId = (threatId: string): string => {
   const threatIdParts: string[] = threatId.split('_');
-  return parseInt(threatIdParts[0]);
+  return threatIdParts[0];
 };
 
-export default function Threat ({ position, id }: { position: [number, number, number], id: string }){
+export default function Threat ({ position, waveNum, id }: ThreatInfo){
   const threat = useRef<Mesh>(null!);
-  const enemyId = useRef<number>(getEnemyId(id));
+  const enemyId = useRef<string>(getEnemyId(id));
 
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
   const enemyHitId = useGlobalStore((state: GlobalState) => state.enemyHitId);
+  const gameWaveNum = useGlobalStore((state: GlobalState) => state.waveNum);
 
   const threatOffset = useRef<Vector3>(new Vector3());
   const threatClock = useRef(new Clock(false));
@@ -134,6 +135,7 @@ export default function Threat ({ position, id }: { position: [number, number, n
     threatOffset.current.setZ(threatClock.current.getDelta() * groundSpeed);
     threat.current.position.add(threatOffset.current);
 
+    if (waveNum !== gameWaveNum) return;
     if (isDead.current) return;
 
     const prevVisible = threat.current.visible;

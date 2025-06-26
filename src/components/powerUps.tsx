@@ -1,14 +1,23 @@
-import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
+import { useMemo } from "react";
+import { GlobalState, PowerUpInfo, useGlobalStore } from "../stores/useGlobalStore";
 import PowerUp from "./powerUp";
 
 export default function PowerUps (){
-  const wave = useGlobalStore((state: GlobalState) => state.wave);
+  const generatedWaves = useGlobalStore((state: GlobalState) => state.generatedWaves);
   const playCount = useGlobalStore((state: GlobalState) => state.playCount);
-  const waveNum = useGlobalStore((state: GlobalState) => state.waveNum);
 
+  const powerUps: PowerUpInfo[] = useMemo(() => {
+    const powerUps = [...generatedWaves.values()].flatMap(wave => wave.powerUps);
+    
+    // console.log('# powerUps = ', powerUps.length);
+
+    return powerUps;
+    
+  }, [generatedWaves]);
+  
   return (
     <>
-      {wave.powerUps.map((powerUp, index) => <PowerUp key={`power-up-${playCount}-${waveNum}-${index}`} {...powerUp} />)}
+      {powerUps.map((powerUp, index) => <PowerUp key={`power-up-${playCount}-${index}`} {...powerUp} />)}
     </>
   );
 }

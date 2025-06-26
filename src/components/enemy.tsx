@@ -7,7 +7,7 @@ import Threat from "./threat";
 import gsap from "gsap";
 import { Sounds } from "../utils/sounds";
 
-export default function Enemy ({ id, position, type, threats }: EnemyInfo){
+export default function Enemy ({ id, waveNum, position, type, threats }: EnemyInfo){
   const pawn = useGLTF("models/Pawn.glb");
   const knight = useGLTF("models/Knight.glb");
   const bishop = useGLTF("models/Bishop.glb");
@@ -22,6 +22,7 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const enemyHitId = useGlobalStore((state: GlobalState) => state.enemyHitId);
   const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
+  const gameWaveNum = useGlobalStore((state: GlobalState) => state.waveNum);
 
   const enemyOffset = useRef<Vector3>(new Vector3());
   const enemyClock = useRef(new Clock(false));
@@ -75,6 +76,8 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
     enemyOffset.current.setZ(enemyClock.current.getDelta() * groundSpeed);
     enemy.current.position.add(enemyOffset.current);
 
+    if (waveNum !== gameWaveNum) return;
+
     const prevVisible = enemy.current.visible;
 
     enemy.current.visible = enemy.current.position.z < 7 && enemy.current.position.z > -14.5;
@@ -114,7 +117,7 @@ export default function Enemy ({ id, position, type, threats }: EnemyInfo){
         />
       </mesh>
       <>
-        {threats.map((threat, index) => <Threat key={`threat-${index}`} position={threat.position} id={threat.id} />)}
+        {threats.map(threat => <Threat key={`threat-${threat.id}`} {...threat} />)}
       </>
     </>
   )

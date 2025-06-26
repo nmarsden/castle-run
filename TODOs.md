@@ -133,11 +133,16 @@
 
 [ ] fix bugs
     [x] player stopped moving if pressing one direction followed by the opposite direction multiple times
-    [ ] enemy's z position is shifted out of alignment with the ground over time
+    [x] enemy's z position is shifted out of alignment with the ground over time
+        * also, collision detection can stop working
+        * Possible solution: 
+          - generate and render all wave data at the start instead of re-rendering each wave which is likely causing the data to be out of sync with actual positions
     [x] fix camera shake when player hit
     [x] fix things becoming invisible too early before being out of view
     [x] fix loading behaviour - do not show ui until loaded
     [x] fix y position of kings and queens
+    [ ] fix performance problem when more than 25 segments in a wave
+    [ ] fix end of 10 waves behaviour - eg. end game
 
 [x] push to github
 [x] deploy

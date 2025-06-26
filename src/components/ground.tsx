@@ -6,7 +6,7 @@ import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 
 export default function Ground(){
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
-  const setWaveProgressDelta = useGlobalStore((state: GlobalState) => state.setWaveProgressDelta);
+  const setGameProgressDelta = useGlobalStore((state: GlobalState) => state.setGameProgressDelta);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const texture = useTexture("textures/checker_board.png");
@@ -39,8 +39,8 @@ export default function Ground(){
     const groundDelta = (groundClock.current.getDelta() * groundSpeed * 0.5);
     groundOffset.current += groundDelta;
 
-    // Update waveProgressDelta
-    setWaveProgressDelta(groundDelta * 2);
+    // Update gameProgressDelta
+    setGameProgressDelta(groundDelta * 2);
 
     // Update texture offset
     texture.offset.setX(0);

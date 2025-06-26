@@ -7,11 +7,13 @@ export type EnemyType = 'PAWN' | 'KNIGHT' | 'BISHOP' | 'QUEEN' | 'KING';
 
 export type ThreatInfo = {
   id: string;
+  waveNum: number;
   position: [number, number, number];
 };
 
 export type EnemyInfo = {
-  id: number;
+  id: string;
+  waveNum: number;
   position: [number, number, number];
   type: EnemyType;
   threats: ThreatInfo[];
@@ -20,7 +22,8 @@ export type EnemyInfo = {
 export type PowerUpType = 'HEALTH';
 
 export type PowerUpInfo = {
-  id: number;
+  id: string;
+  waveNum: number;
   position: [number, number, number];
   type: PowerUpType;
 }
@@ -28,17 +31,11 @@ export type PowerUpInfo = {
 type Wave = {
   enemies: EnemyInfo[];
   powerUps: PowerUpInfo[];
-  length: number;
+  maxGameProgress: number;
 };
 
-const EMPTY_WAVE: Wave = {
-  enemies: [],
-  powerUps: [],
-  length: 0
-};
-
-const NO_POWER_UP_ID = -1;
-const NO_ENEMY_ID = -1;
+const NO_POWER_UP_ID = '';
+const NO_ENEMY_ID = '';
 
 const ENEMY_CODE_TO_TYPE = new Map<String, EnemyType>([
   ['p', 'PAWN'],
@@ -157,6 +154,7 @@ const calcThreats = (enemy: EnemyInfo): ThreatInfo[] => {
   const threats: ThreatInfo[] = threatOffsets.map((offset, index) => {
     return {
       id: `${enemy.id}_${index}`,
+      waveNum: enemy.waveNum,
       position: [enemyX + offset[0], y, enemyZ + offset[1]]
     }
   });
@@ -166,7 +164,9 @@ const calcThreats = (enemy: EnemyInfo): ThreatInfo[] => {
 };
 
 const pickSegmentDifficulties = (waveNum: number): SegmentDifficulty[] => {
-  const numSegments = 50;
+  // TODO fix performance problem when more than 25 segments
+  const numSegments = 25;
+  // const numSegments = 50;
   const difficultyBag = SEGMENT_DIFFICULT_BAGS_BY_WAVE_NUM.get(waveNum) as SegmentDifficulty[];
 
   // Pick random difficulties from the bag
@@ -188,6 +188,13 @@ const pickRandomWaveDataSegment = (difficulty: SegmentDifficulty): WaveData => {
 };
 
 const generateWaveData = (waveNum: number): WaveData => {
+  // DEBUG
+  // return [
+  //     '_____',
+  //     '__p__',
+  //     '____h',
+  // ];
+
   const waveData: WaveData = [];
 
   // Add wave data segments according to the picked segment difficulties for the waveNum
@@ -199,15 +206,52 @@ const generateWaveData = (waveNum: number): WaveData => {
   return waveData;
 };
 
-const populateWave = (waveNum: number, waveProgress: number): Wave => {
+const setupNextWave = (waveNum: number, waveNumCompleted: number, waveNumCompletedBest: number) => {
+  waveNum++;
+  waveNumCompleted++;
+  if (waveNum > TOTAL_NUM_WAVES) {
+    waveNum = 1;
+    waveNumCompleted = 0;
+    // TODO end game
+  }
+  if (waveNumCompleted > waveNumCompletedBest) {
+    waveNumCompletedBest++;
+  }
+
+  return { 
+    waveNum,
+    waveNumCompleted,
+    waveNumCompletedBest,
+    waveCompleted: false,
+    playerAction: 'NONE',
+    powerUpHitId: NO_POWER_UP_ID,
+    threatHitId: '',
+    enemyHitId: NO_ENEMY_ID,
+    allEnemyHitIds: [],
+    allPowerUpHitIds: [],
+    lastThreatHit: { id: '', time: 0 }
+  };
+};
+
+const generateWaves = (): Map<number, Wave> => {
+  const waves = new Map<number, Wave>();
+  let gameProgress = 0;
+  for (let waveNum=1; waveNum <= TOTAL_NUM_WAVES; waveNum++) {
+    const wave = generateWave(waveNum, gameProgress);
+    waves.set(waveNum, wave);
+    gameProgress = wave.maxGameProgress;
+  }
+  return waves;
+};
+
+const generateWave = (waveNum: number, gameProgress: number): Wave => {
   const waveData: WaveData = generateWaveData(waveNum);
-  // const waveData: WaveData = WAVE_DATA[waveNum - 1];
   const enemies: EnemyInfo[] = [];
   const powerUps: PowerUpInfo[] = [];
 
   // Populate enemies & powerUps
   const waveStartBuffer = 20;
-  let z = waveProgress - waveStartBuffer;
+  let z = -gameProgress - waveStartBuffer;
   let id = 0;
   for (let i = waveData.length-1; i >= 0; i--) {
     const squares = waveData[i].split('');
@@ -217,13 +261,13 @@ const populateWave = (waveNum: number, waveProgress: number): Wave => {
       const enemyType = getEnemyType(square);
       if (enemyType) {
         const y = getPositionY(enemyType);
-        enemies.push({ id, position: [x, y, z], type: enemyType, threats: [] });
+        enemies.push({ id: `${waveNum}-${id}`, waveNum, position: [x, y, z], type: enemyType, threats: [] });
         id++;
       }
       const powerUpType = getPowerUpType(square);
       if (powerUpType) {
         const y = -0.25;
-        powerUps.push({ id, position: [x, y, z], type: powerUpType });
+        powerUps.push({ id: `${waveNum}-${id}`, waveNum, position: [x, y, z], type: powerUpType });
         id++;
       }
     }
@@ -241,9 +285,9 @@ const populateWave = (waveNum: number, waveProgress: number): Wave => {
 
   // Populate length
   const waveEndBuffer = 7;
-  const length = waveStartBuffer + waveData.length + waveEndBuffer;
+  const maxGameProgress = gameProgress + waveStartBuffer + waveData.length + waveEndBuffer;
 
-  return { enemies, powerUps, length };
+  return { enemies, powerUps, maxGameProgress };
 }
 
 export type PlayerAction = 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_FORWARD' | 'MOVE_BACKWARD' | 'NONE';
@@ -267,18 +311,18 @@ type Colors = {
 };
 
 type Hits = {
-  enemyId: number;
+  enemyId: string;
   threatId: string;
-  powerUpId: number; 
+  powerUpId: string; 
 }
 
 const isCloseTo = (a: number, b: number): boolean => {
   return a > (b - 0.05) && a < (b + 0.05);
 };
 
-const getHits = (wave: Wave, waveProgress: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: number[], allPowerUpHitIds: number[]): Hits => {
+const getHits = (wave: Wave, gameProgress: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: string[], allPowerUpHitIds: string[]): Hits => {
   // Calculate wave Z position
-  const waveZPos = Math.floor((waveProgress * -1) - 0.7 + playerZOffset);
+  const waveZPos = Math.floor((gameProgress * -1) - 0.7 + playerZOffset);
 
   // Get remaining enemies
   const enemies = wave.enemies.filter(enemy => !allEnemyHitIds.includes(enemy.id));
@@ -325,8 +369,8 @@ const isThreatHitValid = (threatHitId: string, lastThreatHit: { id: string, time
   return true;
 }
 
-const isWaveCompleted = (wave: Wave, waveProgress: number): boolean => {
-  return waveProgress > wave.length;
+const isWaveCompleted = (wave: Wave, gameProgress: number): boolean => {
+  return gameProgress > wave.maxGameProgress;
 };
 
 export type GlobalState = {
@@ -335,7 +379,7 @@ export type GlobalState = {
   waveNum: number;
   waveNumCompleted: number;
   waveNumCompletedBest: number;
-  waveProgress: number;
+  gameProgress: number;
   waveCompleted: boolean;
   groundSpeed: number;
   playerAction: PlayerAction;
@@ -343,26 +387,25 @@ export type GlobalState = {
   playerZOffset: number;
   playerHealthMax: number;
   playerHealth: number;
-  powerUpHitId: number;
+  powerUpHitId: string;
   threatHitId: string;
-  enemyHitId: number;
-  allEnemyHitIds: number[];
-  allPowerUpHitIds: number[];
+  enemyHitId: string;
+  allEnemyHitIds: string[];
+  allPowerUpHitIds: string[];
   lastThreatHit: { id: string; time: number }
-  wave: Wave;
   colors: Colors;
   soundFXOn: boolean;
   musicOn: boolean;
   bloomEffect: boolean;
   emissiveIntensity: number;
+  generatedWaves: Map<number, Wave>;
 
   setGroundSpeed: (groundSpeed: number) => void;
   play: () => void;
-  playNextWave: () => void;
   toggleMusic: () => void;
   toggleSoundFx: () => void;
   setPlayerAction: (playerAction: PlayerAction) => void;
-  setWaveProgressDelta: (waveProgressDelta: number) => void;
+  setGameProgressDelta: (gameProgressDelta: number) => void;
   setPlayerXOffset: (playerXOffset: number) => void;
   setPlayerZOffset: (playerZOffset: number) => void;
   setColors: (colors: Colors) => void;
@@ -379,7 +422,7 @@ export const useGlobalStore = create<GlobalState>()(
         waveNum: 0,
         waveNumCompleted: 0,
         waveNumCompletedBest: 0,
-        waveProgress: 0,
+        gameProgress: 0,
         waveCompleted: false,
         groundSpeed: 4,
         playerAction: 'NONE',
@@ -393,7 +436,6 @@ export const useGlobalStore = create<GlobalState>()(
         allEnemyHitIds: [],
         allPowerUpHitIds: [],
         lastThreatHit: { id: '', time: 0 },
-        wave: EMPTY_WAVE,
         colors: {
           background1: '#000000',     // #000000
           background2: '#FFFFFF',     // #FFFFFF
@@ -415,6 +457,7 @@ export const useGlobalStore = create<GlobalState>()(
         musicOn: true,
         bloomEffect: false,
         emissiveIntensity: 1.32,
+        generatedWaves: new Map(),
 
         setGroundSpeed: (groundSpeed: number) => set(() => {
           return { groundSpeed };
@@ -422,15 +465,17 @@ export const useGlobalStore = create<GlobalState>()(
 
         play: () => set(({ playCount, playerHealthMax }) => {
           playCount++; 
+          const generatedWaves = generateWaves();
+
+          // console.log('generatedWave=', generatedWaves);
 
           return { 
             playing: true, 
             playCount,
             waveNum: 1,
             waveNumCompleted: 0,
-            waveProgress: 0,
+            gameProgress: 0,
             waveCompleted: false,
-            wave: populateWave(1, 0),
             playerAction: 'NONE',
             playerXOffset: 0,
             playerZOffset: 0,
@@ -440,34 +485,8 @@ export const useGlobalStore = create<GlobalState>()(
             enemyHitId: NO_ENEMY_ID,
             allEnemyHitIds: [],
             allPowerUpHitIds: [],
-            lastThreatHit: { id: '', time: 0 },        
-          };
-        }),
-
-        playNextWave: () => set(({ waveNum, waveNumCompleted, waveNumCompletedBest, waveProgress }) => {
-          waveNum++;
-          waveNumCompleted++;
-          if (waveNum > TOTAL_NUM_WAVES) {
-            waveNum = 1;
-            waveNumCompleted = 0;
-          }
-          if (waveNumCompleted > waveNumCompletedBest) {
-            waveNumCompletedBest++;
-          }
-
-          return { 
-            waveNum,
-            waveNumCompleted,
-            waveNumCompletedBest,
-            waveCompleted: false,
-            wave: populateWave(waveNum, waveProgress),
-            playerAction: 'NONE',
-            powerUpHitId: NO_POWER_UP_ID,
-            threatHitId: '',
-            enemyHitId: NO_ENEMY_ID,
-            allEnemyHitIds: [],
-            allPowerUpHitIds: [],
-            lastThreatHit: { id: '', time: 0 },        
+            lastThreatHit: { id: '', time: 0 },
+            generatedWaves        
           };
         }),
 
@@ -482,12 +501,17 @@ export const useGlobalStore = create<GlobalState>()(
           return { playing, playerAction };
         }),
 
-        setWaveProgressDelta: (waveProgressDelta: number) => set(({ wave, playerXOffset, playerZOffset, playing, playerHealthMax, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted }) => {
+        setGameProgressDelta: (gameProgressDelta: number) => set(({ 
+          playerXOffset, playerZOffset, playing, playerHealthMax, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, 
+          powerUpHitId, allPowerUpHitIds, gameProgress, waveCompleted, waveNum, waveNumCompleted, waveNumCompletedBest, generatedWaves 
+        }) => {
           if (!playing) return {};
 
-          waveProgress += waveProgressDelta;
+          gameProgress += gameProgressDelta;
 
-          const hits = getHits(wave, waveProgress, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
+          const wave = generatedWaves.get(waveNum) as Wave;
+
+          const hits = getHits(wave, gameProgress, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
           if (isThreatHitValid(hits.threatId, lastThreatHit)) {
             threatHitId = hits.threatId;
             lastThreatHit = { id: threatHitId, time: new Date().getTime() }
@@ -516,14 +540,16 @@ export const useGlobalStore = create<GlobalState>()(
             powerUpHitId = NO_POWER_UP_ID;
           }
 
-          waveCompleted  = isWaveCompleted(wave, waveProgress);
+          waveCompleted  = isWaveCompleted(wave, gameProgress);
+          let nextWave = {};
           if (waveCompleted) {
             Sounds.getInstance().playSoundFX('WAVE_COMPLETE');
-            // Adjust waveProgress
-            waveProgress = waveProgress - wave.length;
+            nextWave = setupNextWave(waveNum, waveNumCompleted, waveNumCompletedBest);
           }
 
-          return { playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, powerUpHitId, allPowerUpHitIds, waveProgress, waveCompleted };
+          return { 
+            playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, 
+            powerUpHitId, allPowerUpHitIds, gameProgress, waveCompleted, ...nextWave };
         }),
 
         setPlayerXOffset: (playerXOffset: number) => set(() => ({ playerXOffset })),

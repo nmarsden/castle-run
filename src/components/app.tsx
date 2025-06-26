@@ -13,7 +13,6 @@ import PlayerBounds from './playerBounds.tsx';
 import Enemies from './enemies.tsx';
 import PowerUps from './powerUps.tsx';
 import Ui from './ui/ui.tsx';
-import Waves from './waves.tsx';
 import Background from './background.tsx';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { KernelSize, Resolution } from 'postprocessing'
@@ -42,7 +41,6 @@ export default function App() {
           <PlayerBounds />
           <Player />
           <Keyboard />
-          <Waves />
           <EffectComposer enabled={bloomEffect}>
             <Bloom 
               intensity={0.125} 

@@ -7,13 +7,14 @@ import { Sounds } from "../utils/sounds";
 import vertexShader from '../shaders/portal2/vertex.glsl';
 import fragmentShader from '../shaders/portal2/fragment.glsl';
 
-export default function PowerUp ({ id, position, type }: PowerUpInfo){
+export default function PowerUp ({ id, waveNum, position, type }: PowerUpInfo){
   const powerUp = useRef<Mesh>(null!);
 
   const groundSpeed = useGlobalStore((state: GlobalState) => state.groundSpeed);
   const playing = useGlobalStore((state: GlobalState) => state.playing);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const powerUpHitId = useGlobalStore((state: GlobalState) => state.powerUpHitId);
+  const gameWaveNum = useGlobalStore((state: GlobalState) => state.waveNum);
 
   const powerUpOffset = useRef<Vector3>(new Vector3());
   const powerUpClock = useRef(new Clock(false));
@@ -125,6 +126,8 @@ export default function PowerUp ({ id, position, type }: PowerUpInfo){
     // Adjust Z position
     powerUpOffset.current.setZ(powerUpClock.current.getDelta() * groundSpeed);
     powerUp.current.position.add(powerUpOffset.current);
+
+    if (waveNum !== gameWaveNum) return;
 
     // Make visible when Z position is on the ground area
     const prevVisible = powerUp.current.visible;

@@ -32,7 +32,7 @@ export default function Player (){
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const playCount = useGlobalStore((state: GlobalState) => state.playCount);  
   const playerHealth = useGlobalStore((state: GlobalState) => state.playerHealth);  
-  const waveProgress = useGlobalStore((state: GlobalState) => state.waveProgress);  
+  const gameProgress = useGlobalStore((state: GlobalState) => state.gameProgress);  
   const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
 
   const tempPos = useRef<Vector3>(new Vector3());
@@ -89,7 +89,7 @@ export default function Player (){
   }, [playCount]);
 
   useEffect(() => {
-    if (waveProgress < 1) return;
+    if (gameProgress < 1) return;
 
     if (playerHealth === 0) {
       // Die
