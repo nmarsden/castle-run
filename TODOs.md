@@ -99,6 +99,8 @@
   [x] allow restart
   [x] show number of waves completed
   [x] show best number of waves completed
+  [ ] animate player death
+  [ ] delay showing game over overlay
 
 [ ] ui improvements
   [x] fonts
@@ -142,6 +144,7 @@
     [x] fix loading behaviour - do not show ui until loaded
     [x] fix y position of kings and queens
     [ ] fix performance problem when more than 25 segments in a wave
+        [ ] do less when enemy/threat/powerUp is not visible
     [ ] fix end of 10 waves behaviour - eg. end game
 
 [x] push to github

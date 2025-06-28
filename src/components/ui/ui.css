@@ -88,6 +88,7 @@
 .pulse,
 .button-pulse:not(.button-disabled) {
   animation: pulse 1s ease-in-out infinite reverse;
+  animation-delay: 2s;
 }
 
 .button-badge {
