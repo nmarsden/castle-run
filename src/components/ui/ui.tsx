@@ -10,6 +10,7 @@ export default function Ui() {
   const setBloomEffect = useGlobalStore((state: GlobalState) => state.setBloomEffect);
 
   const playing = useGlobalStore((state: GlobalState) => state.playing);  
+  const gameCompleted = useGlobalStore((state: GlobalState) => state.gameCompleted);  
   const playCount = useGlobalStore((state: GlobalState) => state.playCount);
   const waveNum = useGlobalStore((state: GlobalState) => state.waveNum);
   const musicOn = useGlobalStore((state: GlobalState) => state.musicOn);
@@ -79,7 +80,7 @@ export default function Ui() {
             </div>
           ) : (
             <>
-              <div className="overlayHeading">GAME OVER</div>
+              <div className="overlayHeading">{gameCompleted? 'ALL CLEARED!' : 'GAME OVER'}</div>
               <div className="resultsContainer">
                 <div>
                   <div className="resultLabel">COMPLETED</div>

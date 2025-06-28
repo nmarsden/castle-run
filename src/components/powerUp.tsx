@@ -62,7 +62,13 @@ export default function PowerUp ({ id, waveNum, position, type }: PowerUpInfo){
   }, [playing]);
 
   useEffect(() => {
-    if (!isSleeping.current) {
+    isSleeping.current = waveNum !== gameWaveNum;
+
+    if (isSleeping.current) {
+      // Stop bouncing & rotating
+      bounceTween.current?.pause();
+      rotationTween.current?.pause();
+    } else {
       // Start bouncing & rotating
       bounceTween.current = gsap.to(
         powerUp.current.position, 
@@ -83,16 +89,7 @@ export default function PowerUp ({ id, waveNum, position, type }: PowerUpInfo){
           repeat: -1
         }
       );      
-    } else {
-      // Stop bouncing & rotating
-      bounceTween.current?.pause();
-      rotationTween.current?.pause();
     }
-
-  }, [isSleeping.current]);
-
-  useEffect(() => {
-    isSleeping.current = waveNum !== gameWaveNum;
   }, [gameWaveNum]);
   
   useEffect(() => {

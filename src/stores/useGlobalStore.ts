@@ -209,14 +209,22 @@ const generateWaveData = (waveNum: number): WaveData => {
 const setupNextWave = (waveNum: number, waveNumCompleted: number, waveNumCompletedBest: number) => {
   waveNum++;
   waveNumCompleted++;
-  if (waveNum > TOTAL_NUM_WAVES) {
-    waveNum = 1;
-    waveNumCompleted = 0;
-    // TODO end game
-  }
   if (waveNumCompleted > waveNumCompletedBest) {
     waveNumCompletedBest++;
   }
+
+  if (waveNum > TOTAL_NUM_WAVES) {
+    Sounds.getInstance().playSoundFX('GAME_COMPLETE');
+
+    return {
+      playing: false,
+      gameCompleted: true,
+      waveNumCompleted,
+      waveNumCompletedBest
+    }
+  };
+
+  Sounds.getInstance().playSoundFX('WAVE_COMPLETE');
 
   return { 
     waveNum,
@@ -398,6 +406,7 @@ const isWaveCompleted = (wave: Wave, gameProgress: number): boolean => {
 
 export type GlobalState = {
   playing: boolean;
+  gameCompleted: boolean;
   playCount: number;
   waveNum: number;
   waveNumCompleted: number;
@@ -441,6 +450,7 @@ export const useGlobalStore = create<GlobalState>()(
     (set) => {
       return {
         playing: false,
+        gameCompleted: false,
         playCount: 0,
         waveNum: 0,
         waveNumCompleted: 0,
@@ -494,6 +504,7 @@ export const useGlobalStore = create<GlobalState>()(
 
           return { 
             playing: true, 
+            gameCompleted: false,
             playCount,
             waveNum: 1,
             waveNumCompleted: 0,
@@ -568,10 +579,8 @@ export const useGlobalStore = create<GlobalState>()(
           waveCompleted  = isWaveCompleted(wave, gameProgress);
           let nextWave = {};
           if (waveCompleted) {
-            Sounds.getInstance().playSoundFX('WAVE_COMPLETE');
             nextWave = setupNextWave(waveNum, waveNumCompleted, waveNumCompletedBest);
           }
-
 
           // performance.measure("setGameProgressDelta() Complete", {
           //   start: setGameProgressDeltaTimeStart,

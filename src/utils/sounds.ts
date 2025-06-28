@@ -7,7 +7,7 @@ export type SoundEffect = 'PLAYER_MOVE' | 'PLAYER_DIE' |
                           'ENEMY_SPAWN' | 'ENEMY_HIT' | 
                           'THREAT_SPAWN' | 'THREAT_HIT' | 
                           'HEALTH_SPAWN' | 'HEALTH_HIT' | 
-                          'WAVE_COMPLETE';
+                          'WAVE_COMPLETE' | 'GAME_COMPLETE';
 
 const MUSIC_TRACKS: Map<MusicTrack, Howl> = new Map<MusicTrack, Howl>([
   ['IDLE',    new Howl({ src: ['audio/ObservingTheStar.ogg'], format: ['ogg'], loop: true, autoplay: true })],
@@ -31,6 +31,7 @@ const SOUND_EFFECTS: Map<SoundEffect, Howl> = new Map<SoundEffect, Howl>([
   ['HEALTH_HIT',      new Howl({ src: ['audio/DM-CGS-15.wav'], format: ['wav'] })],
 
   ['WAVE_COMPLETE',   new Howl({ src: ['audio/DM-CGS-23.wav'], format: ['wav'] })],
+  ['GAME_COMPLETE',   new Howl({ src: ['audio/DM-CGS-26.wav'], format: ['wav'] })],
 ])
                           
 class Sounds {
