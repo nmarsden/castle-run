@@ -21,6 +21,7 @@ export default function Ui() {
 
   const [showNewWaveMsg, setShowNewWaveMsg] = useState(false);
   const [showControls, setShowControls] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
 
   const toggleBloom = useCallback(() => {
     setBloomEffect(!bloomEffect);
@@ -29,6 +30,10 @@ export default function Ui() {
   const toggleShowControls = useCallback(() => {
     setShowControls(!showControls);
   }, [showControls]);
+
+  const toggleShowInfo = useCallback(() => {
+    setShowInfo(!showInfo);
+  }, [showInfo]);
 
   useEffect(() => {
     Sounds.getInstance().playMusicTrack('IDLE');
@@ -71,7 +76,7 @@ export default function Ui() {
         <div className="message">WAVE #{waveNum}</div>
       </div>
 
-      <div className={`overlay ${(playing || showControls) ? 'hide' : 'show'}`}>
+      <div className={`overlay ${(playing || showControls || showInfo) ? 'hide' : 'show'}`}>
           {playCount === 0 ? (
             <div className="overlayHeading">
               <div className="fa-solid fa-chess-rook"></div>
@@ -110,6 +115,7 @@ export default function Ui() {
           </div>
           <div className="buttonGroup">
             <div className="button-light button-toggle" onClick={() => toggleShowControls()}>CONTROLS</div>
+            <div className="button-light button-toggle" onClick={() => toggleShowInfo()}>INFO</div>
           </div>
       </div>
       <div className={`overlay ${showControls ? 'show' : 'hide'}`}>
@@ -118,11 +124,11 @@ export default function Ui() {
           <div className="controlsGroup">
             <div className="fa-solid fa-keyboard"></div>
             <div className="controlsInfo">
-              <div className="key">W</div>
+              <div className="key"><i className="fa-solid fa-arrow-up"></i></div>
               <div className="controlsText">
-                <div className="key">A</div>
-                <div className="key">S</div>
-                <div className="key">D</div>
+                <div className="key"><i className="fa-solid fa-arrow-left"></i></div>
+                <div className="key"><i className="fa-solid fa-arrow-down"></i></div>
+                <div className="key"><i className="fa-solid fa-arrow-right"></i></div>
               </div>
             </div>
           </div>
@@ -141,6 +147,49 @@ export default function Ui() {
         </div>
         <div className="buttonGroup">
           <div className="button-light" onClick={() => toggleShowControls()}>CLOSE</div>
+        </div>
+      </div>
+      <div className={`overlay ${showInfo ? 'show' : 'hide'}`}>
+        <div className="overlayHeading">
+          <div className="fa-solid fa-chess-rook"></div>
+          <div>CASTLE</div>
+          <div>RUN</div>
+        </div>
+        <div className="infoSubHeading">built by</div>
+        <div className="infoBuiltBy">
+          Neil Marsden |
+          <a href="https://github.com/nmarsden/castle-run" target="_blank">github</a>|
+          <a href="https://nmarsden.com" target="_blank">projects</a>
+        </div>
+        <div className="infoSubHeading">credits</div>
+        <div className="infoCredits">
+          <div className="infoCredit">
+            <div className="infoCreditLabel">Models:</div>
+            <a href="https://lowpolyassets.itch.io/low-poly-chess-set" target="_blank">Low Poly Chess Set</a>
+          </div>
+          <div className="infoCredit">
+            <div className="infoCreditLabel">Music:</div>
+            <a href="https://opengameart.org/content/another-space-background-track" target="_blank">Observing the star - yd</a>
+          </div>
+          <div className="infoCredit">
+            <div className="infoCreditLabel"></div>
+            <a href="https://opengameart.org/content/tower-defense-theme" target="_blank">Tower defense theme - DST</a>
+          </div>
+          <div className="infoCredit">
+            <div className="infoCreditLabel">SFX:</div>
+            <a href="https://dustyroom.com/free-casual-game-sounds" target="_blank">Casual Game Sounds</a>
+          </div>
+          <div className="infoCredit">
+            <div className="infoCreditLabel">Icons:</div>
+            <a href="https://fontawesome.com/" target="_blank">Font Awesome</a>
+          </div>
+          <div className="infoCredit">
+            <div className="infoCreditLabel">Font:</div>
+            <a href="https://fonts.google.com/specimen/Orbitron" target="_blank">Orbitron - Google Fonts</a>
+          </div>
+        </div>
+        <div className="buttonGroup">
+          <div className="button-light" onClick={() => toggleShowInfo()}>CLOSE</div>
         </div>
       </div>
     </>

@@ -68,8 +68,8 @@ export default function Debug (){
     window.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.key === 'd') {
         setHidden(hidden => !hidden);
-      } else if (event.key === 'p') {
-        setPaused(paused => !paused);
+      // } else if (event.key === 'p') {
+      //   setPaused(paused => !paused);
       } else if (event.key === 's') {
         toggleSoundFx();
       }

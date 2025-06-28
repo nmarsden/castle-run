@@ -462,7 +462,7 @@ export const useGlobalStore = create<GlobalState>()(
         playerXOffset: 0,
         playerZOffset: 0,
         playerHealthMax: 4,
-        playerHealth: 0,
+        playerHealth: -1,
         powerUpHitId: NO_POWER_UP_ID,
         threatHitId: '',
         enemyHitId: NO_ENEMY_ID,

@@ -226,3 +226,40 @@
 .resultLabel {
   font-size: 14px;
 }
+
+.infoHeader {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.infoInstructions {
+  font-size: 16px;
+}
+
+.infoSubHeading {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.infoBuiltBy {
+  font-size: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.infoCredits {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoCredit {
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.infoCreditLabel {
+  min-width: 70px;
+  text-align: left;
+}
