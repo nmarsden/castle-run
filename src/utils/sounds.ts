@@ -10,28 +10,28 @@ export type SoundEffect = 'PLAYER_MOVE' | 'PLAYER_DIE' |
                           'WAVE_COMPLETE' | 'GAME_COMPLETE';
 
 const MUSIC_TRACKS: Map<MusicTrack, Howl> = new Map<MusicTrack, Howl>([
-  ['IDLE',    new Howl({ src: ['audio/ObservingTheStar.ogg'], format: ['ogg'], loop: true, autoplay: true })],
-  ['PLAYING', new Howl({ src: ['audio/DST-TowerDefenseTheme.mp3'], format: ['mp3'], loop: true })],
+  ['IDLE',    new Howl({ src: ['audio/ObservingTheStar.mp3', 'audio/ObservingTheStar.webm'], format: ['mp3', 'webm'], loop: true, autoplay: true })],
+  ['PLAYING', new Howl({ src: ['audio/DST-TowerDefenseTheme.mp3', 'audio/DST-TowerDefenseTheme.webm'], format: ['mp3', 'webm'], loop: true })],
 ]);
 
 const SOUND_EFFECTS: Map<SoundEffect, Howl> = new Map<SoundEffect, Howl>([
-  ['PLAYER_MOVE',     new Howl({ src: ['audio/DM-CGS-40.wav'], format: ['wav'] })],
-  ['PLAYER_DIE',      new Howl({ src: ['audio/DM-CGS-08.wav'], format: ['wav'] })],
+  ['PLAYER_MOVE',     new Howl({ src: ['audio/DM-CGS-40.mp3', 'audio/DM-CGS-40.webm'], format: ['mp3', 'webm'] })],
+  ['PLAYER_DIE',      new Howl({ src: ['audio/DM-CGS-08.mp3', 'audio/DM-CGS-08.webm'], format: ['mp3', 'webm'] })],
 
-  ['HEALTH_INCREASE', new Howl({ src: ['audio/DM-CGS-28.wav'], format: ['wav'] })],
-  ['HEALTH_DECREASE', new Howl({ src: ['audio/DM-CGS-25.wav'], format: ['wav'] })],
+  ['HEALTH_INCREASE', new Howl({ src: ['audio/DM-CGS-28.mp3', 'audio/DM-CGS-28.webm'], format: ['mp3', 'webm'] })],
+  ['HEALTH_DECREASE', new Howl({ src: ['audio/DM-CGS-25.mp3', 'audio/DM-CGS-25.webm'], format: ['mp3', 'webm'] })],
 
-  ['ENEMY_SPAWN',     new Howl({ src: ['audio/DM-CGS-22.wav'], format: ['wav'] })],
-  ['ENEMY_HIT',       new Howl({ src: ['audio/DM-CGS-31.wav'], format: ['wav'] })],
+  ['ENEMY_SPAWN',     new Howl({ src: ['audio/DM-CGS-22.mp3', 'audio/DM-CGS-22.webm'], format: ['mp3', 'webm'] })],
+  ['ENEMY_HIT',       new Howl({ src: ['audio/DM-CGS-31.mp3', 'audio/DM-CGS-31.webm'], format: ['mp3', 'webm'] })],
 
-  ['THREAT_SPAWN',    new Howl({ src: ['audio/DM-CGS-14.wav'], format: ['wav'] })],
-  ['THREAT_HIT',      new Howl({ src: ['audio/DM-CGS-29.wav'], format: ['wav'] })],
+  ['THREAT_SPAWN',    new Howl({ src: ['audio/DM-CGS-14.mp3', 'audio/DM-CGS-14.webm'], format: ['mp3', 'webm'] })],
+  ['THREAT_HIT',      new Howl({ src: ['audio/DM-CGS-29.mp3', 'audio/DM-CGS-29.webm'], format: ['mp3', 'webm'] })],
 
-  ['HEALTH_SPAWN',    new Howl({ src: ['audio/DM-CGS-22.wav'], format: ['wav'] })],
-  ['HEALTH_HIT',      new Howl({ src: ['audio/DM-CGS-15.wav'], format: ['wav'] })],
+  ['HEALTH_SPAWN',    new Howl({ src: ['audio/DM-CGS-22.mp3', 'audio/DM-CGS-22.webm'], format: ['mp3', 'webm'] })],
+  ['HEALTH_HIT',      new Howl({ src: ['audio/DM-CGS-15.mp3', 'audio/DM-CGS-15.webm'], format: ['mp3', 'webm'] })],
 
-  ['WAVE_COMPLETE',   new Howl({ src: ['audio/DM-CGS-23.wav'], format: ['wav'] })],
-  ['GAME_COMPLETE',   new Howl({ src: ['audio/DM-CGS-26.wav'], format: ['wav'] })],
+  ['WAVE_COMPLETE',   new Howl({ src: ['audio/DM-CGS-23.mp3', 'audio/DM-CGS-23.webm'], format: ['mp3', 'webm'] })],
+  ['GAME_COMPLETE',   new Howl({ src: ['audio/DM-CGS-26.mp3', 'audio/DM-CGS-26.webm'], format: ['mp3', 'webm'] })],
 ])
                           
 class Sounds {

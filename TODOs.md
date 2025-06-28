@@ -107,7 +107,7 @@
   [x] icons
   [x] toggle buttons
   [x] controls info
-  [ ] game info - credits
+  [x] game info - credits
 
 [ ] audio
   [x] music
@@ -125,7 +125,7 @@
     [x] wave complete.    - 45
   [x] sfx on/off controls
   [x] music on/off controls
-  [ ] convert audio files to mp3 & webm
+  [x] convert audio files to mp3 & webm
 
 [ ] use local storage
     [x] sfx on/off
