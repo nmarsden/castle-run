@@ -1,10 +1,10 @@
 import {Leva, useControls} from "leva";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {GlobalState, useGlobalStore} from "../stores/useGlobalStore";
 
 export default function Debug (){
   const [hidden, setHidden] = useState(true);
-  const [paused, setPaused] = useState(false);
+  // const [paused, setPaused] = useState(false);
   const colors = useGlobalStore((state: GlobalState) => state.colors);
   const setColors = useGlobalStore((state: GlobalState) => state.setColors);
   const bloomEffect = useGlobalStore((state: GlobalState) => state.bloomEffect);
@@ -15,15 +15,15 @@ export default function Debug (){
   const setGroundSpeed = useGlobalStore((state: GlobalState) => state.setGroundSpeed);
   const toggleSoundFx = useGlobalStore((state: GlobalState) => state.toggleSoundFx);  
 
-  const initialGroundSpeed = useRef(groundSpeed);  
+  // const initialGroundSpeed = useRef(groundSpeed);  
 
-  useEffect(() => {
-    if (paused) {
-      setGroundSpeed(0);
-    } else {
-      setGroundSpeed(initialGroundSpeed.current)
-    }
-  }, [paused]);
+  // useEffect(() => {
+  //   if (paused) {
+  //     setGroundSpeed(0);
+  //   } else {
+  //     setGroundSpeed(initialGroundSpeed.current)
+  //   }
+  // }, [paused]);
 
   useControls(
     'Colors',
