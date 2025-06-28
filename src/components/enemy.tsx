@@ -27,6 +27,7 @@ export default function Enemy ({ id, waveNum, position, type, threats }: EnemyIn
   const enemyOffset = useRef<Vector3>(new Vector3());
   const enemyClock = useRef(new Clock(false));
   const isDead = useRef(false);
+  const isSleeping = useRef(waveNum !== gameWaveNum);
 
   const geometry = useMemo(() => {
     if (type === 'PAWN') return (pawn.nodes.Pawn as Mesh).geometry;
@@ -45,7 +46,12 @@ export default function Enemy ({ id, waveNum, position, type, threats }: EnemyIn
   }, [playing]);
 
   useEffect(() => {
+    isSleeping.current = waveNum !== gameWaveNum;
+  }, [gameWaveNum]);
+
+  useEffect(() => {
     if (isDead.current) return;
+    if (isSleeping.current) return;
 
     if (enemyHitId === id) {
       // Die
@@ -76,7 +82,7 @@ export default function Enemy ({ id, waveNum, position, type, threats }: EnemyIn
     enemyOffset.current.setZ(enemyClock.current.getDelta() * groundSpeed);
     enemy.current.position.add(enemyOffset.current);
 
-    if (waveNum !== gameWaveNum) return;
+    if (isSleeping.current) return;
 
     const prevVisible = enemy.current.visible;
 

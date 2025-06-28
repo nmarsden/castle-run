@@ -24,6 +24,7 @@ export default function PowerUp ({ id, waveNum, position, type }: PowerUpInfo){
 
   const originalColor1 = useRef(new Color(colors.health1));
   const originalColor2 = useRef(new Color(colors.health2));
+  const isSleeping = useRef(waveNum !== gameWaveNum);
 
   const material: ShaderMaterial = useMemo(() => {
     const shaderMaterial = new ShaderMaterial({
@@ -55,7 +56,13 @@ export default function PowerUp ({ id, waveNum, position, type }: PowerUpInfo){
   useEffect(() => {
     if (playing) {
       powerUpClock.current.start();
-      
+    } else {
+      powerUpClock.current.stop();
+    }
+  }, [playing]);
+
+  useEffect(() => {
+    if (!isSleeping.current) {
       // Start bouncing & rotating
       bounceTween.current = gsap.to(
         powerUp.current.position, 
@@ -75,18 +82,22 @@ export default function PowerUp ({ id, waveNum, position, type }: PowerUpInfo){
           ease: "power1.inOut", 
           repeat: -1
         }
-      );
+      );      
     } else {
-      powerUpClock.current.stop();
-
       // Stop bouncing & rotating
-      bounceTween.current.pause();
-      rotationTween.current.pause();
+      bounceTween.current?.pause();
+      rotationTween.current?.pause();
     }
-  }, [playing]);
+
+  }, [isSleeping.current]);
 
   useEffect(() => {
+    isSleeping.current = waveNum !== gameWaveNum;
+  }, [gameWaveNum]);
+  
+  useEffect(() => {
     if (isDead.current) return;
+    if (isSleeping.current) return;
 
     if (powerUpHitId === id) {
       if (type === 'HEALTH') {
@@ -127,7 +138,7 @@ export default function PowerUp ({ id, waveNum, position, type }: PowerUpInfo){
     powerUpOffset.current.setZ(powerUpClock.current.getDelta() * groundSpeed);
     powerUp.current.position.add(powerUpOffset.current);
 
-    if (waveNum !== gameWaveNum) return;
+    if (isSleeping.current) return;
 
     // Make visible when Z position is on the ground area
     const prevVisible = powerUp.current.visible;

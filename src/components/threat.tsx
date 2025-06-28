@@ -29,7 +29,8 @@ export default function Threat ({ position, waveNum, id }: ThreatInfo){
   const originalColor1 = useRef(new Color(colors.threat1));
   const originalColor2 = useRef(new Color(colors.threat2));
   const hitColor = useRef(new Color(colors.threatHit));
-  
+  const isSleeping = useRef(waveNum !== gameWaveNum);
+
   const material: ShaderMaterial = useMemo(() => {
     const shaderMaterial = new ShaderMaterial({
       vertexShader,
@@ -67,7 +68,12 @@ export default function Threat ({ position, waveNum, id }: ThreatInfo){
   }, [playing]);
   
   useEffect(() => {
+    isSleeping.current = waveNum !== gameWaveNum;
+  }, [gameWaveNum]);
+
+  useEffect(() => {
     if (isDead.current) return;
+    if (isSleeping.current) return;
 
     if (id == threatHitId) {
       // Hit
@@ -112,6 +118,7 @@ export default function Threat ({ position, waveNum, id }: ThreatInfo){
 
   useEffect(() => {
     if (isDead.current) return;
+    if (isSleeping.current) return;
 
     if (enemyId.current === enemyHitId) {
       // Die
@@ -135,8 +142,7 @@ export default function Threat ({ position, waveNum, id }: ThreatInfo){
     threatOffset.current.setZ(threatClock.current.getDelta() * groundSpeed);
     threat.current.position.add(threatOffset.current);
 
-    if (waveNum !== gameWaveNum) return;
-    if (isDead.current) return;
+    if (isSleeping.current || isDead.current) return;
 
     const prevVisible = threat.current.visible;
 

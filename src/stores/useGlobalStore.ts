@@ -321,6 +321,8 @@ const isCloseTo = (a: number, b: number): boolean => {
 };
 
 const getHits = (wave: Wave, gameProgress: number, playerXOffset: number, playerZOffset: number, allEnemyHitIds: string[], allPowerUpHitIds: string[]): Hits => {
+  // const getHitsTimeStart = performance.now();  
+
   // Calculate wave Z position
   const waveZPos = Math.floor((gameProgress * -1) - 0.7 + playerZOffset);
 
@@ -349,10 +351,31 @@ const getHits = (wave: Wave, gameProgress: number, playerXOffset: number, player
     return powerUp.position[0] === playerXOffset && isCloseTo(powerUp.position[2], waveZPos)
   });
 
+  const enemyId = hitEnemies.length > 0 ? hitEnemies[0].id : NO_ENEMY_ID;
+  const threatId = hitThreats.length > 0 ? hitThreats[0].id : '';
+  const powerUpId = hitPowerUps.length > 0 ? hitPowerUps[0].id : NO_POWER_UP_ID;
+
+  // performance.measure("getHits() Complete", {
+  //   start: getHitsTimeStart,
+  //   detail: {
+  //     devtools: {
+  //       dataType: "track-entry",
+  //       track: "getHits() Tasks",
+  //       trackGroup: "Castle Run Tracks", // Group related tracks together
+  //       color: "tertiary-dark",
+  //       // properties: [
+  //       //   ["Filter Type", "Gaussian Blur"],
+  //       //   ["Resize Dimensions", "500x300"]
+  //       // ],
+  //       // tooltipText: "Image processed successfully"
+  //     }
+  //   }
+  // });
+
   return {
-    enemyId: hitEnemies.length > 0 ? hitEnemies[0].id : NO_ENEMY_ID,
-    threatId: hitThreats.length > 0 ? hitThreats[0].id : '',
-    powerUpId: hitPowerUps.length > 0 ? hitPowerUps[0].id : NO_POWER_UP_ID
+    enemyId,
+    threatId,
+    powerUpId
   }
 };
 
@@ -507,6 +530,8 @@ export const useGlobalStore = create<GlobalState>()(
         }) => {
           if (!playing) return {};
 
+          // const setGameProgressDeltaTimeStart = performance.now();  
+
           gameProgress += gameProgressDelta;
 
           const wave = generatedWaves.get(waveNum) as Wave;
@@ -546,6 +571,19 @@ export const useGlobalStore = create<GlobalState>()(
             Sounds.getInstance().playSoundFX('WAVE_COMPLETE');
             nextWave = setupNextWave(waveNum, waveNumCompleted, waveNumCompletedBest);
           }
+
+
+          // performance.measure("setGameProgressDelta() Complete", {
+          //   start: setGameProgressDeltaTimeStart,
+          //   detail: {
+          //     devtools: {
+          //       dataType: "track-entry",
+          //       track: "setGameProgressDelta() Tasks",
+          //       trackGroup: "Castle Run Tracks",
+          //       color: "tertiary-dark",
+          //     }
+          //   }
+          // });
 
           return { 
             playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, 

@@ -33,7 +33,7 @@ export default function Ground(){
   }, [playing]);
 
   useFrame(() => {
-    if (!playing) return;
+    if (!playing || groundSpeed === 0) return;
 
     // Update groundOffset
     const groundDelta = (groundClock.current.getDelta() * groundSpeed * 0.5);
