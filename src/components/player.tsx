@@ -39,7 +39,6 @@ export default function Player (){
   const originalColor1 = useRef(new Color(colors.player1));
   const originalColor2 = useRef(new Color(colors.player2));
   const flashColor = useRef(new Color(colors.playerFlash));
-  const hoverAnimation = useRef<GSAPTween>(null!);
 
   const material: ShaderMaterial = useMemo(() => {
     const shaderMaterial = new ShaderMaterial({
@@ -71,12 +70,38 @@ export default function Player (){
 
   useEffect(() => {
     // Hover animation
-    hoverAnimation.current = gsap.to(
+    gsap.to(
       group.current.position,
       {
         y: -0.3,        
         duration: 0.5,
         ease: "power1.inOut",
+        repeat: -1,
+        yoyo: true,
+      }
+    );
+    gsap.to(
+      group.current.rotation,
+      {
+        keyframes: [
+          { x: Math.PI * -0.02 },
+          { x: Math.PI * 0.02 }
+        ],        
+        duration: 5,
+        ease: "linear",
+        repeat: -1,
+        yoyo: true,
+      }
+    );
+    gsap.to(
+      group.current.rotation,
+      {
+        keyframes: [
+          { z: Math.PI * -0.005 },
+          { z: Math.PI * 0.005 }
+        ],        
+        duration: 3,
+        ease: "linear",
         repeat: -1,
         yoyo: true,
       }
@@ -187,6 +212,8 @@ export default function Player (){
       ref={group}
       key={`player-${playCount}`}
       position={[0, -0.4, -1]} 
+      rotation-x={Math.PI * 0.02}
+      rotation-z={Math.PI * 0.005}
     >
       <mesh
         ref={player}
