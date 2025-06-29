@@ -101,6 +101,7 @@
   [x] show best number of waves completed
   [ ] animate player death
   [ ] delay showing game over overlay
+  [x] cycle background through all hues when game completed
 
 [ ] ui improvements
   [x] fonts
