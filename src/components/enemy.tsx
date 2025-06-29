@@ -57,7 +57,7 @@ export default function Enemy ({ id, waveNum, position, type, threats }: EnemyIn
         r: waveColor.r,
         g: waveColor.g,
         b: waveColor.b,
-        duration: 5,
+        duration: 2,
         ease: "linear",
       }
     );  
@@ -67,7 +67,7 @@ export default function Enemy ({ id, waveNum, position, type, threats }: EnemyIn
         r: waveColor.r,
         g: waveColor.g,
         b: waveColor.b,
-        duration: 5,
+        duration: 2,
         ease: "linear",
       }
     );  

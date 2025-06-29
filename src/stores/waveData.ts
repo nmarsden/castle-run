@@ -391,7 +391,7 @@ export const SEGMENT_DIFFICULT_BAGS_BY_WAVE_NUM: Map<number,SegmentDifficulty[]>
 
 export const WAVE_COLORS_BY_WAVE_NUM = new Map<number, Color>([
   [1,  new Color("#FFFFFF")], // #FFFFFF
-  [2,  new Color("#0000ff")], // #0000ff 
+  [2,  new Color("#4b4bff")], // #4b4bff
   [3,  new Color("#52FF3F")], // #52FF3F 
   [4,  new Color("#ffff00")], // #ffff00 
   [5,  new Color("#00ffff")], // #00ffff

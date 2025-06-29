@@ -23,7 +23,7 @@ export default function Background(){
         r: waveColor.r,
         g: waveColor.g,
         b: waveColor.b,
-        duration: 5,
+        duration: 2,
         ease: "linear",
       }
     );  
