@@ -73,8 +73,8 @@
   [ ] show current wave number in HUD
   [x] show new wave message
   [ ] have different environment for each wave
-      [ ] background color
-      [ ] lighting
+      [x] background color
+      [x] lighting
       [ ] speed
   [x] use Segment-Based Generation:
       * How it works: Create a library of pre-designed "segments" (e.g., "single enemy dodge," "double enemy dodge with gap," "zig-zag pattern," "all lanes blocked but one").

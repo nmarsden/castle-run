@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SEGMENT_DIFFICULT_BAGS_BY_WAVE_NUM, SegmentDifficulty, TOTAL_NUM_WAVES, WAVE_DATA_SEGMENTS_BY_DIFFICULTY, WaveData } from './waveData';
+import { SEGMENT_DIFFICULT_BAGS_BY_WAVE_NUM, SegmentDifficulty, TOTAL_NUM_WAVES, WAVE_COLORS_BY_WAVE_NUM, WAVE_DATA_SEGMENTS_BY_DIFFICULTY, WaveData } from './waveData';
 import { Sounds } from '../utils/sounds';
+import { Color } from 'three';
 
 export type EnemyType = 'PAWN' | 'KNIGHT' | 'BISHOP' | 'QUEEN' | 'KING';
 
@@ -237,7 +238,8 @@ const setupNextWave = (waveNum: number, waveNumCompleted: number, waveNumComplet
     enemyHitId: NO_ENEMY_ID,
     allEnemyHitIds: [],
     allPowerUpHitIds: [],
-    lastThreatHit: { id: '', time: 0 }
+    lastThreatHit: { id: '', time: 0 },
+    waveColor: getWaveColor(waveNum)
   };
 };
 
@@ -404,6 +406,10 @@ const isWaveCompleted = (wave: Wave, gameProgress: number): boolean => {
   return gameProgress > wave.maxGameProgress;
 };
 
+const getWaveColor = (waveNum: number): Color => {
+  return WAVE_COLORS_BY_WAVE_NUM.get(waveNum) as Color;
+};
+
 export type GlobalState = {
   playing: boolean;
   gameCompleted: boolean;
@@ -431,6 +437,7 @@ export type GlobalState = {
   bloomEffect: boolean;
   emissiveIntensity: number;
   generatedWaves: Map<number, Wave>;
+  waveColor: Color;
 
   setGroundSpeed: (groundSpeed: number) => void;
   play: () => void;
@@ -488,9 +495,10 @@ export const useGlobalStore = create<GlobalState>()(
         },
         soundFXOn: true,
         musicOn: true,
-        bloomEffect: false,
+        bloomEffect: true,
         emissiveIntensity: 1.32,
         generatedWaves: new Map(),
+        waveColor: new Color("#FFFFFF"),
 
         setGroundSpeed: (groundSpeed: number) => set(() => {
           return { groundSpeed };
@@ -520,7 +528,8 @@ export const useGlobalStore = create<GlobalState>()(
             allEnemyHitIds: [],
             allPowerUpHitIds: [],
             lastThreatHit: { id: '', time: 0 },
-            generatedWaves        
+            generatedWaves,
+            waveColor: getWaveColor(1)
           };
         }),
 

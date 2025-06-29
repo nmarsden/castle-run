@@ -23,6 +23,7 @@ export default function Enemy ({ id, waveNum, position, type, threats }: EnemyIn
   const enemyHitId = useGlobalStore((state: GlobalState) => state.enemyHitId);
   const emissiveIntensity = useGlobalStore((state: GlobalState) => state.emissiveIntensity);
   const gameWaveNum = useGlobalStore((state: GlobalState) => state.waveNum);
+  const waveColor = useGlobalStore((state: GlobalState) => state.waveColor);  
 
   const enemyOffset = useRef<Vector3>(new Vector3());
   const enemyClock = useRef(new Clock(false));
@@ -48,6 +49,29 @@ export default function Enemy ({ id, waveNum, position, type, threats }: EnemyIn
   useEffect(() => {
     isSleeping.current = waveNum !== gameWaveNum;
   }, [gameWaveNum]);
+
+  useEffect(() => {
+    gsap.to(
+      material.current.emissive,
+      {
+        r: waveColor.r,
+        g: waveColor.g,
+        b: waveColor.b,
+        duration: 5,
+        ease: "linear",
+      }
+    );  
+    gsap.to(
+      material.current.color,
+      {
+        r: waveColor.r,
+        g: waveColor.g,
+        b: waveColor.b,
+        duration: 5,
+        ease: "linear",
+      }
+    );  
+  }, [waveColor]);
 
   useEffect(() => {
     if (isDead.current) return;

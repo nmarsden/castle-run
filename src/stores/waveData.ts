@@ -1,3 +1,5 @@
+import { Color } from "three";
+
 export type WaveData = string[];
 
 // const WAVE_DATA_1: WaveData = [
@@ -385,4 +387,17 @@ export const SEGMENT_DIFFICULT_BAGS_BY_WAVE_NUM: Map<number,SegmentDifficulty[]>
   [8,  [1,2,3,3,3,4,4,4,4,4]],  // 1: 10%,  2: 10%,  3: 30%,  4: 50%
   [9,  [1,2,3,4,4,4,4,4,4,4]],  // 1: 10%,  2: 10%,  3: 10%,  4: 70%
   [10, [1,2,3,4,4,4,4,5,5,5]],  // 1: 10%,  2: 10%,  3: 10%,  4: 40%,  5: 30%
+]);
+
+export const WAVE_COLORS_BY_WAVE_NUM = new Map<number, Color>([
+  [1,  new Color("#FFFFFF")], // #FFFFFF
+  [2,  new Color("#0000ff")], // #0000ff 
+  [3,  new Color("#52FF3F")], // #52FF3F 
+  [4,  new Color("#ffff00")], // #ffff00 
+  [5,  new Color("#00ffff")], // #00ffff
+  [6,  new Color("#ffaa00")], // #ffaa00 
+  [7,  new Color("#00ff00")], // #00ff00
+  [8,  new Color("#ff00d0")], // #ff00d0
+  [9,  new Color("#0079ff")], // #0079ff
+  [10, new Color("#FF0000")], // #FF0000
 ]);

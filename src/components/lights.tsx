@@ -1,9 +1,13 @@
 import {folder, useControls} from "leva";
-import {useRef} from "react";
-import {DirectionalLight} from "three";
+import {useEffect, useRef} from "react";
+import {AmbientLight, DirectionalLight} from "three";
+import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
+import gsap from "gsap";
 
 export default function Lights() {
+  const ambientLight = useRef<AmbientLight>(null!);
   const directionalLight = useRef<DirectionalLight>(null!);
+  const waveColor = useGlobalStore((state: GlobalState) => state.waveColor);
 
   const {
     ambientColor, ambientIntensity,
@@ -30,10 +34,34 @@ export default function Lights() {
     }
   );
 
+  useEffect(() => {
+    gsap.to(
+      ambientLight.current.color,
+      {
+        r: waveColor.r,
+        g: waveColor.g,
+        b: waveColor.b,
+        duration: 5,
+        ease: "linear",
+      }
+    );  
+    gsap.to(
+      directionalLight.current.color,
+      {
+        r: waveColor.r,
+        g: waveColor.g,
+        b: waveColor.b,
+        duration: 5,
+        ease: "linear",
+      }
+    );  
+  }, [waveColor]);
+    
   // useShadowHelper(directionalLight, true);
   
   return <>
     <ambientLight
+      ref={ambientLight}
       color={ambientColor}
       intensity={ambientIntensity}
     />
