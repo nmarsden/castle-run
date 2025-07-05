@@ -48,6 +48,7 @@ export default function Player (){
       uniforms: {
         uColor1: new Uniform(originalColor1.current.clone()),
         uColor2: new Uniform(originalColor2.current.clone()),
+        uEmissiveIntensity: new Uniform(2),
         uAlpha: new Uniform(1),
         uOffset: new Uniform(0),
         uFrequency: new Uniform(8),

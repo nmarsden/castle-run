@@ -1,6 +1,7 @@
 uniform vec3 uColor1;
 uniform vec3 uColor2;
 uniform float uAlpha;
+uniform float uEmissiveIntensity;
 uniform float uFrequency;
 uniform float uOffset;
 uniform float uSpeedFactor;
@@ -109,7 +110,5 @@ void main() {
 
     vec3 color = mix(uColor1, uColor2, strength);
 
-    float emissiveIntensity = 2.0;
-
-    gl_FragColor = vec4(color * emissiveIntensity, uAlpha);
+    gl_FragColor = vec4(color * uEmissiveIntensity, uAlpha);
 }

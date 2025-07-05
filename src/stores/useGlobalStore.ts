@@ -488,8 +488,8 @@ export const useGlobalStore = create<GlobalState>()(
           threat1: '#ff0c0c',         // #ff0c0c #FF2929
           threat2: '#000000',         // #000000
           threatHit: '#FFA500',       // #FFA500
-          health1: '#15d100',         // #52FF3F #94ff88 #15d100
-          health2: '#ffffff',         // #01440a #0aad20 #ffffff
+          health1: '#1aff00',         // #52FF3F #94ff88 #15d100 #1aff00
+          health2: '#46ff00',         // #01440a #0aad20 #ffffff #7dfff8 #46ff00
           healthContainer: '#a3a3a3', // #ebe013 #623d3d #a3a3a3
           powerUpHealth: '#52FF3F'    // #52FF3F
         },
