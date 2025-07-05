@@ -56,6 +56,7 @@ export default function Background() {
       uniforms: {
         uColor1: new Uniform(new Color(colors.background1)),
         uColor2: new Uniform(new Color(colors.background2)),
+        uEmissiveIntensity: new Uniform(2),
         uAlpha: new Uniform(1),
         uOffset: new Uniform(0),
         uFrequency: new Uniform(10),

@@ -40,6 +40,7 @@ export default function Threat ({ position, waveNum, id }: ThreatInfo){
       uniforms: {
         uColor1: new Uniform(originalColor1.current.clone()),
         uColor2: new Uniform(originalColor2.current.clone()),
+        uEmissiveIntensity: new Uniform(20),
         uAlpha: new Uniform(0),
         uOffset: new Uniform(Math.random() * 100),
         uFrequency: new Uniform(2),

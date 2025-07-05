@@ -485,7 +485,7 @@ export const useGlobalStore = create<GlobalState>()(
           thruster: '#33ccff',        // #33ccff
           ground: '#1a1a1a',          // #1a1a1a #E0E0E0 
           enemy: '#BABABA',           // #BABABA
-          threat1: '#FF2929',         // #FF2929
+          threat1: '#ff0c0c',         // #ff0c0c #FF2929
           threat2: '#000000',         // #000000
           threatHit: '#FFA500',       // #FFA500
           health1: '#15d100',         // #52FF3F #94ff88 #15d100
