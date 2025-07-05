@@ -23,7 +23,7 @@ void main() {
     finalColor *= smoothstep(0.5, 0.0, vUv.y); // Fades from top to bottom of the UV
 
     // Apply emisive intensity
-    float emissiveIntensity = 5.0;
+    float emissiveIntensity = 20.0;
     finalColor *= emissiveIntensity;
 
     gl_FragColor = vec4(finalColor, 1.0);

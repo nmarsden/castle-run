@@ -482,7 +482,7 @@ export const useGlobalStore = create<GlobalState>()(
           player1: '#ebe013',         // #EBAE13 #ebe013
           player2: '#f2cc6c',         // #9b7411 #efbe44 #f2cc6c
           playerFlash: '#ebd013',     // #eb2913 #e25636 #ebd013
-          thruster: '#33ccff',        // #33ccff
+          thruster: '#004e69',        // #33ccff #00769d #004e69
           ground: '#1a1a1a',          // #1a1a1a #E0E0E0 
           enemy: '#BABABA',           // #BABABA
           threat1: '#ff0c0c',         // #ff0c0c #FF2929
