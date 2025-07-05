@@ -14,13 +14,9 @@ import Enemies from './enemies.tsx';
 import PowerUps from './powerUps.tsx';
 import Ui from './ui/ui.tsx';
 import Background from './background.tsx';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import { KernelSize, Resolution } from 'postprocessing'
-import { GlobalState, useGlobalStore } from '../stores/useGlobalStore.ts';
+import BloomEffect from './bloomEffect.tsx';
 
 export default function App() {
-  const bloomEffect = useGlobalStore((state: GlobalState) => state.bloomEffect);
-
   return (
     <>
       <Debug />
@@ -41,17 +37,7 @@ export default function App() {
           <PlayerBounds />
           <Player />
           <Keyboard />
-          <EffectComposer enabled={bloomEffect}>
-            <Bloom 
-              intensity={0.125} 
-              kernelSize={KernelSize.LARGE} // blur kernel size
-              luminanceThreshold={0.9} // luminance threshold. Raise this value to mask out darker elements in the scene.
-              luminanceSmoothing={0.025} // smoothness of the luminance threshold. Range is [0, 1]
-              mipmapBlur={false} // Enables or disables mipmap blur.
-              resolutionX={Resolution.AUTO_SIZE} // The horizontal resolution.
-              resolutionY={Resolution.AUTO_SIZE} // The vertical resolution.              
-            />
-          </EffectComposer>
+          <BloomEffect />
         </Suspense>
       </Canvas>
       <Ui />

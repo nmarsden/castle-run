@@ -496,7 +496,7 @@ export const useGlobalStore = create<GlobalState>()(
         soundFXOn: true,
         musicOn: true,
         bloomEffect: true,
-        emissiveIntensity: 10,
+        emissiveIntensity: 30,
         generatedWaves: new Map(),
         waveColor: new Color("#FFFFFF"),
 
