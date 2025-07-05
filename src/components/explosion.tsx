@@ -5,8 +5,9 @@ import fragmentShader from '../shaders/explosion/fragment.glsl';
 import gsap from "gsap";
 import { GlobalState, useGlobalStore } from "../stores/useGlobalStore";
 
-export default function Explosion ({ position = [0, 0, 0] }: { position: [number, number, number] }) {
+export default function Explosion () {
   const threatHitId = useGlobalStore((state: GlobalState) => state.threatHitId);
+  const threatHitPosition = useGlobalStore((state: GlobalState) => state.threatHitPosition);
   const pointsRef = useRef<Points>(null!);
 
   const DURATION_SECS = 0.5;
@@ -23,6 +24,7 @@ export default function Explosion ({ position = [0, 0, 0] }: { position: [number
       depthWrite: false,
       uniforms: {
         uProgress: new Uniform(0),
+        uEmissiveIntensity: new Uniform(50),
         uRadius: new Uniform(RADIUS),
       }
     });
@@ -57,9 +59,9 @@ export default function Explosion ({ position = [0, 0, 0] }: { position: [number
       const i3 = i * 3;
 
       // Position at the explosion origin
-      tempPositions[i3 + 0] = position[0];
-      tempPositions[i3 + 1] = position[1];
-      tempPositions[i3 + 2] = position[2];
+      tempPositions[i3 + 0] = 0;
+      tempPositions[i3 + 1] = 0;
+      tempPositions[i3 + 2] = 0;
 
       // Random velocity for explosion outward
       const phi = Math.random() * Math.PI * 2;
@@ -70,15 +72,15 @@ export default function Explosion ({ position = [0, 0, 0] }: { position: [number
       tempVelocities[i3 + 2] = Math.cos(theta) * speed;
 
       // Random colors for a fiery effect
-      const r = Math.random() * 0.5 + 0.5; // Reddish
-      const g = Math.random() * 0.02;      // Greenish (less)
-      const b = Math.random() * 0.01;      // Bluish (even less)
+      const r = Math.random() * 0.2;   // Reddish
+      const g = Math.random() * 0.01;  // Greenish (less)
+      const b = Math.random() * 0.005; // Bluish (even less)
       tempColors[i3 + 0] = r;
       tempColors[i3 + 1] = g;
       tempColors[i3 + 2] = b;
 
       // Sizes
-      tempSizes[i] = 200;
+      tempSizes[i] = 300;
     }
 
     const bufferGeometry = new BufferGeometry();
@@ -93,6 +95,7 @@ export default function Explosion ({ position = [0, 0, 0] }: { position: [number
   return (
     <points 
       ref={pointsRef} 
+      position={threatHitPosition}
       visible={false}
       material={material} 
       geometry={geometry}

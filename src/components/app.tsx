@@ -15,6 +15,7 @@ import PowerUps from './powerUps.tsx';
 import Ui from './ui/ui.tsx';
 import Background from './background.tsx';
 import BloomEffect from './bloomEffect.tsx';
+import Explosion from './explosion.tsx';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
           <PowerUps />
           <PlayerBounds />
           <Player />
+          <Explosion />
           <Keyboard />
           <BloomEffect />
         </Suspense>

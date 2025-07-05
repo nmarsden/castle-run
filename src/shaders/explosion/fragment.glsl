@@ -1,3 +1,5 @@
+uniform float uEmissiveIntensity;
+
 varying vec4 vColor;
 
 void main() {
@@ -9,7 +11,5 @@ void main() {
      discard;
     }
     
-    float emissiveIntensity = 20.0;
-
-    gl_FragColor = vec4(vColor.rgb * emissiveIntensity, vColor.a);
+    gl_FragColor = vec4(vColor.rgb * uEmissiveIntensity, vColor.a);
 }

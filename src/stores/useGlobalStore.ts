@@ -323,6 +323,7 @@ type Colors = {
 type Hits = {
   enemyId: string;
   threatId: string;
+  threatPosition: [number, number, number];
   powerUpId: string; 
 }
 
@@ -363,6 +364,7 @@ const getHits = (wave: Wave, gameProgress: number, playerXOffset: number, player
 
   const enemyId = hitEnemies.length > 0 ? hitEnemies[0].id : NO_ENEMY_ID;
   const threatId = hitThreats.length > 0 ? hitThreats[0].id : '';
+  const threatPosition = (hitThreats.length > 0 ? [playerXOffset, 0, playerZOffset] : [0, 0, 0]) as [number, number, number];
   const powerUpId = hitPowerUps.length > 0 ? hitPowerUps[0].id : NO_POWER_UP_ID;
 
   // performance.measure("getHits() Complete", {
@@ -385,6 +387,7 @@ const getHits = (wave: Wave, gameProgress: number, playerXOffset: number, player
   return {
     enemyId,
     threatId,
+    threatPosition,
     powerUpId
   }
 };
@@ -427,6 +430,7 @@ export type GlobalState = {
   playerHealth: number;
   powerUpHitId: string;
   threatHitId: string;
+  threatHitPosition: [number, number, number];
   enemyHitId: string;
   allEnemyHitIds: string[];
   allPowerUpHitIds: string[];
@@ -472,6 +476,7 @@ export const useGlobalStore = create<GlobalState>()(
         playerHealth: -1,
         powerUpHitId: NO_POWER_UP_ID,
         threatHitId: '',
+        threatHitPosition: [0, 0, 0],
         enemyHitId: NO_ENEMY_ID,
         allEnemyHitIds: [],
         allPowerUpHitIds: [],
@@ -545,7 +550,7 @@ export const useGlobalStore = create<GlobalState>()(
         }),
 
         setGameProgressDelta: (gameProgressDelta: number) => set(({ 
-          playerXOffset, playerZOffset, playing, playerHealthMax, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, 
+          playerXOffset, playerZOffset, playing, playerHealthMax, playerHealth, threatHitId, threatHitPosition, lastThreatHit, enemyHitId, allEnemyHitIds, 
           powerUpHitId, allPowerUpHitIds, gameProgress, waveCompleted, waveNum, waveNumCompleted, waveNumCompletedBest, generatedWaves 
         }) => {
           if (!playing) return {};
@@ -559,6 +564,7 @@ export const useGlobalStore = create<GlobalState>()(
           const hits = getHits(wave, gameProgress, playerXOffset, playerZOffset, allEnemyHitIds, allPowerUpHitIds)
           if (isThreatHitValid(hits.threatId, lastThreatHit)) {
             threatHitId = hits.threatId;
+            threatHitPosition = hits.threatPosition;
             lastThreatHit = { id: threatHitId, time: new Date().getTime() }
             // DEBUG: comment out next line to be invincible
             playerHealth--;
@@ -604,7 +610,7 @@ export const useGlobalStore = create<GlobalState>()(
           // });
 
           return { 
-            playing, playerHealth, threatHitId, lastThreatHit, enemyHitId, allEnemyHitIds, 
+            playing, playerHealth, threatHitId, threatHitPosition, lastThreatHit, enemyHitId, allEnemyHitIds, 
             powerUpHitId, allPowerUpHitIds, gameProgress, waveCompleted, ...nextWave };
         }),
 
