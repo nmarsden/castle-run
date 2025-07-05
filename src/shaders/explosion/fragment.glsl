@@ -9,5 +9,7 @@ void main() {
      discard;
     }
     
-    gl_FragColor = vColor;
+    float emissiveIntensity = 20.0;
+
+    gl_FragColor = vec4(vColor.rgb * emissiveIntensity, vColor.a);
 }

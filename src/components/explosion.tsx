@@ -71,8 +71,8 @@ export default function Explosion ({ position = [0, 0, 0] }: { position: [number
 
       // Random colors for a fiery effect
       const r = Math.random() * 0.5 + 0.5; // Reddish
-      const g = Math.random() * 0.3;       // Greenish (less)
-      const b = Math.random() * 0.1;       // Bluish (even less)
+      const g = Math.random() * 0.02;      // Greenish (less)
+      const b = Math.random() * 0.01;      // Bluish (even less)
       tempColors[i3 + 0] = r;
       tempColors[i3 + 1] = g;
       tempColors[i3 + 2] = b;

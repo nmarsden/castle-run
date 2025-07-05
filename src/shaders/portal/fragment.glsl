@@ -89,5 +89,7 @@ void main() {
 
     vec3 color = mix(uColor1, uColor2, strength);
 
-    gl_FragColor = vec4(color, uAlpha);
+    float emissiveIntensity = 2.0;
+
+    gl_FragColor = vec4(color * emissiveIntensity, uAlpha);
 }

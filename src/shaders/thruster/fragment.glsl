@@ -22,5 +22,9 @@ void main() {
     // Make the edges fade out more quickly for a cone-like effect
     finalColor *= smoothstep(0.5, 0.0, vUv.y); // Fades from top to bottom of the UV
 
+    // Apply emisive intensity
+    float emissiveIntensity = 5.0;
+    finalColor *= emissiveIntensity;
+
     gl_FragColor = vec4(finalColor, 1.0);
 }
